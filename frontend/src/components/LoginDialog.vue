@@ -15,7 +15,6 @@ const password = ref('')
 const error = ref(null)
 
 async function handleSubmit(e) {
-  console.log('handleSubmit')
   e.preventDefault()
   try {
     await authStore.loginWithEmail({ username: email.value, password: password.value })

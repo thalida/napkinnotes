@@ -15,7 +15,6 @@ onMounted(() => {
   uiStore.initTheme()
   authStore.silentLogin().finally(() => {
     isLoading.value = false
-    console.log('isLoading', isLoading.value)
   })
 })
 
