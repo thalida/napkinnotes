@@ -1,39 +1,74 @@
-import { flow, makeAutoObservable } from "mobx"
+import { flow, makeAutoObservable, reaction } from "mobx"
 import { createContext } from "react";
 import { updateNote } from "@/api/notes";
 import { fetchMe } from "@/api/users";
-import { INote } from "@/types/notes";
 import { IUser } from "@/types/users";
+import { INote } from "@/types/notes";
 
 class CoreStore {
-
     me: IUser | null = null
+    note: INote | null = null
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
     }
 
-    get note() {
-        return this.me?.note
-    }
-
     clearData() {
         this.me = null
+        this.note = null
     }
 
-    setMe = (data: IUser) => {
-        this.me = data
+    setNoteContent = (content: string) => {
+        if (typeof this.note === 'undefined' || this.note === null) {
+            return
+        }
+
+        this.note.content = content
+
+        if (this.note.isAnon) {
+            localStorage.setItem('x-anon-note', JSON.stringify(this.note))
+        }
     }
 
-    fetchMe = flow(function* (this: CoreStore) {
+    initUser = flow(function* (this: CoreStore) {
         const res = yield fetchMe()
-        this.setMe(res.data)
-    })
+        this.me = res.data
+        this.note = {
+            ...res.data.note,
+            isAnon: false
+        }
+    });
 
-    updateNote = flow(function* (this: CoreStore, note: INote) {
-        yield updateNote(note)
+    initAnon() {
+        const storedNote = localStorage.getItem('x-anon-note')
+        if (storedNote) {
+            this.note = JSON.parse(storedNote)
+            return;
+        }
+
+        const now = new Date()
+        this.note = {
+            id: `anon-${now.getTime()}`,
+            created_at: now.toISOString(),
+            updated_at: now.toISOString(),
+            content: '',
+            isAnon: true
+        }
+        localStorage.setItem('x-anon-note', JSON.stringify(this.note))
+    }
+
+    updateNote = flow(function* (this: CoreStore, id: string, content: string) {
+        yield updateNote(id, { content })
     });
 }
 
 export const coreStore = new CoreStore();
 export const CoreStoreContext = createContext(coreStore);
+
+reaction(() => coreStore.note?.content, (content) => {
+    if (coreStore.note === null || coreStore.note.isAnon) {
+        return
+    }
+
+    coreStore.updateNote(coreStore.note.id, content || '')
+}, { delay: 1000 })

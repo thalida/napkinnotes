@@ -33,9 +33,9 @@ const App = observer(() => {
 
     useEffect(() => {
         if (authStore.isAuthenticated) {
-            coreStore.fetchMe()
+            coreStore.initUser()
         } else {
-            coreStore.clearData()
+            coreStore.initAnon()
         }
     }, [authStore, authStore.isAuthenticated, coreStore])
 

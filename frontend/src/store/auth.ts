@@ -12,6 +12,10 @@ class AuthStore {
         makeAutoObservable(this, {}, { autoBind: true })
     }
 
+    get isAnonymous() {
+        return !this.isAuthenticated
+    }
+
     setTokenData(data: IAuthTokenResponse) {
         this.tokenData = data
         localStorage.setItem('x-tokenData', JSON.stringify(data))
@@ -35,7 +39,6 @@ class AuthStore {
     }
 
     logout = flow(function* (this: AuthStore) {
-        console.log("Logging out", this)
         const tokenDataCopy = this.tokenData ? { ...this.tokenData } : null
         this.clearTokenData()
         if (tokenDataCopy !== null) {

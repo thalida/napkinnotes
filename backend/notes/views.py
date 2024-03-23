@@ -16,4 +16,4 @@ class NotesViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(id=self.request.user.id)
+        return self.queryset.filter(user=self.request.user.id)
