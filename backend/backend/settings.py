@@ -33,6 +33,34 @@ SECRET_KEY = "django-insecure-#^"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Application definition
+
+INSTALLED_APPS = [
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.import_export",  # optional, if django-import-export package is used
+    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # 3rd party apps
+    "oauth2_provider",
+    "social_django",
+    "drf_social_oauth2",
+    "django_filters",
+    "corsheaders",
+    "rest_framework",
+    "drf_spectacular",
+    # local apps
+    "authentication",
+    "docs",
+    "notes",
+]
+
 ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGIN_REGEXES = []
 
@@ -74,33 +102,6 @@ AUTHENTICATION_BACKENDS = (
     "drf_social_oauth2.backends.DjangoOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
-
-# Application definition
-
-INSTALLED_APPS = [
-    "unfold",  # before django.contrib.admin
-    "unfold.contrib.filters",  # optional, if special filters are needed
-    "unfold.contrib.forms",  # optional, if special form elements are needed
-    "unfold.contrib.import_export",  # optional, if django-import-export package is used
-    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    # 3rd party apps
-    "oauth2_provider",
-    "social_django",
-    "drf_social_oauth2",
-    "django_filters",
-    "corsheaders",
-    "rest_framework",
-    "drf_spectacular",
-    # local apps
-    "authentication",
-    "docs",
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -244,6 +245,17 @@ UNFOLD = {
                         "title": _("Dashboard"),
                         "icon": "dashboard",
                         "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": _("Core"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Notes"),
+                        "icon": "person",
+                        "link": reverse_lazy("admin:notes_note_changelist"),
                     },
                 ],
             },

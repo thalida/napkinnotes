@@ -8,12 +8,10 @@ from authentication.serializers import UserSerializer
 
 
 @extend_schema_view(
-    retrieve=extend_schema(summary="Retrieve user"),
+    retrieve=extend_schema(exclude=True),
     me=extend_schema(summary="Retrieve me"),
-    update=extend_schema(summary="Update user"),
-    partial_update=extend_schema(summary="Partial update user"),
 )
-class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]

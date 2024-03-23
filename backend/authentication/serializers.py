@@ -2,11 +2,18 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from authentication.models import User
+from notes.serializers import NoteSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
     display_name = serializers.SerializerMethodField()
     initials = serializers.SerializerMethodField()
+    note = serializers.SerializerMethodField()
+
+    @extend_schema_field(NoteSerializer())
+    def get_note(self, obj):
+        note = obj.notes.first()
+        return NoteSerializer(note).data if note else None
 
     @extend_schema_field(serializers.CharField())
     def get_display_name(self, obj):
@@ -19,4 +26,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "first_name", "last_name", "display_name", "initials"]
+        fields = ["id", "email", "first_name", "last_name", "display_name", "initials", "note"]
