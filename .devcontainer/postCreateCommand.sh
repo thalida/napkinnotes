@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd /workspaces/django-react-boilerplate/backend
+cd /workspaces/napkinnotes/backend
 poetry install
 
-cd /workspaces/django-react-boilerplate/frontend
+cd /workspaces/napkinnotes/frontend
 npm install
