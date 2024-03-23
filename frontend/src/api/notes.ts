@@ -1,8 +1,9 @@
-import { INote } from '@/types/notes'
+import type { INote } from '@/types'
 import api from './index'
-import { authStore } from '@/store/auth'
+import { useAuthStore } from '@/stores/auth'
 
 export function updateNote(id: string, { content }: Partial<INote>) {
+  const authStore = useAuthStore()
   return api.put(
     `/notes/${id}/`,
     {
@@ -15,4 +16,8 @@ export function updateNote(id: string, { content }: Partial<INote>) {
       },
     }
   )
+}
+
+export default {
+  updateNote
 }

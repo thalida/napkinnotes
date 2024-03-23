@@ -2,10 +2,10 @@
 
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-module.exports = {
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html",
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   darkMode: 'selector',
   theme: {
