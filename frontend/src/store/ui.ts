@@ -7,7 +7,7 @@ class UIStore {
     themeClass = "light" as "light" | "dark"
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this, {}, { autoBind: true })
     }
 
     initTheme = () => {

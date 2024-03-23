@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import { observer } from 'mobx-react-lite';
@@ -8,12 +8,12 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const ThemeToggle = observer(() => {
+const AppThemeToggle = observer(() => {
   const uiStore = useContext(UIStoreContext)
 
-  const [enabled, setEnabled] = React.useState(false)
+  const [enabled, setEnabled] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setEnabled(uiStore.themeClass === "dark")
   }, [uiStore.themeClass])
 
@@ -61,4 +61,4 @@ const ThemeToggle = observer(() => {
   )
 });
 
-export default ThemeToggle
+export default AppThemeToggle

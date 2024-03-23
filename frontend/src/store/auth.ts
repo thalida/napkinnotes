@@ -1,7 +1,7 @@
-import { emailLogin, refreshToken, revokeToken } from "@/api/auth";
-import type { IAuthLoginRequest, IAuthTokenResponse } from "@/types/auth";
 import { flow, makeAutoObservable } from "mobx"
 import { createContext } from "react";
+import { emailLogin, refreshToken, revokeToken } from "@/api/auth";
+import type { IAuthLoginRequest, IAuthTokenResponse } from "@/types/auth";
 
 class AuthStore {
     tokenData: IAuthTokenResponse | null = null;
@@ -9,7 +9,7 @@ class AuthStore {
     isAuthenticating = false;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this, {}, { autoBind: true })
     }
 
     setTokenData(data: IAuthTokenResponse) {
@@ -35,6 +35,7 @@ class AuthStore {
     }
 
     logout = flow(function* (this: AuthStore) {
+        console.log("Logging out", this)
         const tokenDataCopy = this.tokenData ? { ...this.tokenData } : null
         this.clearTokenData()
         if (tokenDataCopy !== null) {
@@ -53,7 +54,6 @@ class AuthStore {
             const res = yield refreshToken(tokenData.refresh_token)
             this.setTokenData(res.data)
         } catch (error) {
-            console.error(error)
             this.clearTokenData()
         }
     })

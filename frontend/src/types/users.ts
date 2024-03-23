@@ -1,3 +1,4 @@
+import { INote } from "./notes"
 
 export interface IUser {
     id: string
@@ -6,4 +7,5 @@ export interface IUser {
     last_name: string
     display_name: string
     initials: string
+    note: INote
 }

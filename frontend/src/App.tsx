@@ -1,23 +1,24 @@
-import React, { useContext } from 'react';
-import './App.css';
-import RootComponent from './RootComponent'
+import { useContext, useEffect, useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AuthStoreContext } from './store/auth';
-import { UsersStoreContext } from './store/users';
+import { CoreStoreContext } from './store/core';
 import { UIStoreContext } from './store/ui';
+import NotFoundPage from './pages/NotFoundPage';
+import IndexPage from './pages/IndexPage';
 
 const App = observer(() => {
 
     const authStore = useContext(AuthStoreContext)
-    const usersStore = useContext(UsersStoreContext)
+    const coreStore = useContext(CoreStoreContext)
     const uiStore = useContext(UIStoreContext)
-    const [isLoading, setIsLoading] = React.useState(true)
+    const [isLoading, setIsLoading] = useState(true)
 
-    React.useEffect(() => {
+    useEffect(() => {
         uiStore.initTheme()
     }, [uiStore])
 
-    React.useEffect(() => {
+    useEffect(() => {
         async function silentLogin() {
             try {
                 await authStore.silentLogin()
@@ -30,13 +31,13 @@ const App = observer(() => {
         silentLogin()
     }, [authStore])
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (authStore.isAuthenticated) {
-            usersStore.fetchMe()
+            coreStore.fetchMe()
         } else {
-            usersStore.clearData()
+            coreStore.clearData()
         }
-    }, [authStore, authStore.isAuthenticated, usersStore])
+    }, [authStore, authStore.isAuthenticated, coreStore])
 
 
     if (isLoading || authStore.isAuthenticating) {
@@ -48,7 +49,18 @@ const App = observer(() => {
     }
 
     return (
-        <RootComponent />
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="*"
+                    element={<NotFoundPage />}
+                />
+                <Route
+                    path={"/"}
+                    element={<IndexPage />}
+                />
+            </Routes>
+        </BrowserRouter>
     );
 })
 
