@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 
-interface IContenteditableProps extends React.HTMLProps<HTMLDivElement> {
+interface INapkinProps extends React.HTMLProps<HTMLDivElement> {
   value: string;
   onContentChange: (value: string) => void;
 }
 
-export default function Contenteditable({ value, onContentChange, ...rest }: IContenteditableProps) {
+export default function Napkin({ value, onContentChange, style, ...rest }: INapkinProps) {
   const contentEditableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function Contenteditable({ value, onContentChange, ...rest }: ICo
       contentEditable="true"
       ref={contentEditableRef}
       onInput={handleInput}
+      style={{ minHeight: '200px', backgroundColor: '#f3f4f6', padding: '10px', ...style }}
       {...rest}
     />
   );

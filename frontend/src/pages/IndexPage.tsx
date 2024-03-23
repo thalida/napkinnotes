@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { AuthStoreContext } from '@/store/auth';
 import { CoreStoreContext } from '@/store/core';
 import LoginDialog from '@/components/LoginDialog';
-import Contenteditable from '@/components/Contenteditable';
+import Napkin from '@/components/Napkin';
 
 const IndexPage = observer(() => {
   const authStore = useContext(AuthStoreContext)
@@ -39,10 +39,9 @@ const IndexPage = observer(() => {
       )}
 
       {coreStore.note && (
-        <Contenteditable
+        <Napkin
           value={coreStore.note?.content || ''}
           onContentChange={handleContentChange}
-          style={{ minHeight: '200px', backgroundColor: '#f3f4f6', padding: '10px' }}
         />
       )}
 
