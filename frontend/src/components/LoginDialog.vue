@@ -1,25 +1,28 @@
 <script setup>
+import { ref, defineProps } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { XCircleIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
 const props = defineProps({
   isVisible: Boolean,
-  onDismiss: Function,
 })
+const emit = defineEmits(['onDismiss'])
 
 const email = ref('')
 const password = ref('')
 const error = ref(null)
 
 async function handleSubmit(e) {
+  console.log('handleSubmit')
   e.preventDefault()
   try {
-    await authStore.loginWithEmail({ username: email, password })
+    await authStore.loginWithEmail({ username: email.value, password: password.value })
     email.value = ''
     password.value = ''
     error.value = null
-    onDismiss()
+    emit('onDismiss')
   } catch {
     error.value = 'Invalid email or password'
     email.value = ''
@@ -31,7 +34,7 @@ async function handleSubmit(e) {
 
 <template>
   <TransitionRoot as="template" :show="props.isVisible">
-    <Dialog as="div" class="relative z-10" @close="props.onDismiss">
+    <Dialog as="div" class="relative z-10" @close="$emit('onDismiss')">
       <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
       </TransitionChild>
@@ -67,7 +70,7 @@ async function handleSubmit(e) {
                   </div>
                 </div>
 
-                <form class="space-y-6" @onSubmit="handleSubmit">
+                <form class="space-y-6" @submit="handleSubmit">
                   <div>
                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900">
                       Email address

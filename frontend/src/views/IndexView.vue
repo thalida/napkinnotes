@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth';
 import { useCoreStore } from '@/stores/core';
 import { throttle } from 'lodash'
-import Napkin from '@/components/Napkin.vue'
+import NapkinApp from '@/components/NapkinApp.vue'
 import LoginDialog from '@/components/LoginDialog.vue'
 
 
@@ -14,6 +14,7 @@ const isLoginDialogVisible = ref(false)
 const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 function handleLoginDialogDismiss() {
+  console.log('handleLoginDialogDismiss')
   isLoginDialogVisible.value = false
 }
 
@@ -38,28 +39,22 @@ function handleContentChange(content: string) {
 </script>
 
 <template>
+  <div class="flex flex-col py-10 px-4 sm:px-6 lg:px-8">
+    <button v-if="authStore.isAuthenticated" class="mt-4 bg-red-500 text-white font-semibold py-2 px-4 rounded" @click="handleLogoutButtonClick">
+      Logout
+    </button>
+    <button
+      v-else
+      class="mt-4 bg-indigo-500 text-white font-semibold py-2 px-4 rounded"
+      @click="handleLoginButtonClick"
+      >
+      Show Login Dialog
+    </button>
 
-    <div class="flex flex-col py-10 px-4 sm:px-6 lg:px-8">
-        <button v-if="authStore.isAuthenticated" class="mt-4 bg-red-500 text-white font-semibold py-2 px-4 rounded" @click="handleLogoutButtonClick">
-          Logout
-        </button>
-        <button
-          v-else
-          class="mt-4 bg-indigo-500 text-white font-semibold py-2 px-4 rounded"
-          @click="handleLoginButtonClick"
-        >
-          Show Login Dialog
-        </button>
+    <NapkinApp v-if="coreStore.note" />
 
-        <Napkin
-          v-if="coreStore.note"
-          :content="coreStore.note.content"
-          @onContentChange="handleContentChange"
-        />
-
-      <LoginDialog :isVisible="isLoginDialogVisible" @onDismiss="handleLoginDialogDismiss" />
-    </div>
-
+    <LoginDialog :isVisible="isLoginDialogVisible" @onDismiss="handleLoginDialogDismiss" />
+  </div>
 </template>
 
 <style scoped>

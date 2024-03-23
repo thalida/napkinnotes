@@ -16,6 +16,7 @@ import dj_database_url
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
+
 from docs.utils import read_file
 
 load_dotenv()
@@ -68,13 +69,12 @@ if DEBUG:
     ALLOWED_HOSTS += [
         "localhost",
         "127.0.0.1",
-        "localhost:3000",
         "127.0.0.1:8000",
     ]
 
     CORS_ALLOWED_ORIGIN_REGEXES += [
-        r"^http(s)?://localhost:3000$",
-        r"^http(s)?://127.0.0.1:3000$",
+        r"^http(s)?://localhost:5173$",
+        r"^http(s)?://127.0.0.1:5173$",
     ]
 
 # User & Authentication

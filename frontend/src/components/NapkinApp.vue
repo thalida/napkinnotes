@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { throttle } from 'lodash'
+import { useCoreStore } from '@/stores/core';
 
+const coreStore = useCoreStore()
 const contentEditableRef = ref<HTMLDivElement | null>(null)
-const props = defineProps({
-  content: String,
-  onContentChange: Function,
-})
+const htmlContent = ref(coreStore.note?.content)
+
+const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 // function handleClick(event) {
 //   const target = event.target as HTMLElement;
@@ -69,10 +71,8 @@ async function handleInput(event) {
     }
   }
 
-
-  if (props.onContentChange) {
-    props.onContentChange((event.target as HTMLDivElement).innerHTML || "");
-  }
+  coreStore.setNoteContent(contentEditableRef.value?.innerHTML || "")
+  throttledUpdate()
 }
 
 // function handlePaste(event) {
@@ -84,9 +84,11 @@ async function handleInput(event) {
 
 <template>
   <div
+    class="bg-white p-2"
+    style="min-height: 100px;"
     ref="contentEditableRef"
     contenteditable="true"
-    v-html="props.content"
+    v-html="htmlContent"
     @input="handleInput"
   />
 </template>

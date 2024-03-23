@@ -6,14 +6,12 @@ import authApi from '@/api/auth'
 export const useAuthStore = defineStore('auth', () => {
   const tokenData = ref<IAuthTokenResponse | null>(null)
   const isAuthenticated = ref(false)
-  const isAuthenticating = ref(false)
 
   function setTokenData(data: IAuthTokenResponse) {
     tokenData.value = data
 
     localStorage.setItem('x-tokenData', JSON.stringify(data))
 
-    isAuthenticating.value = false
     isAuthenticated.value = true
   }
 
@@ -32,7 +30,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     localStorage.removeItem('x-tokenData')
 
-    isAuthenticating.value = false
     isAuthenticated.value = false
   }
 
@@ -47,8 +44,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function silentLogin() {
-    isAuthenticating.value = true
-
     const tokenData = getTokenData()
 
     if (tokenData === null) {
@@ -58,7 +53,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const res = await authApi.refreshToken(tokenData.refresh_token)
-
       setTokenData(res.data)
     } catch (error) {
       clearTokenData()
@@ -79,7 +73,6 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     tokenData,
     isAuthenticated,
-    isAuthenticating,
     setTokenData,
     getTokenData,
     clearTokenData,

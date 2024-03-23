@@ -53,7 +53,14 @@ export const useCoreStore = defineStore('core', () => {
   }
 
   async function updateNote() {
+    console.log('updateNote')
     if (!note.value) {
+      return
+    }
+
+    console.log('note.value', note.value)
+
+    if (note.value.isAnon) {
       return
     }
 

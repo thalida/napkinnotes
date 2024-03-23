@@ -15,10 +15,15 @@ onMounted(() => {
   uiStore.initTheme()
   authStore.silentLogin().finally(() => {
     isLoading.value = false
+    console.log('isLoading', isLoading.value)
   })
 })
 
 watchEffect(() => {
+  if (isLoading.value) {
+    return
+  }
+
   if (authStore.isAuthenticated) {
     coreStore.initUser()
   } else {
