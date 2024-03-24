@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth';
 import { useCoreStore } from '@/stores/core';
 import LoginDialog from '@/components/LoginDialog.vue'
+import AboutDialog from '@/components/AboutDialog.vue'
 import AppThemeSwitcher from '@/components/AppThemeSwitcher.vue'
 import NapkinNotesLogo from '@/components/icons/NapkinNotesLogo.vue'
 import { BIconEscape } from "bootstrap-icons-vue"
@@ -10,9 +11,14 @@ import { BIconEscape } from "bootstrap-icons-vue"
 const authStore = useAuthStore()
 const coreStore = useCoreStore()
 const isLoginDialogVisible = ref(false)
+const isAboutDialogVisible = ref(false)
 
 function handleLoginDialogDismiss() {
   isLoginDialogVisible.value = false
+}
+
+function handleAboutDialogDismiss() {
+  isAboutDialogVisible.value = false
 }
 
 function handleLogoutButtonClick() {
@@ -22,6 +28,10 @@ function handleLogoutButtonClick() {
 
 function handleLoginButtonClick() {
   isLoginDialogVisible.value = true
+}
+
+function handleLogoButtonClick() {
+  isAboutDialogVisible.value = true
 }
 </script>
 
@@ -44,13 +54,19 @@ function handleLoginButtonClick() {
       </button>
     </div>
     <div class="flex flex-row items-center justify-center">
-      <NapkinNotesLogo class="w-10 h-10" />
+      <button
+        class="flex flex-row items-center justify-center hover:scale-110 hover:-rotate-12 transition ease-in-out duration-200"
+        @click="handleLogoButtonClick"
+      >
+        <NapkinNotesLogo class="w-10 h-10" />
+      </button>
     </div>
     <div class="flex flex-row items-center justify-end gap-4">
       <AppThemeSwitcher />
     </div>
   </div>
   <LoginDialog :isVisible="isLoginDialogVisible" @onDismiss="handleLoginDialogDismiss" />
+  <AboutDialog :isVisible="isAboutDialogVisible" @onDismiss="handleAboutDialogDismiss" />
 </template>
 
 <style scoped>
