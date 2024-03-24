@@ -13,7 +13,7 @@ const throttledUpdate = throttle(coreStore.updateNote, 1000)
 onMounted(() => {
   napkinnote = new NapkinNote(contentEditableRef.value as HTMLElement)
   napkinnote.on(NAPKIN_NOTE_EVENTS.ON_UPDATE, () => {
-    coreStore.setNoteContent(napknapkinnotein.htmlContent)
+    coreStore.setNoteContent(napkinnote.htmlContent)
     throttledUpdate()
   })
 })
