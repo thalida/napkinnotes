@@ -80,7 +80,6 @@ export default class NapkinNote {
     input.wrap = "soft";
     input.autocomplete = "off";
     input.autocapitalize = "off";
-    input.rows = 1;
     input.value = text.replace(this.CALCULATOR_REGEX, "$2");
     input.placeholder = "Enter a math expression";
     input.dataset.value = input.value;
@@ -148,20 +147,37 @@ export default class NapkinNote {
 
       input.dataset.value = input.value;
 
-      let inputValue = input.value.trim();
-
+      const inputValue = input.value.trim();
       const hasValue = inputValue.length > 0;
+
       let evalRes: { success: boolean, result: any, error: any } | null = null;
 
       if (hasValue) {
-        const isVariableWithoutDeclaration = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(inputValue);
-        if (isVariableWithoutDeclaration) {
-          inputValue = `var ${input.value}`;
+        const splitLines = inputValue.split("\n").map((line) => line.trim()).filter((line) => line.length > 0);
+
+        let inputStr = ""
+        let lastVariableName = "";
+        for (let line of splitLines) {
+          const endswithSemiColon = line.endsWith(";");
+          const endsWithCurlyBrace = line.endsWith("}") || line.endsWith("{");
+
+          const isVariableWithoutDeclaration = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(line);
+          if (isVariableWithoutDeclaration) {
+            line = `var ${line}`;
+          }
+
+          if (!endsWithCurlyBrace && !endswithSemiColon) {
+            inputStr += `${line};`;
+          } else {
+            inputStr += `${line}`;
+          }
+
+
+          const matches = line.match(this.CALCULAOTR_VARIABLE_REGEX);
+          lastVariableName = matches ? matches[2] : "";;
         }
 
-        const matches = inputValue.match(this.CALCULAOTR_VARIABLE_REGEX);
-        const variableName = matches ? matches[2] : "";
-        evalRes = evalInput(inputValue, variableName);
+        evalRes = evalInput(inputStr, lastVariableName);
       }
 
       output.textContent = evalRes ? evalRes.result : "";
@@ -290,7 +306,7 @@ export default class NapkinNote {
     const isInputElement = (event.target as HTMLElement).tagName === "INPUT" || (event.target as HTMLElement).tagName === "TEXTAREA";
     if (isInputElement) {
       const isBackspace = event.key === "Backspace";
-      const isEnter = event.key === "Enter";
+      const isShiftEnter = event.key === "Enter" && event.shiftKey;
       const value = (event.target as HTMLInputElement).value;
       const isEmpty = value.length === 0;
 
@@ -307,7 +323,7 @@ export default class NapkinNote {
         this.alreadyEmptyInputs.delete(event.target as HTMLElement);
       }
 
-      if (isEnter) {
+      if (isShiftEnter) {
         (event.target as HTMLInputElement).value = value.trim();
 
         (event.target as HTMLElement).blur();
