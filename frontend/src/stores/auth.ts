@@ -2,21 +2,24 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { IAuthLoginRequest, IAuthTokenResponse } from '@/types'
 import authApi from '@/api/auth'
+import { LOCALSTOARGE_NAMESPACE } from '.'
 
 export const useAuthStore = defineStore('auth', () => {
+  const TOKEN_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}tokenData`
+
   const tokenData = ref<IAuthTokenResponse | null>(null)
   const isAuthenticated = ref(false)
 
   function setTokenData(data: IAuthTokenResponse) {
     tokenData.value = data
 
-    localStorage.setItem('x-tokenData', JSON.stringify(data))
+    localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(data))
 
     isAuthenticated.value = true
   }
 
   function getTokenData() {
-    const data = localStorage.getItem('x-tokenData')
+    const data = localStorage.getItem(TOKEN_STORAGE_KEY)
 
     if (data) {
       return JSON.parse(data) as IAuthTokenResponse
@@ -27,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function clearTokenData() {
     tokenData.value = null
-    localStorage.removeItem('x-tokenData')
+    localStorage.removeItem(TOKEN_STORAGE_KEY)
     isAuthenticated.value = false
   }
 

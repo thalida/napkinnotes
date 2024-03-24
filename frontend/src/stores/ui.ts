@@ -1,7 +1,9 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { LOCALSTOARGE_NAMESPACE } from '.'
 
 export const useUIStore = defineStore('ui', () => {
+  const THEME_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}theme`
   const supportedThemes = ['light', 'dark', 'system']
   const selectedTheme = ref('system')
   const themeClass = ref<'light' | 'dark'>('light')
@@ -28,9 +30,9 @@ export const useUIStore = defineStore('ui', () => {
     }
 
     if (selectedTheme.value === 'system') {
-      localStorage.removeItem('x-theme')
+      localStorage.removeItem(THEME_STORAGE_KEY)
     } else {
-      localStorage.setItem('x-theme', selectedTheme.value)
+      localStorage.setItem(THEME_STORAGE_KEY, selectedTheme.value)
     }
   }
 

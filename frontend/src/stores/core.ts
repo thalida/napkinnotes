@@ -3,8 +3,11 @@ import { defineStore } from 'pinia'
 import type { IUser, INote } from '@/types'
 import notesApi from '@/api/notes'
 import usersApi from '@/api/users'
+import { LOCALSTOARGE_NAMESPACE } from '.'
 
 export const useCoreStore = defineStore('core', () => {
+  const NOTE_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}anon-note`
+
   const user = ref<IUser | null>(null)
   const note = ref<INote | null>(null)
 
@@ -21,7 +24,7 @@ export const useCoreStore = defineStore('core', () => {
     note.value.content = content
 
     if (note.value.isAnon) {
-      localStorage.setItem('x-anon-note', JSON.stringify(note.value))
+      localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
     }
   }
 
@@ -35,7 +38,7 @@ export const useCoreStore = defineStore('core', () => {
   }
 
   async function initAnon() {
-    const storedNote = localStorage.getItem('x-anon-note')
+    const storedNote = localStorage.getItem(NOTE_STORAGE_KEY)
     if (storedNote) {
       note.value = JSON.parse(storedNote)
       return
@@ -49,7 +52,7 @@ export const useCoreStore = defineStore('core', () => {
       content: '',
       isAnon: true
     }
-    localStorage.setItem('x-anon-note', JSON.stringify(note.value))
+    localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
   }
 
   async function updateNote() {
