@@ -42,9 +42,9 @@ watchEffect(() => {
 <template>
   <Menu as="div" class="relative inline-block text-left">
     <div>
-      <MenuButton class="flex items-center rounded-full text-gray-400 dark:text-white hover:text-gray-600">
+      <MenuButton class="flex items-center rounded-full text-slate-600 hover:text-gray-400">
         <span class="sr-only">Open options</span>
-        <component :is="activeIcon" class="inline-block w-4 h-4" />
+        <component :is="activeIcon" class="inline-block w-5 h-5" />
       </MenuButton>
     </div>
 
@@ -69,8 +69,8 @@ watchEffect(() => {
               @click="uiStore.setTheme(option.key)"
               class="flex flex-row items-center justify-start gap-2 w-full px-4 py-2 text-left text-sm"
               :class="{
-                'bg-blue-100 dark:bg-slate-700 dark:text-emerald-500': uiStore.selectedTheme === option.key,
-                'dark:text-slate-400': uiStore.selectedTheme !== option.key && hover,
+                'bg-slate-100 text-emerald-500 dark:bg-slate-700 dark:text-emerald-500': uiStore.selectedTheme === option.key,
+                'text-slate-400 dark:text-slate-400': uiStore.selectedTheme !== option.key && hover,
                 'text-gray-700 dark:text-white': uiStore.selectedTheme !== option.key && !hover,
               }"
             >

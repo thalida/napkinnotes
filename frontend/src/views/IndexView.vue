@@ -7,7 +7,7 @@ const coreStore = useCoreStore()
 </script>
 
 <template>
-  <div class="flex flex-col h-full max-h-full bg-white dark:bg-slate-900">
+  <div class="flex flex-col h-full max-h-full bg-slate-200 dark:bg-slate-900">
 
     <div class="grow overflow-auto">
       <NapkinNote
@@ -16,7 +16,7 @@ const coreStore = useCoreStore()
         class="p-8 prose grow h-full w-full max-w-full border-slate-100 dark:text-white overflow-y-auto focus:outline-none" />
     </div>
 
-    <AppMenu class="p-4 shrink-0 dark:bg-slate-950" />
+    <AppMenu class="p-4 shrink-0 bg-slate-300 dark:bg-slate-950" />
   </div>
 </template>
 

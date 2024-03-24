@@ -35,6 +35,18 @@ onBeforeUnmount(() => {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
+:root {
+  --napkinnotes--calculator-widget--bg: rgba(0, 0, 0, 0.08);
+  --napkinnoes--calculator-widget--output-text: #047857;
+  --napkinnotes--link-widget--action: #10b981;
+}
+
+.dark {
+  --napkinnotes--calculator-widget--bg: rgba(0, 0, 0, 0.2);
+  --napkinnoes--calculator-widget--output-text: #22c55e;
+  --napkinnotes--link-widget--action: #10b981;
+}
+
 .widget.widget-calculator {
   display: flex;
   flex-direction: row;
@@ -50,7 +62,7 @@ onBeforeUnmount(() => {
 }
 
 .widget-calculator__input {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--napkinnotes--calculator-widget--bg);
   border: 0;
   border-radius: 8px;
   padding-left: 1rem;
@@ -71,12 +83,13 @@ onBeforeUnmount(() => {
   align-items: center;
   height: 48px;
   min-width: 48px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--napkinnotes--calculator-widget--bg);
   border-radius: 8px;
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #00ff92;
+  color: var(--napkinnoes--calculator-widget--output-text);
   font-family: "Fira Code", monospace;
+  font-weight: 700;
 }
 
 .widget.widget-checkbox {
@@ -88,8 +101,8 @@ onBeforeUnmount(() => {
 }
 
 .widget-link__action {
-  color: #00ff92;
+  color: var(--napkinnotes--link-widget--action);
   text-decoration: none;
+  padding: 0.25rem 0.5rem;
 }
 </style>
-@/components/NapkinNote

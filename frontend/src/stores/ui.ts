@@ -10,12 +10,11 @@ export const useUIStore = defineStore('ui', () => {
   const colorScheme = ref<ColorScheme>('dark')
 
   function initTheme() {
-    const theme = localStorage.theme ? localStorage.theme : 'system'
+    const theme = localStorage.getItem(THEME_STORAGE_KEY) as Theme || "system"
     setTheme(theme)
   }
 
   function setTheme(theme: Theme) {
-    console.log('setTheme', theme)
     selectedTheme.value = theme
 
     if (
