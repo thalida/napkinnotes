@@ -24,6 +24,7 @@ django-unfold = "^0.20.5"
 django-import-export = "^3.3.7"
 django-simple-history = "^3.5.0"
 loguru = "^0.7.2"
+whitenoise = {extras = ["brotli"], version = "^6.6.0"}
 
 [build-system]
 requires = ["poetry-core"]
