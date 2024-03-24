@@ -73,10 +73,13 @@ export default class Napkin {
     widget.classList.add("widget", "widget-calculator");
     widget.contentEditable = "false";
 
-    const input = document.createElement("input");
+    const input = document.createElement("textarea");
     input.className = "widget-calculator__input";
-    input.type = "text";
+    input.wrap = "soft";
+    input.autocomplete = "off";
+    input.autocapitalize = "off";
     input.value = text.replace(this.CALCULATOR_REGEX, "$2");
+    input.placeholder = "Enter a math expression";
     input.dataset.value = input.value;
 
     const output = document.createElement("output");
@@ -105,6 +108,7 @@ export default class Napkin {
       }
 
       input.value = input.dataset.value || "";
+      input.placeholder = "Enter a math expression";
     }
   }
 
@@ -116,7 +120,7 @@ export default class Napkin {
 
     const inputHistory: string[] = [];
 
-    function evalInput(inputString: string, variableName: string): any {
+    function evalInput(inputString: string, variableName: string): { success: boolean, result: any, error: any } {
       inputHistory.push(inputString);
 
       let evalString = `'use strict'; ${inputHistory.join(";")}`
@@ -124,16 +128,15 @@ export default class Napkin {
 
       try {
         const result = eval?.(evalString);
-        return result;
+        return { success: true, result, error: null };
       } catch (error) {
         inputHistory.pop();
+        return { success: false, result: null, error };
       }
-
-      return "";
     }
 
     for (const calculator of calculatorElements) {
-      const input = calculator.querySelector(".widget-calculator__input") as HTMLInputElement;
+      const input = calculator.querySelector(".widget-calculator__input") as HTMLTextAreaElement;
       const output = calculator.querySelector(".widget-calculator__output") as HTMLElement;
 
       if (!input || !output) {
@@ -145,20 +148,33 @@ export default class Napkin {
       let inputValue = input.value.trim();
 
       const hasValue = inputValue.length > 0;
+      let evalRes: { success: boolean, result: any, error: any } | null = null;
+
+      if (hasValue) {
+        const isVariableWithoutDeclaration = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(inputValue);
+        if (isVariableWithoutDeclaration) {
+          inputValue = `var ${input.value}`;
+        }
+
+        const matches = inputValue.match(this.CALCULAOTR_VARIABLE_REGEX);
+        const variableName = matches ? matches[2] : "";
+        evalRes = evalInput(inputValue, variableName);
+      }
+
+      output.textContent = evalRes ? evalRes.result : "";
+
       if (!hasValue) {
-        output.textContent = "";
-        continue;
+        calculator.classList.add("widget-calculator--empty");
+        calculator.classList.remove("widget-calculator--success", "widget-calculator--error");
+      } else {
+        if (evalRes?.error) {
+          calculator.classList.add("widget-calculator--error");
+          calculator.classList.remove("widget-calculator--empty", "widget-calculator--success");
+        } else {
+          calculator.classList.add("widget-calculator--success");
+          calculator.classList.remove("widget-calculator--empty", "widget-calculator--error");
+        }
       }
-
-      const isVariableWithoutDeclaration = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(inputValue);
-      if (isVariableWithoutDeclaration) {
-        inputValue = `var ${input.value}`;
-      }
-
-      const matches = inputValue.match(this.CALCULAOTR_VARIABLE_REGEX);
-      const variableName = matches ? matches[2] : "";
-      const result = evalInput(inputValue, variableName);
-      output.textContent = result;
     }
   }
 
@@ -272,7 +288,7 @@ export default class Napkin {
       const isBackspace = event.key === "Backspace";
       const isEnter = event.key === "Enter";
       const value = (event.target as HTMLInputElement).value;
-      const isEmpty = value.trim().length === 0;
+      const isEmpty = value.length === 0;
 
       if (isBackspace && isEmpty) {
         const previouslyEmpty = this.alreadyEmptyInputs.has(event.target as HTMLElement);

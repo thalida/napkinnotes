@@ -38,8 +38,15 @@ onBeforeUnmount(() => {
 .widget-calculator {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: 1rem;
-  height: 48px;
+  min-height: 48px;
+}
+
+.widget-calculator--empty > .widget-calculator__output,
+.widget-calculator--error > .widget-calculator__output {
+  display: none;
 }
 
 .widget-calculator__input {
@@ -48,9 +55,13 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   padding-left: 1rem;
   padding-right: 1rem;
+  min-height: 48px;
+  max-height: 256px;
   height: 100%;
   flex-grow: 1;
   font-family: "Fira Code", monospace;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .widget-calculator__output {
@@ -58,7 +69,7 @@ onBeforeUnmount(() => {
   flex-shrink: 0;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 48px;
   min-width: 48px;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
