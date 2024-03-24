@@ -104,7 +104,7 @@ async function handleSubmit(e: Event) {
                 <div>
                   <button
                     type="submit"
-                    class="transition ease-in-out duration-200 flex w-full justify-center rounded-md bg-gradient-to-br from-pink-700 via-fuchsia-500 to-violet-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:shadow-lg hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    class="mt-8 transition ease-in-out duration-200 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:shadow-lg bg-lime-500 hover:bg-fuchsia-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Log In
                   </button>
