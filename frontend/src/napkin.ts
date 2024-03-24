@@ -11,23 +11,23 @@ export default class Napkin {
   private IS_CHECKED_REGEX = /^-\s\[[x]\]/
   private LIST_UNORDERED_REGEX = /^([*-]\s)([^[].*)/
   private LIST_ORDERED_REGEX = /^([1]+\.\s)(.*)/
+  private CALCULATOR_REGEX = /^(\$\s)(.*)/
 
   constructor(element: HTMLElement) {
     this.element = element
+
     this.loadCheckboxWidgets()
-    this.focus()
+    this.loadCalculatorWidgets()
 
     this.element.addEventListener("onpaste", (event) => this.handlePasteEvent(event as ClipboardEvent))
     this.element.addEventListener("input", (event) => this.handleInputEvent(event as InputEvent))
     this.element.addEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
+
+    this.element.focus()
   }
 
   get htmlContent() {
     return this.element.innerHTML || ""
-  }
-
-  focus() {
-    this.element.focus()
   }
 
   on(event: string, callback: EventListener) {
@@ -49,6 +49,72 @@ export default class Napkin {
 
     for (const callback of this.callbacks[event]) {
       callback(data)
+    }
+  }
+
+  createCalculatorWidget(textNode: Text, text: string) {
+    const div = document.createElement("div");
+    div.classList.add("widget", "widget-calculator");
+
+    const input = document.createElement("input");
+    input.className = "widget-calculator__input";
+    input.type = "text";
+    input.value = text.replace(this.CALCULATOR_REGEX, "$2");
+
+    const output = document.createElement("output");
+    output.className = "widget-calculator__output";
+    output.textContent = "";
+
+    div.appendChild(input);
+    div.appendChild(output);
+
+    textNode.replaceWith(div);
+    this.setCursorAfterElement(div);
+  }
+
+  loadCalculatorWidgets() {
+    const calculatorElements = this.element.querySelectorAll(".widget-calculator");
+    if (!calculatorElements) {
+      return;
+    }
+
+    for (const calculator of calculatorElements) {
+      const input = calculator.querySelector(".widget-calculator__input") as HTMLInputElement;
+      input.value = input.dataset.value || "";
+    }
+  }
+
+  formatCalculatorWidgets() {
+    const calculatorElements = this.element.querySelectorAll(".widget-calculator");
+    if (!calculatorElements) {
+      return;
+    }
+
+    const inputHistory = []
+    for (const calculator of calculatorElements) {
+      const input = calculator.querySelector(".widget-calculator__input") as HTMLInputElement;
+      const output = calculator.querySelector(".widget-calculator__output") as HTMLOutputElement;
+
+      if (!input || !output) {
+        continue;
+      }
+
+      input.dataset.value = input.value;
+
+      if (input.value.trim() === "") {
+        output.textContent = "";
+        continue;
+      }
+
+      inputHistory.push(input.value);
+
+      try {
+        const result = eval(inputHistory.join(";"));
+        output.textContent = result;
+      } catch (error) {
+        inputHistory.pop();
+        output.textContent = "";
+      }
     }
   }
 
@@ -101,6 +167,17 @@ export default class Napkin {
     this.insertHTML(row);
   }
 
+  loadCheckboxWidgets() {
+    const checkboxElements = this.element.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
+    if (!checkboxElements) {
+      return;
+    }
+
+    for (const checkbox of checkboxElements) {
+      checkbox.checked = checkbox.value === "true";
+    }
+  }
+
   formatLinkWidgets() {
     const linkElements = this.element.querySelectorAll(".widget-link");
 
@@ -117,17 +194,6 @@ export default class Napkin {
       }
 
       gotoLink.href = gotoLinkText.textContent || "";
-    }
-  }
-
-  loadCheckboxWidgets() {
-    const checkboxElements = this.element.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
-    if (!checkboxElements) {
-      return;
-    }
-
-    for (const checkbox of checkboxElements) {
-      checkbox.checked = checkbox.value === "true";
     }
   }
 
@@ -159,13 +225,12 @@ export default class Napkin {
     }
   }
 
-
-
   private handleInputEvent(event: InputEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.parseTextNodes();
+    this.formatTextNodes();
     this.formatLinkWidgets();
+    this.formatCalculatorWidgets();
     this.trigger(NAPKIN_EVENTS.ON_UPDATE);
   }
 
@@ -202,7 +267,16 @@ export default class Napkin {
     this.trigger(NAPKIN_EVENTS.ON_UPDATE);
   }
 
-  private parseTextNodes() {
+  private getAllTextNodes(node: Node): Text[] {
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode as Text);
+    }
+    return textNodes;
+  }
+
+  private formatTextNodes() {
     const textNodes = this.getAllTextNodes(this.element as Node);
     for (const textNode of textNodes) {
       const text = textNode.textContent || "";
@@ -210,8 +284,9 @@ export default class Napkin {
       const isCheckbox = this.CHECKBOX_REGEX.test(text);
       const isBulletList = this.LIST_UNORDERED_REGEX.test(text);
       const isNumberedList = this.LIST_ORDERED_REGEX.test(text);
+      const isCalculator = this.CALCULATOR_REGEX.test(text);
 
-      if (!isCheckbox && !isBulletList && !isNumberedList) {
+      if (!isCheckbox && !isBulletList && !isNumberedList && !isCalculator) {
         continue;
       }
 
@@ -229,6 +304,11 @@ export default class Napkin {
         this.createOrderedListWidget(textNode, text);
         continue;
       }
+
+      if (isCalculator) {
+        this.createCalculatorWidget(textNode, text);
+        continue;
+      }
     }
   }
 
@@ -237,15 +317,6 @@ export default class Napkin {
     range?.collapse(true);
     range?.insertNode(element);
     this.setCursorAfterElement(element);
-  }
-
-  private getAllTextNodes(node: Node): Text[] {
-    const textNodes: Text[] = [];
-    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
-    while (walker.nextNode()) {
-      textNodes.push(walker.currentNode as Text);
-    }
-    return textNodes;
   }
 
   private setCursorAfterElement(element: HTMLElement | null | undefined) {
