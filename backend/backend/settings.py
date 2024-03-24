@@ -30,10 +30,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#^"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="django-insecure-3k2l3z@kq3r6h5t#")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = "RENDER" not in os.environ
 
 # Application definition
 
@@ -63,8 +63,18 @@ INSTALLED_APPS = [
     "notes",
 ]
 
-ALLOWED_HOSTS = []
-CORS_ALLOWED_ORIGIN_REGEXES = []
+ALLOWED_HOSTS = [
+    ".napkinnotes.app",
+    ".onrender.com",
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.napkinnotes\.app$",
+    r"^https:\/\/.*\.onrender\.com$",
+]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 if DEBUG:
     ALLOWED_HOSTS += [
