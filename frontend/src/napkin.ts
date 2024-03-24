@@ -266,9 +266,10 @@ export default class Napkin {
 
     const div = document.createElement("div");
     div.appendChild(input);
-    div.insertAdjacentHTML("beforeend", "&nbsp;");
     div.appendChild(document.createTextNode(inputText));
+
     textNode.replaceWith(div);
+
     this.setCursorAfterElement(div);
   }
 

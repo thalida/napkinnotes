@@ -78,4 +78,8 @@ onBeforeUnmount(() => {
   color: #00ff92;
   font-family: "Fira Code", monospace;
 }
+
+.widget.widget-checkbox {
+  margin-right: 0.5rem;
+}
 </style>
