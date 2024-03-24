@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth';
 import { useCoreStore } from '@/stores/core';
-import NapkinApp from '@/components/NapkinApp.vue'
+import NapkinNote from '@/components/NapkinNote.vue'
 import LoginDialog from '@/components/LoginDialog.vue'
 
 
@@ -28,7 +28,7 @@ function handleLoginButtonClick() {
   <div class="flex flex-col h-full max-h-full bg-white dark:bg-slate-900">
 
     <div class="grow overflow-auto">
-      <NapkinApp
+      <NapkinNote
         v-if="coreStore.note"
         :key="coreStore.note.id"
         class="p-8 prose grow h-full w-full max-w-full border-slate-100 dark:text-white overflow-y-auto focus:outline-none" />

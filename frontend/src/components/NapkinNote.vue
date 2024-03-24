@@ -2,17 +2,17 @@
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { throttle } from 'lodash'
 import { useCoreStore } from '@/stores/core';
-import Napkin, { NAPKIN_EVENTS } from "@/napkin";
+import NapkinNote, { NAPKIN_NOTE_EVENTS } from "@/components/NapkinNote";
 
-let napkin: Napkin
+let napkin: NapkinNote
 const coreStore = useCoreStore()
 const contentEditableRef = ref<HTMLDivElement | null>(null)
 const htmlContent = ref(coreStore.note?.content)
 const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 onMounted(() => {
-  napkin = new Napkin(contentEditableRef.value as HTMLElement)
-  napkin.on(NAPKIN_EVENTS.ON_UPDATE, () => {
+  napkin = new NapkinNote(contentEditableRef.value as HTMLElement)
+  napkin.on(NAPKIN_NOTE_EVENTS.ON_UPDATE, () => {
     coreStore.setNoteContent(napkin.htmlContent)
     throttledUpdate()
   })
@@ -92,3 +92,4 @@ onBeforeUnmount(() => {
   text-decoration: none;
 }
 </style>
+@/components/NapkinNote

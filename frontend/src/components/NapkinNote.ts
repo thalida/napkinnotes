@@ -1,8 +1,8 @@
-export const NAPKIN_EVENTS = {
+export const NAPKIN_NOTE_EVENTS = {
   ON_UPDATE: "update",
 };
 
-export default class Napkin {
+export default class NapkinNote {
   element: HTMLElement
 
   private callbacks: { [key: string]: EventListener[] } = {}
@@ -31,7 +31,6 @@ export default class Napkin {
 
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
-    this.element.addEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
     this.element.addEventListener("keyup", (event) => this.handleKeyupEvent(event as KeyboardEvent))
     this.element.addEventListener("keydown", (event) => this.handleKeydownEvent(event as KeyboardEvent))
     this.element.addEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
@@ -44,14 +43,13 @@ export default class Napkin {
   }
 
   destroy() {
-    this.element.removeEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
     this.element.removeEventListener("keyup", (event) => this.handleKeyupEvent(event as KeyboardEvent))
     this.element.removeEventListener("keydown", (event) => this.handleKeydownEvent(event as KeyboardEvent))
     this.element.removeEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
   }
 
   on(event: string, callback: EventListener) {
-    if (!Object.values(NAPKIN_EVENTS).includes(event)) {
+    if (!Object.values(NAPKIN_NOTE_EVENTS).includes(event)) {
       throw new Error(`Unsupported event: ${event}`)
     }
 
@@ -329,7 +327,7 @@ export default class Napkin {
       console.error(error);
     }
 
-    this.trigger(NAPKIN_EVENTS.ON_UPDATE);
+    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE);
   }
 
   private handleKeydownEvent(event: KeyboardEvent) {
@@ -356,7 +354,7 @@ export default class Napkin {
     }
 
     this.createLinkWidget(textNode, textContent);
-    this.trigger(NAPKIN_EVENTS.ON_UPDATE);
+    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE);
   }
 
   private handleClickEvent(event: MouseEvent) {
@@ -372,7 +370,7 @@ export default class Napkin {
     }
 
     this.formatCheckboxWidgets();
-    this.trigger(NAPKIN_EVENTS.ON_UPDATE);
+    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE);
   }
 
   private getAllTextNodes(node: Node): Text[] {
