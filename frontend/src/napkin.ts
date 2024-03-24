@@ -14,6 +14,10 @@ export default class Napkin {
   private LIST_UNORDERED_REGEX = /^([*-]\s)([^[].*)/
   private LIST_ORDERED_REGEX = /^([1]+\.\s)(.*)/
   private CALCULATOR_REGEX = /^(\$\s)(.*)/
+  private CALCULATOR_NEEDS_VAR_DEF_REGEX = /^\s*?([\w]*)\s*?=/
+  private CALCULAOTR_VARIABLE_REGEX = /^(let|const)?\s*?([\w]*)\s*?=/
+
+  private alreadyEmptyInputs = new Set<HTMLElement>();
 
   constructor(element: HTMLElement) {
     this.element = element
@@ -108,20 +112,25 @@ export default class Napkin {
 
     const inputHistory: string[] = [];
 
-    function evalInput(inputString: string, outputElement: HTMLElement) {
+    function evalInput(inputString: string): any {
       if (inputString.trim() === "") {
-        outputElement.textContent = "";
+        return "";
       }
 
       inputHistory.push(inputString);
 
       try {
-        const result = eval(inputHistory.join(";"));
-        outputElement.textContent = result;
+        let result = eval?.(`"use strict";${inputHistory.join(";")}`);
+        if (typeof result === "string") {
+          result = result.replace("use strict", "")
+        }
+
+        return result;
       } catch (error) {
         inputHistory.pop();
-        outputElement.textContent = "";
       }
+
+      return "";
     }
 
     for (const calculator of calculatorElements) {
@@ -132,8 +141,22 @@ export default class Napkin {
         continue;
       }
 
-      input.dataset.value = input.value;
-      evalInput(input.value, output);
+      let inputValue = input.value;
+
+      input.dataset.value = inputValue;
+
+      const isVariableWithoutLet = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(inputValue);
+      if (isVariableWithoutLet) {
+        inputValue = `let ${input.value}`;
+      }
+
+      const matches = inputValue.match(this.CALCULAOTR_VARIABLE_REGEX);
+      const variableName = matches ? matches[2] : "";
+
+      inputValue = `${inputValue};${variableName}`
+
+      const result = evalInput(inputValue);
+      output.textContent = result;
     }
   }
 
@@ -250,7 +273,16 @@ export default class Napkin {
       const isEmpty = value.trim().length === 0;
 
       if (isBackspace && isEmpty) {
-        (event.target as HTMLElement).parentElement?.remove();
+        const previouslyEmpty = this.alreadyEmptyInputs.has(event.target as HTMLElement);
+
+        if (previouslyEmpty) {
+          (event.target as HTMLElement).parentElement?.remove();
+          this.alreadyEmptyInputs.delete(event.target as HTMLElement);
+        } else {
+          this.alreadyEmptyInputs.add(event.target as HTMLElement);
+        }
+      } else {
+        this.alreadyEmptyInputs.delete(event.target as HTMLElement);
       }
 
       if (isEnter) {
