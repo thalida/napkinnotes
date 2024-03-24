@@ -67,6 +67,7 @@ ALLOWED_HOSTS = [
     ".napkinnotes.app",
     ".onrender.com",
 ]
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https:\/\/.*\.napkinnotes\.app$",
     r"^https:\/\/.*\.onrender\.com$",
