@@ -78,6 +78,7 @@ export default class Napkin {
     input.wrap = "soft";
     input.autocomplete = "off";
     input.autocapitalize = "off";
+    input.rows = 1;
     input.value = text.replace(this.CALCULATOR_REGEX, "$2");
     input.placeholder = "Enter a math expression";
     input.dataset.value = input.value;
@@ -283,7 +284,7 @@ export default class Napkin {
   }
 
   private handleInputEvent(event: KeyboardEvent) {
-    const isInputElement = (event.target as HTMLElement).tagName === "INPUT";
+    const isInputElement = (event.target as HTMLElement).tagName === "INPUT" || (event.target as HTMLElement).tagName === "TEXTAREA";
     if (isInputElement) {
       const isBackspace = event.key === "Backspace";
       const isEnter = event.key === "Enter";
@@ -304,6 +305,8 @@ export default class Napkin {
       }
 
       if (isEnter) {
+        (event.target as HTMLInputElement).value = value.trim();
+
         (event.target as HTMLElement).blur();
         const p = document.createElement("p");
         const br = document.createElement("br");
