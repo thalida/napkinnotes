@@ -119,7 +119,7 @@ export default class Napkin {
     function evalInput(inputString: string, variableName: string): any {
       inputHistory.push(inputString);
 
-      let evalString = inputHistory.join(";")
+      let evalString = `'use strict'; ${inputHistory.join(";")}`
       evalString = variableName ? `${evalString};${variableName}` : evalString;
 
       try {
