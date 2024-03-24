@@ -333,8 +333,6 @@ export default class Napkin {
   }
 
   private handleKeydownEvent(event: KeyboardEvent) {
-    console.log("handleKeydownEvent", event)
-
     this.isMetaKeyPressed = event.metaKey || event.ctrlKey;
     const isK = event.key === "k";
 
