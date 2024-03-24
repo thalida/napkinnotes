@@ -4,15 +4,15 @@ import { throttle } from 'lodash'
 import { useCoreStore } from '@/stores/core';
 import NapkinNote, { NAPKIN_NOTE_EVENTS } from "@/components/NapkinNote";
 
-let napkin: NapkinNote
+let napkinnote: NapkinNote
 const coreStore = useCoreStore()
 const contentEditableRef = ref<HTMLDivElement | null>(null)
 const htmlContent = ref(coreStore.note?.content)
 const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 onMounted(() => {
-  napkin = new NapkinNote(contentEditableRef.value as HTMLElement)
-  napkin.on(NAPKIN_NOTE_EVENTS.ON_UPDATE, () => {
+  napkinnote = new NapkinNote(contentEditableRef.value as HTMLElement)
+  napkinnote.on(NAPKIN_NOTE_EVENTS.ON_UPDATE, () => {
     coreStore.setNoteContent(napkin.htmlContent)
     throttledUpdate()
   })
@@ -20,7 +20,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   coreStore.updateNote()
-  napkin.destroy()
+  napkinnote.destroy()
 })
 </script>
 
@@ -37,7 +37,7 @@ onBeforeUnmount(() => {
 
 :root {
   --napkinnotes--calculator-widget--bg: rgba(0, 0, 0, 0.08);
-  --napkinnoes--calculator-widget--output-text: #047857;
+  --napkinnoes--calculator-widget--output-text: #b91c1c;
   --napkinnotes--link-widget--action: #10b981;
 }
 
