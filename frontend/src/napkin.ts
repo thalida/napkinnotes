@@ -1,3 +1,5 @@
+import type { Key } from "readline";
+
 export const NAPKIN_EVENTS = {
   ON_UPDATE: "update",
 };
@@ -26,7 +28,7 @@ export default class Napkin {
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
     this.element.addEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
-    this.element.addEventListener("input", (event) => this.handleInputEvent(event as InputEvent))
+    this.element.addEventListener("keyup", (event) => this.handleInputEvent(event as KeyboardEvent))
     this.element.addEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
 
     this.element.focus()
@@ -76,13 +78,7 @@ export default class Napkin {
 
     widget.appendChild(input);
     widget.appendChild(output);
-
-    const row = document.createElement("div");
-    row.appendChild(widget);
-    textNode.replaceWith(row);
-
-    const br = document.createElement("br");
-    row.after(br);
+    textNode.replaceWith(widget);
 
     input.focus();
   }
@@ -184,13 +180,7 @@ export default class Napkin {
     widget.appendChild(document.createTextNode(" "));
     widget.appendChild(gotoLink);
 
-    const row = document.createElement("div");
-    row.appendChild(widget);
-
-    const br = document.createElement("br");
-    row.after(br);
-
-    this.insertHTML(row);
+    this.insertHTML(widget);
   }
 
   loadCheckboxWidgets() {
@@ -251,9 +241,27 @@ export default class Napkin {
     }
   }
 
-  private handleInputEvent(event: InputEvent) {
-    event.preventDefault();
-    event.stopPropagation();
+  private handleInputEvent(event: KeyboardEvent) {
+    const isInputElement = (event.target as HTMLElement).tagName === "INPUT";
+    if (isInputElement) {
+      const isBackspace = event.key === "Backspace";
+      const isEnter = event.key === "Enter";
+      const value = (event.target as HTMLInputElement).value;
+      const isEmpty = value.trim().length === 0;
+
+      if (isBackspace && isEmpty) {
+        (event.target as HTMLElement).parentElement?.remove();
+      }
+
+      if (isEnter) {
+        (event.target as HTMLElement).blur();
+        const p = document.createElement("p");
+        const br = document.createElement("br");
+        p.appendChild(br);
+        (event.target as HTMLElement).parentElement?.after(p);
+        this.setCursorAfterElement(p);
+      }
+    }
 
     try {
       this.formatTextNodes();

@@ -29,5 +29,15 @@ onMounted(() => {
   />
 </template>
 
-<style scoped>
+<style>
+.widget-calculator {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.widget-calculator__input {
+  flex-grow: 1;
+}
+
 </style>
