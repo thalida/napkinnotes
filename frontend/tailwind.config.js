@@ -12,6 +12,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
       },
     },
   },

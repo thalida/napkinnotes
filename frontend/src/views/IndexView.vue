@@ -26,10 +26,13 @@ function handleLoginButtonClick() {
 
 <template>
   <div class="flex flex-col h-full max-h-full bg-white dark:bg-slate-900">
-    <NapkinApp
-      v-if="coreStore.note"
-      :key="coreStore.note.id"
-      class="p-8 prose grow w-full max-w-full border-slate-100 dark:text-white overflow-auto focus:outline-none" />
+
+    <div class="grow overflow-auto">
+      <NapkinApp
+        v-if="coreStore.note"
+        :key="coreStore.note.id"
+        class="p-8 prose grow w-full max-w-full border-slate-100 dark:text-white overflow-auto focus:outline-none" />
+    </div>
 
     <div class="p-4 shrink-0 dark:bg-slate-950">
       <button

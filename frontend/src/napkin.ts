@@ -116,19 +116,14 @@ export default class Napkin {
 
     const inputHistory: string[] = [];
 
-    function evalInput(inputString: string): any {
-      if (inputString.trim() === "") {
-        return "";
-      }
-
+    function evalInput(inputString: string, variableName: string): any {
       inputHistory.push(inputString);
 
-      try {
-        let result = eval?.(`"use strict";${inputHistory.join(";")}`);
-        if (typeof result === "string") {
-          result = result.replace("use strict", "")
-        }
+      let evalString = inputHistory.join(";")
+      evalString = variableName ? `${evalString};${variableName}` : evalString;
 
+      try {
+        const result = eval?.(evalString);
         return result;
       } catch (error) {
         inputHistory.pop();
@@ -145,21 +140,24 @@ export default class Napkin {
         continue;
       }
 
-      let inputValue = input.value;
+      input.dataset.value = input.value;
 
-      input.dataset.value = inputValue;
+      let inputValue = input.value.trim();
 
-      const isVariableWithoutLet = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(inputValue);
-      if (isVariableWithoutLet) {
-        inputValue = `let ${input.value}`;
+      const hasValue = inputValue.length > 0;
+      if (!hasValue) {
+        output.textContent = "";
+        continue;
+      }
+
+      const isVariableWithoutDeclaration = this.CALCULATOR_NEEDS_VAR_DEF_REGEX.test(inputValue);
+      if (isVariableWithoutDeclaration) {
+        inputValue = `var ${input.value}`;
       }
 
       const matches = inputValue.match(this.CALCULAOTR_VARIABLE_REGEX);
       const variableName = matches ? matches[2] : "";
-
-      inputValue = `${inputValue};${variableName}`
-
-      const result = evalInput(inputValue);
+      const result = evalInput(inputValue, variableName);
       output.textContent = result;
     }
   }
