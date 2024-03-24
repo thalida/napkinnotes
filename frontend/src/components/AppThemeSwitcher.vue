@@ -42,7 +42,7 @@ watchEffect(() => {
 <template>
   <Menu as="div" class="relative inline-block text-left">
     <div>
-      <MenuButton class="flex items-center rounded-full text-slate-600 hover:text-gray-400">
+      <MenuButton class="flex items-center rounded-full text-blue-500 dark:text-slate-800">
         <span class="sr-only">Open options</span>
         <component :is="activeIcon" class="inline-block w-5 h-5" />
       </MenuButton>
@@ -57,7 +57,7 @@ watchEffect(() => {
       eave-to-class="transform opacity-0 scale-95"
     >
       <MenuItems
-        class="absolute right-1 bottom-10 z-10 mt-2 min-w-32 origin-bottom-right rounded-md bg-white dark:bg-slate-800 shadow-lg overflow-hidden ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="absolute right-1 bottom-10 z-10 mt-2 min-w-32 origin-bottom-right rounded-md bg-blue-50 dark:bg-slate-800 shadow-lg overflow-hidden ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div>
           <MenuItem
@@ -69,8 +69,8 @@ watchEffect(() => {
               @click="uiStore.setTheme(option.key)"
               class="flex flex-row items-center justify-start gap-2 w-full px-4 py-2 text-left text-sm"
               :class="{
-                'bg-slate-100 text-emerald-500 dark:bg-slate-700 dark:text-emerald-500': uiStore.selectedTheme === option.key,
-                'text-slate-400 dark:text-slate-400': uiStore.selectedTheme !== option.key && hover,
+                'bg-teal-100 text-blue-500 dark:bg-slate-900/50 dark:text-blue-500': uiStore.selectedTheme === option.key,
+                'text-blue-500': uiStore.selectedTheme !== option.key && hover,
                 'text-gray-700 dark:text-white': uiStore.selectedTheme !== option.key && !hover,
               }"
             >

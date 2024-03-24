@@ -33,11 +33,9 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
-
 :root {
-  --napkinnotes--calculator-widget--bg: rgba(0, 0, 0, 0.08);
-  --napkinnoes--calculator-widget--output-text: #b91c1c;
+  --napkinnotes--calculator-widget--bg: #bfdbfe80;
+  --napkinnoes--calculator-widget--output-text: #10b981;
   --napkinnotes--link-widget--action: #10b981;
 }
 
