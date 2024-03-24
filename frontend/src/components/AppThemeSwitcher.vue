@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { watchEffect } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { useUIStore } from '@/stores/ui';
 
@@ -57,7 +57,7 @@ watchEffect(() => {
       eave-to-class="transform opacity-0 scale-95"
     >
       <MenuItems
-        class="absolute right-0 bottom-8 z-10 mt-2 min-w-32 origin-bottom-right rounded-md bg-white dark:bg-slate-800 shadow-lg overflow-hidden ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="absolute right-1 bottom-10 z-10 mt-2 min-w-32 origin-bottom-right rounded-md bg-white dark:bg-slate-800 shadow-lg overflow-hidden ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div>
           <MenuItem

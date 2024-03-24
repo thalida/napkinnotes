@@ -3,6 +3,7 @@ import { ref, defineProps } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XCircleIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
+import NapkinNotesLogo from '@/components/icons/NapkinNotesLogo.vue'
 
 const authStore = useAuthStore()
 const props = defineProps({
@@ -51,13 +52,9 @@ async function handleSubmit(e: Event) {
             <DialogPanel
               class="relative w-full transform overflow-hidden rounded-lg bg-white dark:bg-slate-950 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:max-w-sm sm:p-6"
             >
-              <div class="w-full sm:mx-auto sm:max-w-md">
-                <img
-                  class="mx-auto h-10 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt="Your Company"
-                />
-                <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
+              <div class="flex flex-row items-center justify-start pb-4 gap-4 w-full sm:mx-auto sm:max-w-md">
+                <NapkinNotesLogo class="w-10 h-10" />
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   Napkin Notes
                 </h2>
               </div>
@@ -71,7 +68,7 @@ async function handleSubmit(e: Event) {
                 </p>
               </div>
 
-              <form class="mt-4 space-y-6" @submit="handleSubmit">
+              <form class="mt-4 space-y-4" @submit="handleSubmit">
                 <div>
                   <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                     Email address
@@ -82,6 +79,7 @@ async function handleSubmit(e: Event) {
                       id="email"
                       name="email"
                       type="email"
+                      autocomplete="email"
                       required
                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:bg-white/5 dark:text-white dark:ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -97,6 +95,7 @@ async function handleSubmit(e: Event) {
                       id="password"
                       name="password"
                       type="password"
+                      autocomplete="current-password"
                       required
                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:bg-white/5 dark:text-white dark:ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -105,9 +104,9 @@ async function handleSubmit(e: Event) {
                 <div>
                   <button
                     type="submit"
-                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    class="transition ease-in-out duration-200 flex w-full justify-center rounded-md bg-gradient-to-br from-pink-700 via-fuchsia-500 to-violet-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:shadow-lg hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
-                    Sign in
+                    Log In
                   </button>
                 </div>
               </form>
@@ -118,3 +117,6 @@ async function handleSubmit(e: Event) {
     </Dialog>
   </TransitionRoot>
 </template>
+
+<style scoped>
+</style>

@@ -11,7 +11,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ["Wix Madefor Text", ...defaultTheme.fontFamily.sans],
+        display: ['Wix Madefor Text', ...defaultTheme.fontFamily.sans],
         mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
       },
     },
