@@ -1,0 +1,51 @@
+previewsEnabled: false
+previewsExpireAfterDays: 1
+
+services:
+  # App
+  - type: web
+    name: napkinnotes:app
+    env: static
+    rootDir: frontend/
+    buildFilter:
+      paths:
+      - frontend/**
+    buildCommand: ./scripts/render/build.sh
+    staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: sameorigin
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # API
+  - type: web
+    name: napkinnotes:api
+    env: python
+    plan: free
+    rootDir: backend/
+    buildFilter:
+      paths:
+      - backend/**
+    startCommand: ./scripts/render/start.sh
+    buildCommand: ./scripts/render/build.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.4
+      - key: DATABASE_URL
+        fromDatabase:
+          name: napkinnotes:db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+
+databases:
+  - name: napkinnotes:db
+    databaseName: napkinnotes
+    user: admin
+    plan: free
