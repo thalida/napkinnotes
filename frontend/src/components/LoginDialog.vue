@@ -12,9 +12,9 @@ const emit = defineEmits(['onDismiss'])
 
 const email = ref('')
 const password = ref('')
-const error = ref(null)
+const error = ref<string|null>(null)
 
-async function handleSubmit(e) {
+async function handleSubmit(e: Event) {
   e.preventDefault()
   try {
     await authStore.loginWithEmail({ username: email.value, password: password.value })

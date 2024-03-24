@@ -1,31 +1,31 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { LOCALSTOARGE_NAMESPACE } from '.'
+import type { ColorScheme, Theme } from '@/types'
 
 export const useUIStore = defineStore('ui', () => {
   const THEME_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}theme`
-  const supportedThemes = ['light', 'dark', 'system']
-  const selectedTheme = ref('system')
-  const themeClass = ref<'light' | 'dark'>('light')
+  const supportedThemes = ['light', 'dark', 'system'] as const
+  const selectedTheme = ref<Theme>('dark')
+  const colorScheme = ref<ColorScheme>('dark')
 
   function initTheme() {
     const theme = localStorage.theme ? localStorage.theme : 'system'
     setTheme(theme)
   }
 
-  function setTheme(theme: typeof supportedThemes[number]) {
-    if (supportedThemes.includes(theme)) {
-      selectedTheme.value = theme
-    }
+  function setTheme(theme: Theme) {
+    console.log('setTheme', theme)
+    selectedTheme.value = theme
 
     if (
       selectedTheme.value === 'dark' ||
       (selectedTheme.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
-      themeClass.value = 'dark'
+      colorScheme.value = 'dark'
       document.documentElement.classList.add('dark')
     } else {
-      themeClass.value = 'light'
+      colorScheme.value = 'light'
       document.documentElement.classList.remove('dark')
     }
 
@@ -39,8 +39,8 @@ export const useUIStore = defineStore('ui', () => {
   return {
     supportedThemes,
     selectedTheme,
-    themeClass,
+    colorScheme,
     initTheme,
-    setTheme
+    setTheme,
   }
 })

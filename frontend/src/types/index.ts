@@ -1,9 +1,10 @@
+export type Theme = 'light' | 'dark' | 'system';
+export type ColorScheme = 'light' | 'dark';
 
 export interface IAuthLoginRequest {
   username: string;
   password: string;
 }
-
 
 export interface IAuthTokenResponse {
   access_token: string;
