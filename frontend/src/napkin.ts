@@ -17,6 +17,8 @@ export default class Napkin {
 
   private alreadyEmptyInputs = new Set<HTMLElement>();
 
+  private isMetaKeyPressed = false;
+
   constructor(element: HTMLElement) {
     this.element = element
 
@@ -30,7 +32,8 @@ export default class Napkin {
     document.execCommand('defaultParagraphSeparator', false, 'p');
 
     this.element.addEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
-    this.element.addEventListener("keyup", (event) => this.handleInputEvent(event as KeyboardEvent))
+    this.element.addEventListener("keyup", (event) => this.handleKeyupEvent(event as KeyboardEvent))
+    this.element.addEventListener("keydown", (event) => this.handleKeydownEvent(event as KeyboardEvent))
     this.element.addEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
 
     this.element.focus()
@@ -42,7 +45,8 @@ export default class Napkin {
 
   destroy() {
     this.element.removeEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
-    this.element.removeEventListener("keyup", (event) => this.handleInputEvent(event as KeyboardEvent))
+    this.element.removeEventListener("keyup", (event) => this.handleKeyupEvent(event as KeyboardEvent))
+    this.element.removeEventListener("keydown", (event) => this.handleKeydownEvent(event as KeyboardEvent))
     this.element.removeEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
   }
 
@@ -203,7 +207,7 @@ export default class Napkin {
     this.setCursorAfterElement(div);
   }
 
-  createLinkWidget(url: string) {
+  createLinkWidget(textNode: Text, url: string) {
     const widget = document.createElement("span");
     widget.classList.add("widget", "widget-link");
 
@@ -216,24 +220,13 @@ export default class Napkin {
     gotoLink.contentEditable = "false";
     gotoLink.href = url;
     gotoLink.target = "_blank";
-    gotoLink.textContent = "[⤴︎]";
+    gotoLink.textContent = "⤴︎";
 
     widget.appendChild(spanLinkText);
-    widget.appendChild(document.createTextNode(" "));
     widget.appendChild(gotoLink);
 
-    this.insertHTML(widget);
-  }
-
-  loadCheckboxWidgets() {
-    const checkboxElements = this.element.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
-    if (!checkboxElements) {
-      return;
-    }
-
-    for (const checkbox of checkboxElements) {
-      checkbox.checked = checkbox.value === "true";
-    }
+    textNode.replaceWith(widget);
+    this.setCursorAfterElement(widget);
   }
 
   formatLinkWidgets() {
@@ -273,6 +266,17 @@ export default class Napkin {
     this.setCursorAfterElement(div);
   }
 
+  loadCheckboxWidgets() {
+    const checkboxElements = this.element.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
+    if (!checkboxElements) {
+      return;
+    }
+
+    for (const checkbox of checkboxElements) {
+      checkbox.checked = checkbox.value === "true";
+    }
+  }
+
   formatCheckboxWidgets() {
     const checkboxElements = this.element.querySelectorAll("input[type=checkbox]") as NodeListOf<HTMLInputElement>;
     if (!checkboxElements) {
@@ -284,7 +288,7 @@ export default class Napkin {
     }
   }
 
-  private handleInputEvent(event: KeyboardEvent) {
+  private handleKeyupEvent(event: KeyboardEvent) {
     const isInputElement = (event.target as HTMLElement).tagName === "INPUT" || (event.target as HTMLElement).tagName === "TEXTAREA";
     if (isInputElement) {
       const isBackspace = event.key === "Backspace";
@@ -328,6 +332,35 @@ export default class Napkin {
     this.trigger(NAPKIN_EVENTS.ON_UPDATE);
   }
 
+  private handleKeydownEvent(event: KeyboardEvent) {
+    console.log("handleKeydownEvent", event)
+
+    this.isMetaKeyPressed = event.metaKey || event.ctrlKey;
+    const isK = event.key === "k";
+
+    if (!this.isMetaKeyPressed || !isK) {
+      return;
+    }
+
+    event.preventDefault();
+    const selection = window.getSelection();
+    const text = selection?.toString();
+
+    if (!text) {
+      return;
+    }
+
+    const textNode = selection?.anchorNode as Text;
+    const textContent = textNode.textContent || "";
+
+    if (!textNode) {
+      return;
+    }
+
+    this.createLinkWidget(textNode, textContent);
+    this.trigger(NAPKIN_EVENTS.ON_UPDATE);
+  }
+
   private handleClickEvent(event: MouseEvent) {
     const target = event.target
 
@@ -341,23 +374,6 @@ export default class Napkin {
     }
 
     this.formatCheckboxWidgets();
-    this.trigger(NAPKIN_EVENTS.ON_UPDATE);
-  }
-
-  private handlePasteEvent(event: ClipboardEvent) {
-    if (!event.clipboardData) {
-      return;
-    }
-
-    const text = event.clipboardData.getData("text/plain");
-    const isLink = text.startsWith("http://") || text.startsWith("https://");
-
-    if (!isLink) {
-      return;
-    }
-
-    event.preventDefault();
-    this.createLinkWidget(text);
     this.trigger(NAPKIN_EVENTS.ON_UPDATE);
   }
 

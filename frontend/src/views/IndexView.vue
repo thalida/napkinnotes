@@ -31,7 +31,7 @@ function handleLoginButtonClick() {
       <NapkinApp
         v-if="coreStore.note"
         :key="coreStore.note.id"
-        class="p-8 prose grow w-full max-w-full border-slate-100 dark:text-white overflow-auto focus:outline-none" />
+        class="p-8 prose grow h-full w-full max-w-full border-slate-100 dark:text-white overflow-y-auto focus:outline-none" />
     </div>
 
     <div class="p-4 shrink-0 dark:bg-slate-950">

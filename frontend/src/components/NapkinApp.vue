@@ -35,7 +35,7 @@ onBeforeUnmount(() => {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
-.widget-calculator {
+.widget.widget-calculator {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -81,5 +81,14 @@ onBeforeUnmount(() => {
 
 .widget.widget-checkbox {
   margin-right: 0.5rem;
+}
+
+.widget.widget-link {
+  white-space: nowrap;
+}
+
+.widget-link__action {
+  color: #00ff92;
+  text-decoration: none;
 }
 </style>
