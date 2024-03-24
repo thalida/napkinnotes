@@ -15,6 +15,7 @@ function handleLoginDialogDismiss() {
 }
 
 function handleLogoutButtonClick() {
+  coreStore.clearData()
   authStore.logout()
 }
 
@@ -24,19 +25,28 @@ function handleLoginButtonClick() {
 </script>
 
 <template>
-  <div class="flex flex-col py-10 px-4 sm:px-6 lg:px-8">
-    <button v-if="authStore.isAuthenticated" class="mt-4 bg-red-500 text-white font-semibold py-2 px-4 rounded" @click="handleLogoutButtonClick">
-      Logout
-    </button>
-    <button
-      v-else
-      class="mt-4 bg-indigo-500 text-white font-semibold py-2 px-4 rounded"
-      @click="handleLoginButtonClick"
-      >
-      Show Login Dialog
-    </button>
+  <div class="flex flex-col h-full max-h-full bg-white dark:bg-slate-900">
+    <NapkinApp
+      v-if="coreStore.note"
+      :key="coreStore.note.id"
+      class="p-8 prose grow w-full max-w-full border-slate-100 dark:text-white overflow-auto focus:outline-none" />
 
-    <NapkinApp v-if="coreStore.note" />
+    <div class="p-4 shrink-0 dark:bg-slate-950">
+      <button
+        v-if="authStore.isAuthenticated"
+        class="bg-red-500 text-white font-semibold py-2 px-4 rounded"
+        @click="handleLogoutButtonClick"
+      >
+        Logout
+      </button>
+      <button
+        v-else
+        class="bg-indigo-500 text-white font-semibold py-2 px-4 rounded"
+        @click="handleLoginButtonClick"
+      >
+        Show Login Dialog
+      </button>
+    </div>
 
     <LoginDialog :isVisible="isLoginDialogVisible" @onDismiss="handleLoginDialogDismiss" />
   </div>

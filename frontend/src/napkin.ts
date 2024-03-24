@@ -40,6 +40,12 @@ export default class Napkin {
     return this.element.innerHTML || ""
   }
 
+  destroy() {
+    this.element.removeEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
+    this.element.removeEventListener("keyup", (event) => this.handleInputEvent(event as KeyboardEvent))
+    this.element.removeEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
+  }
+
   on(event: string, callback: EventListener) {
     if (!Object.values(NAPKIN_EVENTS).includes(event)) {
       throw new Error(`Unsupported event: ${event}`)

@@ -27,9 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function clearTokenData() {
     tokenData.value = null
-
     localStorage.removeItem('x-tokenData')
-
     isAuthenticated.value = false
   }
 

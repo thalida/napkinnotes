@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XCircleIcon } from '@heroicons/vue/24/outline'
@@ -28,7 +28,6 @@ async function handleSubmit(e) {
     password.value = ''
   }
 }
-
 </script>
 
 <template>
