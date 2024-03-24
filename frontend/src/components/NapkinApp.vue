@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { throttle } from 'lodash'
 import { useCoreStore } from '@/stores/core';
 
@@ -9,87 +9,197 @@ const htmlContent = ref(coreStore.note?.content)
 
 const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
-// function handleClick(event) {
-//   const target = event.target as HTMLElement;
-//   if (target.tagName === "INPUT") {
-//     console.log("input clicked");
-//     const input = target as HTMLInputElement;
-//     const refInput = contentEditableRef.value?.querySelector(`#${input.id}`) as HTMLInputElement;
-//     refInput.checked = !refInput.checked;
-//     refInput.value = refInput.checked ? "true" : "false";
-//     refInput.focus();
-//     console.log(refInput.checked, refInput.value);
+onMounted(() => {
+  contentEditableRef.value?.focus()
+  parseWidgets()
+})
 
-//     // input.checked = input.checked ? false : true;
-//     // console.log(input.checked)
-//     // input.value = input.checked ? "true" : "false";
-//     // input.focus();
-//     event.preventDefault();
+function parseWidgets() {
+  const inputElements = contentEditableRef.value?.querySelectorAll("input");
+  for (const inputElement of inputElements) {
+    const isCheckbox = inputElement.type === "checkbox";
+    if (isCheckbox) {
+      inputElement.checked = inputElement.value === "true";
+    }
+  }
 
-//     props.onContentChange?(contentEditableRef.value?.innerHTML)
-//   }
-// }
+  const linkElements = contentEditableRef.value?.querySelectorAll(".widget-link");
+  for (const linkElement of linkElements) {
+    const gotoLink = linkElement.querySelector(".widget-link__action") as HTMLAnchorElement;
+    const gotoLinkText = linkElement.querySelector(".widget-link__text") as HTMLElement;
 
-async function handleInput(event) {
+    if (!gotoLink || !gotoLinkText) {
+      continue;
+    }
+
+    gotoLink.href = gotoLinkText.textContent || "";
+  }
+}
+
+
+function save() {
+  coreStore.setNoteContent(contentEditableRef.value?.innerHTML || "")
+  parseWidgets()
+  throttledUpdate()
+}
+
+function getAllTextNodes(node: Node): Text[] {
+  const textNodes: Text[] = [];
+  const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode as Text);
+  }
+  return textNodes;
+}
+
+function insertHTML(element: HTMLElement) {
+  const range = window.getSelection()?.getRangeAt(0);
+  range?.collapse(true);
+  range?.insertNode(element);
+  setCursorAfterElement(element);
+  save();
+}
+
+function setCursorAfterElement(element: HTMLElement) {
+  console.log(element);
+
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  range.collapse(false);
+
+  const selection = window.getSelection();
+  selection?.removeAllRanges();
+  selection?.addRange(range);
+}
+
+const checkboxRegex = /^(-\s\[[\sx]?\])(.*)/
+const isCheckedRegex = /^-\s\[[x]\]/
+const bulletListRegex = /^([*-]\s)([^[].*)/
+const numberedListRegex = /^([1]+\.\s)(.*)/
+
+async function handleInput(event: Event) {
   event.preventDefault();
   event.stopPropagation();
 
-  const nodes = Array.from((event.target as HTMLDivElement).childNodes);
-
-  const textNodes: Text[] = [];
-  for (const node of nodes) {
-    const isTextNode = node.nodeType === Node.TEXT_NODE;
-    if (isTextNode) {
-      textNodes.push(node as Text);
-    } else {
-      const divChildren = Array.from((node as HTMLDivElement).childNodes);
-      for (const divChild of divChildren) {
-        if (divChild.nodeType === Node.TEXT_NODE) {
-          textNodes.push(divChild as Text);
-        }
-      }
-    }
-  }
+  const textNodes = getAllTextNodes(contentEditableRef.value as Node);
 
   for (const textNode of textNodes) {
     const text = textNode.textContent || "";
 
-    const isCheckbox = text.startsWith("- [ ]") || text.startsWith("- [x]");
+    const isCheckbox = checkboxRegex.test(text);
+    const isBulletList = bulletListRegex.test(text);
+    const isNumberedList = numberedListRegex.test(text);
+
+    if (!isCheckbox && !isBulletList && !isNumberedList) {
+      continue;
+    }
+
     if (isCheckbox) {
-      const isChecked = text.startsWith("- [x]");
+      const inputText = text.replace(checkboxRegex, "$2")
       const input = document.createElement("input");
-      const now = new Date();
-      input.id = `checkbox-${now.getTime()}`;
+
+      input.classList.add("widget", "widget-checkbox");
       input.type = "checkbox";
-      input.checked = isChecked;
-      input.value = isChecked ? "true" : "false";
+      input.checked = isCheckedRegex.test(text);
+      input.value = input.checked ? "true" : "false";
 
       const div = document.createElement("div");
       div.appendChild(input);
-      div.appendChild(document.createTextNode(" " + text.slice(6)));
+      div.insertAdjacentHTML("beforeend", "&nbsp;");
+      div.appendChild(document.createTextNode(inputText));
       textNode.replaceWith(div);
+      setCursorAfterElement(div);
+      continue;
+    }
+
+    if (isBulletList) {
+      const ul = document.createElement("ul");
+      const li = document.createElement("li");
+      li.textContent = text.slice(2) || " ";
+      ul.appendChild(li);
+
+      const div = document.createElement("div");
+      div.appendChild(ul);
+      textNode.replaceWith(div);
+      setCursorAfterElement(div);
+      continue;
+    }
+
+    if (isNumberedList) {
+      const ol = document.createElement("ol");
+      const li = document.createElement("li");
+      li.textContent = text.slice(3) || " ";
+      ol.appendChild(li);
+
+      const div = document.createElement("div");
+      div.appendChild(ol);
+      textNode.replaceWith(div);
+      setCursorAfterElement(div);
+      continue;
     }
   }
 
-  coreStore.setNoteContent(contentEditableRef.value?.innerHTML || "")
-  throttledUpdate()
+  save();
 }
 
-// function handlePaste(event) {
-//   event.preventDefault();
-//   const text = event.clipboardData.getData("text/plain");
-//   document.execCommand("insertText", false, text);
-// }
+function handleClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (target.tagName === "INPUT") {
+    const input = target as HTMLInputElement;
+    input.value = input.checked ? "true" : "false";
+    save();
+  }
+}
+
+function handlePaste(event: ClipboardEvent) {
+  if (!event.clipboardData) {
+    return;
+  }
+
+  const text = event.clipboardData.getData("text/plain");
+  const isLink = text.startsWith("http://") || text.startsWith("https://");
+
+  if (!isLink) {
+    return;
+  }
+
+  event.preventDefault();
+
+  const widget = document.createElement("span");
+  widget.classList.add("widget", "widget-link");
+
+  const spanLinkText = document.createElement("span");
+  spanLinkText.classList.add("widget-link__text");
+  spanLinkText.textContent = text;
+
+  const gotoLink = document.createElement("a");
+  gotoLink.classList.add("widget-link__action");
+  gotoLink.contentEditable = "false";
+  gotoLink.href = text;
+  gotoLink.target = "_blank";
+  gotoLink.textContent = "[⤴︎]";
+
+  widget.appendChild(spanLinkText);
+  widget.appendChild(document.createTextNode(" "));
+  widget.appendChild(gotoLink);
+
+  const row = document.createElement("div");
+  row.appendChild(widget);
+
+  insertHTML(widget);
+}
 </script>
 
 <template>
   <div
-    class="bg-white p-2"
-    style="min-height: 100px;"
-    ref="contentEditableRef"
-    contenteditable="true"
-    v-html="htmlContent"
-    @input="handleInput"
+  class="bg-white p-2 prose w-full max-w-full"
+  style="min-height: 100px;"
+  ref="contentEditableRef"
+  contenteditable="true"
+  v-html="htmlContent"
+  @input="handleInput"
+  @click="handleClick"
+  @paste="handlePaste"
   />
 </template>
 
