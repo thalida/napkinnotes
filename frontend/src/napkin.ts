@@ -1,5 +1,3 @@
-import type { Key } from "readline";
-
 export const NAPKIN_EVENTS = {
   ON_UPDATE: "update",
 };
@@ -15,7 +13,7 @@ export default class Napkin {
   private LIST_ORDERED_REGEX = /^([1]+\.\s)(.*)/
   private CALCULATOR_REGEX = /^(\$\s)(.*)/
   private CALCULATOR_NEEDS_VAR_DEF_REGEX = /^\s*?([\w]*)\s*?=/
-  private CALCULAOTR_VARIABLE_REGEX = /^(let|const)?\s*?([\w]*)\s*?=/
+  private CALCULAOTR_VARIABLE_REGEX = /^(let|const|var)?\s*?([\w]*)\s*?=/
 
   private alreadyEmptyInputs = new Set<HTMLElement>();
 
