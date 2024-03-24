@@ -16,23 +16,27 @@ onMounted(() => {
 
 function parseWidgets() {
   const inputElements = contentEditableRef.value?.querySelectorAll("input");
-  for (const inputElement of inputElements) {
-    const isCheckbox = inputElement.type === "checkbox";
-    if (isCheckbox) {
-      inputElement.checked = inputElement.value === "true";
+  if (inputElements) {
+    for (const inputElement of inputElements) {
+      const isCheckbox = inputElement.type === "checkbox";
+      if (isCheckbox) {
+        inputElement.checked = inputElement.value === "true";
+      }
     }
   }
 
   const linkElements = contentEditableRef.value?.querySelectorAll(".widget-link");
-  for (const linkElement of linkElements) {
-    const gotoLink = linkElement.querySelector(".widget-link__action") as HTMLAnchorElement;
-    const gotoLinkText = linkElement.querySelector(".widget-link__text") as HTMLElement;
+  if (linkElements) {
+    for (const linkElement of linkElements) {
+      const gotoLink = linkElement.querySelector(".widget-link__action") as HTMLAnchorElement;
+      const gotoLinkText = linkElement.querySelector(".widget-link__text") as HTMLElement;
 
-    if (!gotoLink || !gotoLinkText) {
-      continue;
+      if (!gotoLink || !gotoLinkText) {
+        continue;
+      }
+
+      gotoLink.href = gotoLinkText.textContent || "";
     }
-
-    gotoLink.href = gotoLinkText.textContent || "";
   }
 }
 
@@ -192,14 +196,14 @@ function handlePaste(event: ClipboardEvent) {
 
 <template>
   <div
-  class="bg-white p-2 prose w-full max-w-full"
-  style="min-height: 100px;"
-  ref="contentEditableRef"
-  contenteditable="true"
-  v-html="htmlContent"
-  @input="handleInput"
-  @click="handleClick"
-  @paste="handlePaste"
+    class="bg-white p-2 prose w-full max-w-full"
+    style="min-height: 100px;"
+    ref="contentEditableRef"
+    contenteditable="true"
+    v-html="htmlContent"
+    @input="handleInput"
+    @click="handleClick"
+    @paste="handlePaste"
   />
 </template>
 
