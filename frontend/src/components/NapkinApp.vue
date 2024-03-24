@@ -22,10 +22,9 @@ onMounted(() => {
 
 <template>
   <div
-    class="bg-white p-2 prose w-full max-w-full"
-    style="min-height: 100px;"
+    class="bg-white p-2 prose w-full max-w-full h-full"
     ref="contentEditableRef"
-    contenteditable="true"
+    contentEditable="true"
     v-html="htmlContent"
   />
 </template>

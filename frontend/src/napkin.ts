@@ -16,10 +16,16 @@ export default class Napkin {
   constructor(element: HTMLElement) {
     this.element = element
 
-    this.loadCheckboxWidgets()
-    this.loadCalculatorWidgets()
+    try {
+      this.loadCheckboxWidgets()
+      this.loadCalculatorWidgets()
+    } catch (error) {
+      console.error(error)
+    }
 
-    this.element.addEventListener("onpaste", (event) => this.handlePasteEvent(event as ClipboardEvent))
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+
+    this.element.addEventListener("paste", (event) => this.handlePasteEvent(event as ClipboardEvent))
     this.element.addEventListener("input", (event) => this.handleInputEvent(event as InputEvent))
     this.element.addEventListener("click", (event) => this.handleClickEvent(event as MouseEvent))
 
@@ -53,23 +59,32 @@ export default class Napkin {
   }
 
   createCalculatorWidget(textNode: Text, text: string) {
-    const div = document.createElement("div");
-    div.classList.add("widget", "widget-calculator");
+    const widget = document.createElement("div");
+    widget.classList.add("widget", "widget-calculator");
+    widget.contentEditable = "false";
 
     const input = document.createElement("input");
     input.className = "widget-calculator__input";
     input.type = "text";
     input.value = text.replace(this.CALCULATOR_REGEX, "$2");
+    input.dataset.value = input.value;
 
     const output = document.createElement("output");
     output.className = "widget-calculator__output";
+    output.contentEditable = "false";
     output.textContent = "";
 
-    div.appendChild(input);
-    div.appendChild(output);
+    widget.appendChild(input);
+    widget.appendChild(output);
 
-    textNode.replaceWith(div);
-    this.setCursorAfterElement(div);
+    const row = document.createElement("div");
+    row.appendChild(widget);
+    textNode.replaceWith(row);
+
+    const br = document.createElement("br");
+    row.after(br);
+
+    input.focus();
   }
 
   loadCalculatorWidgets() {
@@ -80,6 +95,11 @@ export default class Napkin {
 
     for (const calculator of calculatorElements) {
       const input = calculator.querySelector(".widget-calculator__input") as HTMLInputElement;
+
+      if (!input) {
+        continue;
+      }
+
       input.value = input.dataset.value || "";
     }
   }
@@ -90,31 +110,34 @@ export default class Napkin {
       return;
     }
 
-    const inputHistory = []
+    const inputHistory: string[] = [];
+
+    function evalInput(inputString: string, outputElement: HTMLElement) {
+      if (inputString.trim() === "") {
+        outputElement.textContent = "";
+      }
+
+      inputHistory.push(inputString);
+
+      try {
+        const result = eval(inputHistory.join(";"));
+        outputElement.textContent = result;
+      } catch (error) {
+        inputHistory.pop();
+        outputElement.textContent = "";
+      }
+    }
+
     for (const calculator of calculatorElements) {
       const input = calculator.querySelector(".widget-calculator__input") as HTMLInputElement;
-      const output = calculator.querySelector(".widget-calculator__output") as HTMLOutputElement;
+      const output = calculator.querySelector(".widget-calculator__output") as HTMLElement;
 
       if (!input || !output) {
         continue;
       }
 
       input.dataset.value = input.value;
-
-      if (input.value.trim() === "") {
-        output.textContent = "";
-        continue;
-      }
-
-      inputHistory.push(input.value);
-
-      try {
-        const result = eval(inputHistory.join(";"));
-        output.textContent = result;
-      } catch (error) {
-        inputHistory.pop();
-        output.textContent = "";
-      }
+      evalInput(input.value, output);
     }
   }
 
@@ -163,6 +186,9 @@ export default class Napkin {
 
     const row = document.createElement("div");
     row.appendChild(widget);
+
+    const br = document.createElement("br");
+    row.after(br);
 
     this.insertHTML(row);
   }
@@ -228,9 +254,15 @@ export default class Napkin {
   private handleInputEvent(event: InputEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.formatTextNodes();
-    this.formatLinkWidgets();
-    this.formatCalculatorWidgets();
+
+    try {
+      this.formatTextNodes();
+      this.formatLinkWidgets();
+      this.formatCalculatorWidgets();
+    } catch (error) {
+      console.error(error);
+    }
+
     this.trigger(NAPKIN_EVENTS.ON_UPDATE);
   }
 
