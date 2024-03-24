@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { watchEffect } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { useUIStore } from '@/stores/ui';
+import type { Theme } from '@/types';
 
 import { BIconMoonFill, BIconSunFill, BIconCircleHalf } from "bootstrap-icons-vue"
 
 const uiStore = useUIStore()
-let activeIcon = null;
 
 const menuOptions = [
   {
@@ -25,17 +24,6 @@ const menuOptions = [
     label: 'System',
   },
 ]
-
-watchEffect(() => {
-  switch (uiStore.colorScheme) {
-    case 'light':
-      activeIcon = BIconSunFill
-      break
-    case 'dark':
-      activeIcon = BIconMoonFill
-      break
-  }
-})
 </script>
 
 
@@ -44,7 +32,8 @@ watchEffect(() => {
     <div>
       <MenuButton class="flex items-center rounded-full text-blue-500 dark:text-slate-800">
         <span class="sr-only">Open options</span>
-        <component :is="activeIcon" class="inline-block w-5 h-5" />
+        <BIconSunFill v-if="uiStore.colorScheme === 'light'" class="w-5 h-5" />
+        <BIconMoonFill v-else class="w-5 h-5" />
       </MenuButton>
     </div>
 
@@ -66,7 +55,7 @@ watchEffect(() => {
             v-slot="{ active: hover }"
           >
             <button
-              @click="uiStore.setTheme(option.key)"
+              @click="uiStore.setTheme(option.key as Theme)"
               class="flex flex-row items-center justify-start gap-2 w-full px-4 py-2 text-left text-sm"
               :class="{
                 'bg-teal-100 text-blue-500 dark:bg-slate-900/50 dark:text-blue-500': uiStore.selectedTheme === option.key,
