@@ -70,10 +70,11 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | Django Unfold Admin | https://github.com/unfoldadmin/django-unfold | A better Django Admin Experience |  
 
 
-#### Hosting & Deployment
+#### Dev Ops
 | Tool or Service | Link | Description |
 |-----------------|------|-------------|
-| Render | https://render.com/ | Hosts both the app and api | 
+| Render | https://render.com/ | Deployment and hosting for both the app and api | 
+| VSCode Dev Containers | https://code.visualstudio.com/docs/devcontainers/containers | Development environment | 
 
 
 ## Caveats & Known Issues
