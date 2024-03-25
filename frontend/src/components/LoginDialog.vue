@@ -78,6 +78,15 @@ async function handleGoogleLogin() {
                 </p>
               </div>
 
+              <div v-if="error" class="flex flex-row gap-2 mt-4 rounded-md bg-red-50 dark:bg-red-200 p-4 sm:mx-auto sm:w-full sm:max-w-sm">
+                <div class="flex-shrink-0">
+                  <XCircleIcon class="h-5 w-5 text-red-400 dark:text-red-600" aria-hidden="true" />
+                </div>
+                <p class="text-sm font-medium text-red-800">
+                  {{error}}
+                </p>
+              </div>
+
               <div class="mt-6">
                 <button
                   @click="handleGoogleLogin"
@@ -100,15 +109,6 @@ async function handleGoogleLogin() {
                 <div class="relative flex justify-center text-sm font-bold uppercase leading-6">
                   <span class="bg-white dark:bg-slate-950 px-6 text-gray-900 dark:text-slate-400">Or</span>
                 </div>
-              </div>
-
-              <div v-if="error" class="flex flex-row gap-2 mt-4 rounded-md bg-red-50 dark:bg-red-200 p-4 sm:mx-auto sm:w-full sm:max-w-sm">
-                <div class="flex-shrink-0">
-                  <XCircleIcon class="h-5 w-5 text-red-400 dark:text-red-600" aria-hidden="true" />
-                </div>
-                <p class="text-sm font-medium text-red-800">
-                  {{error}}
-                </p>
               </div>
 
               <form class="mt-4 space-y-4" @submit="handleEmailLogin">

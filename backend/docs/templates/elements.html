@@ -6,7 +6,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>{{ title|default:"Docs" }}</title>
+
+  <title>{{ title }}</title>
+  <meta name="description" content="API for the digital 'napkin' nobody needs but everybody wanted">
+
+  <link rel="icon" href="{% static 'docs/images/favicon.ico' %}" sizes="any">
+  <link rel="icon" href="{% static 'docs/images/logo.svg' %}" type="image/svg+xml">
+
   <!-- Embed elements Elements via Web Component -->
   <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
@@ -29,11 +35,7 @@
 
 <body>
   <div class="wrapper">
-    <elements-api
-      id="docs"
-      apiDescriptionUrl="{{ schema_url }}"
-      router="hash"
-      layout="stacked" />
+    <elements-api id="docs" apiDescriptionUrl="{{ schema_url }}" router="hash" layout="stacked" />
   </div>
   <script>
     const doc = document.querySelector('#docs');
@@ -60,4 +62,5 @@
     trottledUpdateLayout();
   </script>
 </body>
+
 </html>

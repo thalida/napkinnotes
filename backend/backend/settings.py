@@ -225,13 +225,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_URL = "media/"
 
 if not DEBUG:
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # Default primary key field type
@@ -241,8 +240,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
-    "TITLE": "Docs",
+    "TITLE": "Napkin Notes API",
+    "CONTACT": {
+        "url": "https://thalida.com/",
+        "email": "napkinnotes@thalida.com",
+    },
     "DESCRIPTION": read_file("docs/markdown/introduction.md"),
+    "PREPROCESSING_HOOKS": ["docs.hooks.custom_preprocessing_hook"],
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "docs.hooks.custom_postprocessing_hook",
+    ],
+    # Servers are set dynamically via the post processing hook
     "SERVERS": [],
     "SERVE_INCLUDE_SCHEMA": False,
     "SCHEMA_COERCE_PATH_PK": True,
@@ -250,6 +259,32 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_PATCH": True,
     "COMPONENT_SPLIT_REQUEST": True,
     "COMPONENT_NO_READ_ONLY_REQUIRED": True,
+    "EXTENSIONS_INFO": {
+        "x-logo": {
+            "url": f"{STATIC_URL}/docs/images/logo.svg",
+            "backgroundColor": "transparent",
+            "altText": "Napkin Notes Logo",
+            "href": "/docs/",
+        },
+    },
+    "EXTENSIONS_ROOT": {
+        "x-tagGroups": [
+            {
+                "name": "Overview",
+                "tags": [
+                    "Introduction",
+                ],
+            },
+        ],
+    },
+    "TAGS": [
+        {
+            "name": "Introduction",
+            "description": read_file("docs/markdown/introduction.md"),
+            "x-traitTag": True,
+        },
+        # {"name": SchemaTags.AUTH.value, "x-displayName": SchemaTags.AUTH.value},
+    ],
 }
 
 

@@ -19,17 +19,18 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from drf_spectacular.views import SpectacularAPIView
 
-from docs.views import SpectacularElementsView
 import authentication.urls
 import notes.urls
+from docs.views import SpectacularElementsView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    re_path(r"^auth/", include(authentication.urls.auth_urlpatterns)),
     # API Docs
+    path("", SpectacularElementsView.as_view(), name="docs"),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("docs/", SpectacularElementsView.as_view(), name="docs"),
+    # Admin
+    path("admin/", admin.site.urls),
     # API
+    re_path(r"^auth/", include(authentication.urls.auth_urlpatterns)),
     re_path(r"", include(authentication.urls)),
     re_path(r"", include(notes.urls)),
 ]
