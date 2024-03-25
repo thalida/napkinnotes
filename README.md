@@ -8,6 +8,9 @@
       <a href="https://napkinnotes.app" target="_blank"><strong>Website</strong></a> | 
       <a href="https://api.napkinnotes.app" target="_blank"><strong>API Docs</strong></a>
    </p>
+   <p>
+      Hacked together by: thalida 🦄 | <a href="mailto:napkinnotes@thalida.com">napkinnotes@thalida.com</a> | <a href="https://thalida.com">thalida.com</a>
+   </p>
 </div>
 
 <br /><br />
@@ -39,15 +42,26 @@ You can try it out anonymously, but to sync your notes across devices you'll nee
 | Link | Highlight text and `CTRL+K` |
 | Unordered List | Type `* ` (`*` + `SPACE`) |
 | Ordered List | Type `1. ` (`1.` + `SPACE`) |
-| Math ✨ | Type `$ ` (`$` + `SPACE`) |
+| Interactive Checkboxes | Type `- []` or `- [x]` | 
+| Interactive Math ✨ | Type `$ ` (`$` + `SPACE`) |
 
 
-## Dev Log
+## Caveats & Known Issues
 
-### Development Stack
+Napkin Notes is built using `contenteditable` which is prone to issues across browsers. Napkin Notes was built and tested on Chrome.
+
+<br /><br />
+
+---
+
+<br /><br />
+
+# Dev Log
+
+## Development Stack
 Catalog of the tools, resources, and services used in the creation of this project.
 
-#### App
+### App
 | Tool or Service | Link | Description |
 |-----------------|------|-------------|
 | Vue (Vue3) | https://vuejs.org/ | Frontend framework |
@@ -59,7 +73,7 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | Bootstrap Icons Vue | https://github.com/tommyip/bootstrap-icons-vue | Vue components for [Bootstrap Icons](https://icons.getbootstrap.com/) |
 
 
-#### Api
+### Api
 | Tool or Service | Link | Description |
 |-----------------|------|-------------|
 | Django | https://www.djangoproject.com/ | Backend framework |
@@ -70,19 +84,27 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | Django Unfold Admin | https://github.com/unfoldadmin/django-unfold | A better Django Admin Experience |  
 
 
-#### Dev Ops
+### Dev Ops
 | Tool or Service | Link | Description |
 |-----------------|------|-------------|
 | Render | https://render.com/ | Deployment and hosting for both the app and api | 
 | VSCode Dev Containers | https://code.visualstudio.com/docs/devcontainers/containers | Development environment | 
 
+## Diary of Challenges
 
-## Caveats & Known Issues
+### How we got to Vue: The Challenges of React and Svelte
 
-Napkin Notes is built using `contenteditable` which is prone to issues across browsers. Napkin Notes was built and tested on Chrome.
+React's control of the dom was interferring with contenteditable components, especially once I added support for checkboxes. There was most likely an issue with my implementation, but I didn't want to spend too much time debugging.
+
+Once React became a no-go, I tried using Svelte instead. I confirmed in the Svelte online editor that contenteditable would work with checkboxes, but I quickly got confused on how to use Svelte Kit for creating a simple application. 
+
+Since this project was a quick hack, I didn't want to spend too much time getting setup, so made the ultimate and final switch to Vue as the app's framework.
 
 
-## Get in Touch!
+### Contenteditable
 
-* Email: napkinnotes@thalida.com
-* Web: https://thalida.com/
+From everything I saw online (Stackoverflow), `contenteditable` is a headache and difficult to work with. While that was the case when figuring out how to handle custom compoents; I found it equally as challenging to find a simple text editor framework that was well supported, not behind a paywall, and allowed for easy customization.
+
+At the end of this weekend, I'd say that I wouldn't recommend `contenteditable` if working on a production-grade high-traffic platform, but for a quick editor it's **highly recommended!!**
+
+
