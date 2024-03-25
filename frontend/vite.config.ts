@@ -15,6 +15,7 @@ export default defineConfig({
         name: 'Napkin Notes',
         short_name: 'napkinnotes',
         description: "A digital 'napkin' (just what everyone's wanted). Jot down quick math, list todos, paste notes, etc.",
+        theme_color: '#dbeafe',
         icons: [
           {
             "src": "pwa-64x64.png",
