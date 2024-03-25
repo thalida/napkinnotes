@@ -9,7 +9,7 @@ services:
     rootDir: frontend/
     buildFilter:
       paths:
-      - /frontend/**
+      - frontend/**
     buildCommand: ./scripts/render/build.sh
     staticPublishPath: ./dist
     headers:
@@ -25,11 +25,11 @@ services:
   - type: web
     name: napkinnotes:api
     env: python
-    plan: starter
+    plan: free
     rootDir: backend/
     buildFilter:
       paths:
-      - /backend/**
+      - backend/**
     startCommand: ./scripts/render/start.sh
     buildCommand: ./scripts/render/build.sh
     envVars:
