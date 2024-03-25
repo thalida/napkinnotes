@@ -71,6 +71,16 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function loginWithGoogle(accessToken: string) {
+    try {
+      const res = await authApi.googleLogin(accessToken)
+      setTokenData(res.data)
+    } catch (error) {
+      clearTokenData()
+      throw error
+    }
+  }
+
   return {
     tokenData,
     isAuthenticated,
@@ -79,6 +89,7 @@ export const useAuthStore = defineStore('auth', () => {
     clearTokenData,
     logout,
     silentLogin,
+    loginWithGoogle,
     loginWithEmail,
   }
 })

@@ -1,6 +1,22 @@
 import api from './index'
 import type { IAuthLoginRequest, IAuthTokenResponse } from '@/types'
 
+export function googleLogin(accessToken: string) {
+  return api.post(
+    '/auth/convert-token/',
+    {
+      grant_type: "convert_token",
+      client_id: import.meta.env.VITE_API_CLIENT_ID,
+      client_secret: import.meta.env.VITE_API_CLIENT_SECRET,
+      backend: 'google-oauth2',
+      token: accessToken,
+    },
+    {
+      headers: { "Content-Type": "application/json", },
+    }
+  )
+}
+
 export function emailLogin(data: IAuthLoginRequest) {
   return api.post(
     '/auth/token/',
@@ -50,6 +66,7 @@ export function revokeToken({ access_token: accessToken, token_type: tokenType }
 }
 
 export default {
+  googleLogin,
   emailLogin,
   refreshToken,
   revokeToken
