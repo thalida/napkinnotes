@@ -9,9 +9,8 @@ const router = createRouter({
       name: 'home',
       component: IndexView
     },
-    { path: '/:pathMatch(.*)*', name: 'NotFound', redirect: '/' },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', redirect: '/' }
   ]
 })
-
 
 export default router

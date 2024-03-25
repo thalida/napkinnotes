@@ -11,9 +11,9 @@ export function updateNote(id: string, { content }: Partial<INote>) {
     },
     {
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `${authStore.tokenData?.token_type} ${authStore.tokenData?.access_token}`
-      },
+        'Content-Type': 'application/json',
+        Authorization: `${authStore.tokenData?.token_type} ${authStore.tokenData?.access_token}`
+      }
     }
   )
 }

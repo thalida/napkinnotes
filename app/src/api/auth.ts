@@ -5,14 +5,14 @@ export function googleLogin(accessToken: string) {
   return api.post(
     '/auth/convert-token/',
     {
-      grant_type: "convert_token",
+      grant_type: 'convert_token',
       client_id: import.meta.env.VITE_API_CLIENT_ID,
       client_secret: import.meta.env.VITE_API_CLIENT_SECRET,
       backend: 'google-oauth2',
-      token: accessToken,
+      token: accessToken
     },
     {
-      headers: { "Content-Type": "application/json", },
+      headers: { 'Content-Type': 'application/json' }
     }
   )
 }
@@ -27,7 +27,7 @@ export function emailLogin(data: IAuthLoginRequest) {
       ...data
     },
     {
-      headers: { "Content-Type": "application/json", },
+      headers: { 'Content-Type': 'application/json' }
     }
   )
 }
@@ -42,12 +42,15 @@ export function refreshToken(refreshToken: string) {
       refresh_token: refreshToken
     },
     {
-      headers: { "Content-Type": "application/json", },
+      headers: { 'Content-Type': 'application/json' }
     }
   )
 }
 
-export function revokeToken({ access_token: accessToken, token_type: tokenType }: IAuthTokenResponse) {
+export function revokeToken({
+  access_token: accessToken,
+  token_type: tokenType
+}: IAuthTokenResponse) {
   return api.post(
     '/auth/revoke-token/',
     {
@@ -57,10 +60,9 @@ export function revokeToken({ access_token: accessToken, token_type: tokenType }
     },
     {
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `${tokenType} ${accessToken}`,
-      },
-
+        'Content-Type': 'application/json',
+        Authorization: `${tokenType} ${accessToken}`
+      }
     }
   )
 }

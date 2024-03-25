@@ -10,9 +10,11 @@ export const useUIStore = defineStore('ui', () => {
   const colorScheme = ref<ColorScheme>()
 
   function initTheme() {
-    const theme = localStorage.getItem(THEME_STORAGE_KEY) as Theme || "system"
+    const theme = (localStorage.getItem(THEME_STORAGE_KEY) as Theme) || 'system'
     setTheme(theme)
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleColorSchemeChange)
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', handleColorSchemeChange)
   }
 
   function setTheme(theme: Theme) {
@@ -20,15 +22,20 @@ export const useUIStore = defineStore('ui', () => {
 
     if (
       selectedTheme.value === 'dark' ||
-      (selectedTheme.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      (selectedTheme.value === 'system' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
       colorScheme.value = 'dark'
       document.documentElement.classList.add('dark')
-      document.documentElement.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0f172a');
+      document.documentElement
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', '#0f172a')
     } else {
       colorScheme.value = 'light'
       document.documentElement.classList.remove('dark')
-      document.documentElement.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#dbeafe');
+      document.documentElement
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', '#dbeafe')
     }
 
     if (selectedTheme.value === 'system') {
@@ -51,6 +58,6 @@ export const useUIStore = defineStore('ui', () => {
     selectedTheme,
     colorScheme,
     initTheme,
-    setTheme,
+    setTheme
   }
 })

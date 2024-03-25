@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth';
-import { useCoreStore } from '@/stores/core';
+import { useAuthStore } from '@/stores/auth'
+import { useCoreStore } from '@/stores/core'
 import LoginDialog from '@/components/LoginDialog.vue'
 import AboutDialog from '@/components/AboutDialog.vue'
 import AppThemeSwitcher from '@/components/AppThemeSwitcher.vue'
 import NapkinNotesLogo from '@/components/icons/NapkinNotesLogo.vue'
-import { BIconEscape } from "bootstrap-icons-vue"
+import { BIconEscape } from 'bootstrap-icons-vue'
 
 const authStore = useAuthStore()
 const coreStore = useCoreStore()
@@ -47,7 +47,7 @@ function handleLogoButtonClick() {
       </button>
       <button
         v-else
-        class="bg-gradient-to-br from-pink-700 via-fuchsia-500 to-violet-700 text-white font-semibold py-2 px-4 rounded  hover:shadow-lg hover:scale-105 hover:rotate-3 transition ease-in-out duration-200"
+        class="bg-gradient-to-br from-pink-700 via-fuchsia-500 to-violet-700 text-white font-semibold py-2 px-4 rounded hover:shadow-lg hover:scale-105 hover:rotate-3 transition ease-in-out duration-200"
         @click="handleLoginButtonClick"
       >
         Log In
@@ -69,5 +69,4 @@ function handleLogoButtonClick() {
   <AboutDialog :isVisible="isAboutDialogVisible" @onDismiss="handleAboutDialogDismiss" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

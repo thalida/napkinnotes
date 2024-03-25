@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { throttle } from 'lodash'
-import { useCoreStore } from '@/stores/core';
-import NapkinNote, { NAPKIN_NOTE_EVENTS } from "@/components/NapkinNote";
+import { useCoreStore } from '@/stores/core'
+import NapkinNote, { NAPKIN_NOTE_EVENTS } from '@/components/NapkinNote'
 
 let napkinnote: NapkinNote
 const coreStore = useCoreStore()
@@ -25,11 +25,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div
-    ref="contentEditableRef"
-    contentEditable="true"
-    v-html="htmlContent"
-  />
+  <div ref="contentEditableRef" contentEditable="true" v-html="htmlContent" />
 </template>
 
 <style>
@@ -69,7 +65,7 @@ onBeforeUnmount(() => {
   max-height: 256px;
   height: 100%;
   flex-grow: 1;
-  font-family: "Fira Code", monospace;
+  font-family: 'Fira Code', monospace;
   word-wrap: break-word;
   word-break: break-all;
 }
@@ -86,7 +82,7 @@ onBeforeUnmount(() => {
   padding-left: 1rem;
   padding-right: 1rem;
   color: var(--napkinnoes--calculator-widget--output-text);
-  font-family: "Fira Code", monospace;
+  font-family: 'Fira Code', monospace;
   font-weight: 700;
 }
 

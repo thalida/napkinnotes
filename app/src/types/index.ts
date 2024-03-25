@@ -1,17 +1,17 @@
-export type Theme = 'light' | 'dark' | 'system';
-export type ColorScheme = 'light' | 'dark';
+export type Theme = 'light' | 'dark' | 'system'
+export type ColorScheme = 'light' | 'dark'
 
 export interface IAuthLoginRequest {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 
 export interface IAuthTokenResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-  scope: string;
+  access_token: string
+  token_type: string
+  expires_in: number
+  refresh_token: string
+  scope: string
 }
 
 export interface IUser {

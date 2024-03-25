@@ -6,10 +6,10 @@ services:
   - type: web
     name: napkinnotes:app
     env: static
-    rootDir: frontend/
+    rootDir: app/
     buildFilter:
       paths:
-      - frontend/**
+      - app/**
     buildCommand: ./scripts/render/build.sh
     staticPublishPath: ./dist
     headers:

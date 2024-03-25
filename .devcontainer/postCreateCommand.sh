@@ -3,5 +3,5 @@
 cd /workspaces/napkinnotes/api
 poetry install
 
-cd /workspaces/napkinnotes/frontend
+cd /workspaces/napkinnotes/app
 npm install

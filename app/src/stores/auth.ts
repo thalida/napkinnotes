@@ -90,6 +90,6 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     silentLogin,
     loginWithGoogle,
-    loginWithEmail,
+    loginWithEmail
   }
 })
