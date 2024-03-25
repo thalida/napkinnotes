@@ -267,7 +267,7 @@ SPECTACULAR_SETTINGS = {
             "url": f"{STATIC_URL}docs/images/logo.svg",
             "backgroundColor": "transparent",
             "altText": "Napkin Notes Logo",
-            "href": "/docs/",
+            "href": "/",
         },
     },
     "EXTENSIONS_ROOT": {

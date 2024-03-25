@@ -7,7 +7,7 @@ Currently uses local user login, but is setup to support 3rd party sso.
 ## Quick Links
 
 - Django Admin: <http://127.0.0.1:8000/admin/>
-- Django Rest Framework docs: <http://127.0.0.1:8000/docs/>
+- Django API Docs: <http://127.0.0.1:8000/>
 
 
 ## Technologies used
