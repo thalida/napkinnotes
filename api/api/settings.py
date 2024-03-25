@@ -262,7 +262,7 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_NO_READ_ONLY_REQUIRED": True,
     "EXTENSIONS_INFO": {
         "x-logo": {
-            "url": f"{STATIC_URL}/docs/images/logo.svg",
+            "url": f"{STATIC_URL}docs/images/logo.svg",
             "backgroundColor": "transparent",
             "altText": "Napkin Notes Logo",
             "href": "/docs/",
