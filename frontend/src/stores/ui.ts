@@ -6,12 +6,13 @@ import type { ColorScheme, Theme } from '@/types'
 export const useUIStore = defineStore('ui', () => {
   const THEME_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}theme`
   const supportedThemes = ['light', 'dark', 'system'] as const
-  const selectedTheme = ref<Theme>('dark')
-  const colorScheme = ref<ColorScheme>('dark')
+  const selectedTheme = ref<Theme>('system')
+  const colorScheme = ref<ColorScheme>()
 
   function initTheme() {
     const theme = localStorage.getItem(THEME_STORAGE_KEY) as Theme || "system"
     setTheme(theme)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleColorSchemeChange)
   }
 
   function setTheme(theme: Theme) {
@@ -35,6 +36,14 @@ export const useUIStore = defineStore('ui', () => {
     } else {
       localStorage.setItem(THEME_STORAGE_KEY, selectedTheme.value)
     }
+  }
+
+  function handleColorSchemeChange() {
+    if (selectedTheme.value !== 'system') {
+      return
+    }
+
+    setTheme('system')
   }
 
   return {
