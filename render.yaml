@@ -25,7 +25,7 @@ services:
   - type: web
     name: napkinnotes:api
     env: python
-    plan: free
+    plan: starter
     rootDir: backend/
     buildFilter:
       paths:
