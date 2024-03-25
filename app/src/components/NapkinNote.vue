@@ -25,7 +25,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="contentEditableRef" contentEditable="true" v-html="htmlContent" />
+  <div class="napkinnote" ref="contentEditableRef" contentEditable="true" v-html="htmlContent" />
 </template>
 
 <style>
@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
   --napkinnotes--link-widget--action: #10b981;
 }
 
-.widget.widget-calculator {
+.napkinnote .widget.widget-calculator {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -50,12 +50,12 @@ onBeforeUnmount(() => {
   min-height: 48px;
 }
 
-.widget-calculator--empty > .widget-calculator__output,
-.widget-calculator--error > .widget-calculator__output {
+.napkinnote .widget-calculator--empty > .widget-calculator__output,
+.napkinnote .widget-calculator--error > .widget-calculator__output {
   display: none;
 }
 
-.widget-calculator__input {
+.napkinnote .widget-calculator__input {
   background-color: var(--napkinnotes--calculator-widget--bg);
   border: 0;
   border-radius: 8px;
@@ -70,7 +70,7 @@ onBeforeUnmount(() => {
   word-break: break-all;
 }
 
-.widget-calculator__output {
+.napkinnote .widget-calculator__output {
   display: flex;
   flex-shrink: 0;
   justify-content: center;
@@ -86,17 +86,16 @@ onBeforeUnmount(() => {
   font-weight: 700;
 }
 
-.widget.widget-checkbox {
+.napkinnote .widget.widget-checkbox {
   margin-right: 0.5rem;
 }
 
-.widget.widget-link {
-  white-space: nowrap;
-}
-
-.widget-link__action {
+.napkinnote a,
+.napkinnote .widget.widget-link {
   color: var(--napkinnotes--link-widget--action);
-  text-decoration: none;
-  padding: 0.25rem 0.5rem;
+  text-decoration: underline;
+}
+.napkinnote.napkinnote--ctrl-key-active .widget.widget-link {
+  cursor: pointer;
 }
 </style>

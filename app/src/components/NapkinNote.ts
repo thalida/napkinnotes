@@ -17,8 +17,6 @@ export default class NapkinNote {
 
   private alreadyEmptyInputs = new Set<HTMLElement>()
 
-  private isMetaKeyPressed = false
-
   constructor(element: HTMLElement) {
     this.element = element
 
@@ -29,13 +27,9 @@ export default class NapkinNote {
       console.error(error)
     }
 
-    document.execCommand('defaultParagraphSeparator', false, 'p')
-
-    this.element.addEventListener('keyup', (event) => this.handleKeyupEvent(event as KeyboardEvent))
-    this.element.addEventListener('keydown', (event) =>
-      this.handleKeydownEvent(event as KeyboardEvent)
-    )
-    this.element.addEventListener('click', (event) => this.handleClickEvent(event as MouseEvent))
+    this.element.addEventListener('keyup', this.handleKeyupEvent.bind(this))
+    this.element.addEventListener('keydown', this.handleKeydownEvent.bind(this))
+    this.element.addEventListener('click', this.handleClickEvent.bind(this))
 
     this.element.focus()
   }
@@ -45,13 +39,9 @@ export default class NapkinNote {
   }
 
   destroy() {
-    this.element.removeEventListener('keyup', (event) =>
-      this.handleKeyupEvent(event as KeyboardEvent)
-    )
-    this.element.removeEventListener('keydown', (event) =>
-      this.handleKeydownEvent(event as KeyboardEvent)
-    )
-    this.element.removeEventListener('click', (event) => this.handleClickEvent(event as MouseEvent))
+    this.element.removeEventListener('keyup', this.handleKeyupEvent)
+    this.element.removeEventListener('keydown', this.handleKeydownEvent)
+    this.element.removeEventListener('click', this.handleClickEvent)
   }
 
   on(event: string, callback: EventListener) {
@@ -214,10 +204,8 @@ export default class NapkinNote {
     li.textContent = text.slice(2) || ' '
     ul.appendChild(li)
 
-    const div = document.createElement('div')
-    div.appendChild(ul)
-    textNode.replaceWith(div)
-    this.setCursorAfterElement(div)
+    textNode.replaceWith(ul)
+    this.setCursorInElement(li)
   }
 
   createOrderedListWidget(textNode: Text, text: string) {
@@ -226,50 +214,31 @@ export default class NapkinNote {
     li.textContent = text.slice(3) || ' '
     ol.appendChild(li)
 
-    const div = document.createElement('div')
-    div.appendChild(ol)
-    textNode.replaceWith(div)
-    this.setCursorAfterElement(div)
+    textNode.replaceWith(ol)
+    this.setCursorInElement(li)
   }
 
-  createLinkWidget(textNode: Text, url: string) {
-    const widget = document.createElement('span')
-    widget.classList.add('widget', 'widget-link')
-
-    const spanLinkText = document.createElement('span')
-    spanLinkText.classList.add('widget-link__text')
-    spanLinkText.textContent = url
-
+  createLinkWidget(textNode: Text | HTMLElement, url: string) {
     const gotoLink = document.createElement('a')
-    gotoLink.classList.add('widget-link__action')
-    gotoLink.contentEditable = 'false'
+    gotoLink.classList.add('widget', 'widget-link')
     gotoLink.href = url
     gotoLink.target = '_blank'
-    gotoLink.textContent = '⤴︎'
+    gotoLink.textContent = url
 
-    widget.appendChild(spanLinkText)
-    widget.appendChild(gotoLink)
-
-    textNode.replaceWith(widget)
-    this.setCursorAfterElement(widget)
+    textNode.replaceWith(gotoLink)
+    this.setCursorInElement(gotoLink)
   }
 
   formatLinkWidgets() {
-    const linkElements = this.element.querySelectorAll('.widget-link')
+    const linkElements = this.element.querySelectorAll('.widget-link') as NodeListOf<HTMLAnchorElement>
 
     if (!linkElements) {
       return
     }
 
     for (const linkElement of linkElements) {
-      const gotoLink = linkElement.querySelector('.widget-link__action') as HTMLAnchorElement
-      const gotoLinkText = linkElement.querySelector('.widget-link__text') as HTMLElement
-
-      if (!gotoLink || !gotoLinkText) {
-        continue
-      }
-
-      gotoLink.href = gotoLinkText.textContent || ''
+      const linkText = linkElement.textContent || ''
+      linkElement.href = linkText
     }
   }
 
@@ -287,8 +256,7 @@ export default class NapkinNote {
     div.appendChild(document.createTextNode(inputText))
 
     textNode.replaceWith(div)
-
-    this.setCursorAfterElement(div)
+    this.setCursorInElement(div)
   }
 
   loadCheckboxWidgets() {
@@ -318,37 +286,49 @@ export default class NapkinNote {
   }
 
   private handleKeyupEvent(event: KeyboardEvent) {
+    const isMetaKeyPressed = event.metaKey || event.ctrlKey
+
+    if (!isMetaKeyPressed) {
+      this.element.classList.remove('napkinnote--ctrl-key-active')
+    }
+
+    if (event.target === null) {
+      return
+    }
+
     const isInputElement =
       (event.target as HTMLElement).tagName === 'INPUT' ||
       (event.target as HTMLElement).tagName === 'TEXTAREA'
+
     if (isInputElement) {
+      const inputTarget = event.target as HTMLInputElement | HTMLTextAreaElement
       const isBackspace = event.key === 'Backspace'
       const isShiftEnter = event.key === 'Enter' && event.shiftKey
-      const value = (event.target as HTMLInputElement).value
+      const value = inputTarget.value
       const isEmpty = value.length === 0
 
       if (isBackspace && isEmpty) {
-        const previouslyEmpty = this.alreadyEmptyInputs.has(event.target as HTMLElement)
+        const previouslyEmpty = this.alreadyEmptyInputs.has(inputTarget)
 
         if (previouslyEmpty) {
-          ;(event.target as HTMLElement).parentElement?.remove()
-          this.alreadyEmptyInputs.delete(event.target as HTMLElement)
+          inputTarget.parentElement?.remove()
+          this.alreadyEmptyInputs.delete(inputTarget)
         } else {
-          this.alreadyEmptyInputs.add(event.target as HTMLElement)
+          this.alreadyEmptyInputs.add(inputTarget)
         }
       } else {
-        this.alreadyEmptyInputs.delete(event.target as HTMLElement)
+        this.alreadyEmptyInputs.delete(inputTarget)
       }
 
       if (isShiftEnter) {
-        ;(event.target as HTMLInputElement).value = value.trim()
+        inputTarget.value = value.trim()
+        inputTarget.blur()
 
-        ;(event.target as HTMLElement).blur()
         const p = document.createElement('p')
         const br = document.createElement('br')
         p.appendChild(br)
-        ;(event.target as HTMLElement).parentElement?.after(p)
-        this.setCursorAfterElement(p)
+        inputTarget.parentElement?.after(p)
+        this.setCursorInElement(p)
       }
     }
 
@@ -364,30 +344,34 @@ export default class NapkinNote {
   }
 
   private handleKeydownEvent(event: KeyboardEvent) {
-    this.isMetaKeyPressed = event.metaKey || event.ctrlKey
-    const isK = event.key === 'k'
+    const isMetaKeyPressed = event.metaKey || event.ctrlKey
 
-    if (!this.isMetaKeyPressed || !isK) {
+    if (!isMetaKeyPressed) {
       return
     }
 
-    event.preventDefault()
-    const selection = window.getSelection()
-    const text = selection?.toString()
+    this.element.classList.add('napkinnote--ctrl-key-active')
 
-    if (!text) {
-      return
+    if (event.key === 'k') {
+      event.preventDefault()
+
+      const selection = window.getSelection()
+      const text = selection?.toString()
+
+      if (!text) {
+        return
+      }
+
+      const textNode = selection?.anchorNode as Text | HTMLElement
+      const textContent = textNode?.textContent || ''
+
+      if (!textNode) {
+        return
+      }
+
+      this.createLinkWidget(textNode, textContent)
+      this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
     }
-
-    const textNode = selection?.anchorNode as Text
-    const textContent = textNode.textContent || ''
-
-    if (!textNode) {
-      return
-    }
-
-    this.createLinkWidget(textNode, textContent)
-    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
   }
 
   private handleClickEvent(event: MouseEvent) {
@@ -397,14 +381,19 @@ export default class NapkinNote {
       return
     }
 
-    const isCheckbox =
-      (target as HTMLInputElement).type && (target as HTMLInputElement).type === 'checkbox'
-    if (!isCheckbox) {
-      return
+    const isLink = (target as HTMLElement).classList.contains('widget-link')
+    if (isLink && (event.metaKey || event.ctrlKey)) {
+      const url = (target as HTMLAnchorElement).href
+      window.open(url, '_blank')
     }
 
-    this.formatCheckboxWidgets()
-    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+    const isCheckbox =
+      (target as HTMLInputElement).type && (target as HTMLInputElement).type === 'checkbox'
+    if (isCheckbox) {
+      this.formatCheckboxWidgets()
+      this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+    }
+
   }
 
   private getAllTextNodes(node: Node): Text[] {
@@ -452,14 +441,15 @@ export default class NapkinNote {
     }
   }
 
-  private insertHTML(element: HTMLElement) {
-    const range = window.getSelection()?.getRangeAt(0)
-    range?.collapse(true)
-    range?.insertNode(element)
-    this.setCursorAfterElement(element)
+  private setCursorInElement(element: HTMLElement | null | undefined) {
+    if (typeof element === 'undefined' || element === null) {
+      return
+    }
+
+    this.setCursorAfterElement(element.childNodes[element.childNodes.length - 1] as HTMLElement)
   }
 
-  private setCursorAfterElement(element: HTMLElement | null | undefined) {
+  private setCursorAfterElement(element: Node | null | undefined) {
     if (typeof element === 'undefined' || element === null) {
       return
     }
@@ -471,5 +461,12 @@ export default class NapkinNote {
     const selection = window.getSelection()
     selection?.removeAllRanges()
     selection?.addRange(range)
+  }
+
+  private insertHTML(element: HTMLElement) {
+    const range = window.getSelection()?.getRangeAt(0)
+    range?.collapse(true)
+    range?.insertNode(element)
+    this.setCursorAfterElement(element)
   }
 }
