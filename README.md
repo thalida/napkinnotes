@@ -4,6 +4,10 @@
    <p>
       <strong>Napkin Notes is a simple, lightweight, note-taking app for quick math, short-term tasks, and temporary notes.</strong>
    </p>
+   <p>
+      <a href="https://napkinnotes.app" target="_blank"><strong>Website</strong></a> | 
+      <a href="https://api.napkinnotes.app" target="_blank"><strong>API Docs</strong></a>
+   </p>
 </div>
 
 <br /><br />
@@ -48,9 +52,22 @@ Catalog of the tools, resources, and services used in the creation of this proje
 |-----------------|------|-------------|
 | Vue (Vue3) | https://vuejs.org/ | Frontend framework |
 | Vite PWA | https://vite-pwa-org.netlify.app/ | Adds PWA Support to Vue |
+| Tailwind | https://tailwindcss.com/ | Design system and CSS Components |
+| Tailwind Components | https://tailwindui.com/ | Pre-built components from Tailwind; Uses [Headless UI](https://headlessui.com/) and [Heroicons](https://heroicons.com/) |
+| Vue Google Login | https://github.com/devbaji/vue3-google-login | Powers "Login with Google" functionality |
+| Hero Icons | https://heroicons.com/ | |
+| Bootstrap Icons Vue | https://github.com/tommyip/bootstrap-icons-vue | Vue components for [Bootstrap Icons](https://icons.getbootstrap.com/) |
 
 
 #### Api
+| Tool or Service | Link | Description |
+|-----------------|------|-------------|
+| Django | https://www.djangoproject.com/ | Backend framework |
+| Django Rest Framework | https://www.django-rest-framework.org/ | RESTFul Django APIs |
+| DRF Social Oauth | https://github.com/wagnerdelima/drf-social-oauth2 | Provides support for social login; Uses [Python Social Auth](https://python-social-auth.readthedocs.io/en/latest/) and [Django OAuth2 Toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/); |
+| DRF Spectactular | https://drf-spectacular.readthedocs.io/en/latest/ | Open API Schema Generator & Viewer |
+| Stoplight Elements | https://github.com/stoplightio/elements | Beautiful Open API Schema Docs |
+| Django Unfold Admin | https://github.com/unfoldadmin/django-unfold | A better Django Admin Experience |  
 
 
 #### Hosting & Deployment
