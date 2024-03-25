@@ -10,12 +10,11 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png', 'logo-white.svg'],
       manifest: {
         name: 'Napkin Notes',
         short_name: 'napkinnotes',
         description: "A digital 'napkin' (just what everyone's wanted). Jot down quick math, list todos, paste notes, etc.",
-        theme_color: '#0f172a',
         icons: [
           {
             "src": "pwa-64x64.png",

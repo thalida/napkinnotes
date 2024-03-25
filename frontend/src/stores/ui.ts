@@ -23,9 +23,11 @@ export const useUIStore = defineStore('ui', () => {
     ) {
       colorScheme.value = 'dark'
       document.documentElement.classList.add('dark')
+      document.documentElement.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0f172a');
     } else {
       colorScheme.value = 'light'
       document.documentElement.classList.remove('dark')
+      document.documentElement.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#dbeafe');
     }
 
     if (selectedTheme.value === 'system') {
