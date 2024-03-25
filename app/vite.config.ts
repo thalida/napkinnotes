@@ -13,7 +13,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png', 'logo-white.svg'],
       manifest: {
         name: 'Napkin Notes',
-        short_name: 'napkinnotes',
+        short_name: 'Napkin Notes',
         description: "A digital 'napkin' (just what everyone's wanted). Jot down quick math, list todos, paste notes, etc.",
         theme_color: '#dbeafe',
         icons: [
