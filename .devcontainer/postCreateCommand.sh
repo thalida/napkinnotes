@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /workspaces/napkinnotes/backend
+cd /workspaces/napkinnotes/api
 poetry install
 
 cd /workspaces/napkinnotes/frontend

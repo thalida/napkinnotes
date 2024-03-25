@@ -26,10 +26,10 @@ services:
     name: napkinnotes:api
     env: python
     plan: starter
-    rootDir: backend/
+    rootDir: api/
     buildFilter:
       paths:
-      - backend/**
+      - api/**
     startCommand: ./scripts/render/start.sh
     buildCommand: ./scripts/render/build.sh
     envVars:

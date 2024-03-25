@@ -2,4 +2,4 @@
 # exit on error
 set -o errexit
 
-poetry run gunicorn backend.wsgi:application
+poetry run gunicorn api.wsgi:application

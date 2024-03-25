@@ -1,6 +1,6 @@
 from django.db import models
 
-from backend.models import BaseModel
+from api.models import BaseModel
 
 
 class Note(BaseModel):
