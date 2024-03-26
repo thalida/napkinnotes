@@ -2,7 +2,7 @@
    <img src="https://github.com/thalida/napkinnotes/assets/3401715/75867e3a-150a-406b-89c9-69406a159096" alt="Napkin Notes Logo" />
    <h1>Napkin Notes</h1>
    <p>
-      <strong>Napkin Notes is a simple, lightweight, note-taking app for quick math, short-term tasks, and temporary notes.</strong>
+      <strong>Napkin Notes is an encrypted, lightweight, note-taking app for quick math, short-term tasks, and temporary notes.</strong>
    </p>
    <p>
       <a href="https://napkinnotes.app" target="_blank"><strong>Website</strong></a> | 
@@ -79,6 +79,7 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | Django | https://www.djangoproject.com/ | Backend framework |
 | Django Rest Framework | https://www.django-rest-framework.org/ | RESTFul Django APIs |
 | DRF Social Oauth | https://github.com/wagnerdelima/drf-social-oauth2 | Provides support for social login; Uses [Python Social Auth](https://python-social-auth.readthedocs.io/en/latest/) and [Django OAuth2 Toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/); |
+| Python Cryptography | https://github.com/pyca/cryptography | Encryption library used for storing note content |
 | DRF Spectactular | https://drf-spectacular.readthedocs.io/en/latest/ | Open API Schema Generator & Viewer |
 | Stoplight Elements | https://github.com/stoplightio/elements | Beautiful Open API Schema Docs |
 | Django Unfold Admin | https://github.com/unfoldadmin/django-unfold | A better Django Admin Experience |  
