@@ -232,7 +232,9 @@ export default class NapkinNote {
   }
 
   formatLinkWidgets() {
-    const linkElements = this.element.querySelectorAll('.widget-link') as NodeListOf<HTMLAnchorElement>
+    const linkElements = this.element.querySelectorAll(
+      '.widget-link'
+    ) as NodeListOf<HTMLAnchorElement>
 
     if (!linkElements) {
       return
@@ -256,7 +258,7 @@ export default class NapkinNote {
   }
 
   createCheckboxWidget(textNode: Text, text: string) {
-    const inputText = text.replace("- []", '').replace("- [x]", '').replace("- [ ]", '')
+    const inputText = text.replace('- []', '').replace('- [x]', '').replace('- [ ]', '')
 
     const input = this.createCheckboxElement(this.IS_CHECKED_REGEX.test(text))
     const inputTextNode = document.createTextNode(inputText)
@@ -296,7 +298,7 @@ export default class NapkinNote {
       return
     }
 
-    let focusedNode = window.getSelection()?.focusNode
+    const focusedNode = window.getSelection()?.focusNode
     let cursorTarget: HTMLElement | null = null
 
     if (focusedNode && focusedNode.nodeType === Node.TEXT_NODE) {
@@ -312,7 +314,8 @@ export default class NapkinNote {
     cursorTarget = cursorTarget as HTMLElement
 
     const childNodes = cursorTarget.childNodes
-    const hasCheckboxChild = childNodes[0] && (childNodes[0] as HTMLInputElement).type === 'checkbox'
+    const hasCheckboxChild =
+      childNodes[0] && (childNodes[0] as HTMLInputElement).type === 'checkbox'
 
     if (!hasCheckboxChild) {
       return
@@ -448,7 +451,6 @@ export default class NapkinNote {
       this.formatCheckboxWidgets()
       this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
     }
-
   }
 
   private getAllTextNodes(node: Node): Text[] {
