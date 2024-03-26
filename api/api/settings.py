@@ -120,6 +120,10 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.user.user_details",
 )
 
+OAUTH2_PROVIDER = {
+    "ACCESS_TOKEN_EXPIRE_SECONDS": 60 * 60 * 24 * 52,  # 1 year
+}
+
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.google.GoogleOAuth2",
     "drf_social_oauth2.backends.DjangoOAuth2",
