@@ -326,6 +326,7 @@ export default class NapkinNote {
       emptyDiv.appendChild(document.createElement('br'))
       cursorTarget.replaceWith(emptyDiv)
       this.setCursorInElement(emptyDiv)
+      this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
       return
     }
 
@@ -337,9 +338,7 @@ export default class NapkinNote {
     cursorTarget.after(div)
 
     this.setCursorInElement(div)
-
-    console.log(event, cursorTarget, childNodes, hasCheckboxChild)
-
+    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
   }
 
   private handleKeyupEvent(event: KeyboardEvent) {
