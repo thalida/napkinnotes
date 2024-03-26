@@ -35,6 +35,9 @@ SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY", default="django-insecure-m^pcufu@nx9&$_rk_u&db+k!-$%&6+ktw%kea-i4g4c&rjcie*"
 )
 
+FERNET_SECRET_KEY = os.getenv("FERNET_SECRET_KEY", default="fernet-insecure-NhjfsPJmNHnuQb5EFrSlapwe2tdse6rqN2TTAx9MgWI=")
+FERNET_SECRET_KEY = FERNET_SECRET_KEY.encode("utf-8")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "RENDER" not in os.environ
 
@@ -369,9 +372,3 @@ UNFOLD = {
         },
     ],
 }
-
-
-# Keep at the bottom of the settings file
-from api.loguru_logging import load_loguru  # noqa: E402
-
-load_loguru(globals())

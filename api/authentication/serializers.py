@@ -1,3 +1,5 @@
+from django.conf import settings
+from cryptography.fernet import Fernet
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 

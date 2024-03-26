@@ -5,10 +5,10 @@ from api.models import BaseModel
 
 class Note(BaseModel):
     user = models.ForeignKey("authentication.User", on_delete=models.CASCADE, related_name="notes")
-    content = models.TextField(
+    content = models.BinaryField(
         blank=True,
-        default="",
-        help_text="Write your notes here.",
+        default=b"",
+        help_text="Encrypted content of the note.",
     )
 
     def __str__(self):
