@@ -10,9 +10,10 @@ class Note(BaseModel):
         default=b"",
         help_text="Encrypted content of the note.",
     )
+    is_hidden = models.BooleanField(
+        default=False,
+        help_text="Flag to hide the note from the user.",
+    )
 
     def __str__(self):
         return f"{self.user}"
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=["user"], name="unique_user_note")]

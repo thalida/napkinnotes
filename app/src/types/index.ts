@@ -30,5 +30,6 @@ export interface INote {
   updated_at: string
   content: string
 
+  // This is not part of the API response
   isAnon: boolean
 }

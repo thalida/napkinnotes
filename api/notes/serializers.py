@@ -9,8 +9,14 @@ class NoteSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField()
 
     def get_content(self, obj):
-        fernet = Fernet(settings.FERNET_SECRET_KEY)
-        return fernet.decrypt(bytes(obj.content)).decode("utf-8")
+        if not bytes(obj.content):
+            return ""
+
+        try:
+            fernet = Fernet(settings.FERNET_SECRET_KEY)
+            return fernet.decrypt(bytes(obj.content)).decode("utf-8")
+        except Exception:
+            raise serializers.ValidationError("Failed to decrypt note.")
 
     class Meta:
         model = Note
