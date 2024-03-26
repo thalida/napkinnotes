@@ -7,7 +7,7 @@ export default class NapkinNote {
 
   private callbacks: { [key: string]: EventListener[] } = {}
 
-  private CHECKBOX_REGEX = /^(-\s\[[\sx]?\])(.*)/
+  private CHECKBOX_REGEX = /^[\s*]?(-\s\[[\sx]?\])(.*)/
   private IS_CHECKED_REGEX = /^-\s\[[x]\]/
   private LIST_UNORDERED_REGEX = /^([*-]\s)([^[].*)/
   private LIST_ORDERED_REGEX = /^([1]+\.\s)(.*)/
@@ -27,6 +27,7 @@ export default class NapkinNote {
       console.error(error)
     }
 
+    this.element.addEventListener('beforeinput', this.handleBeforeInput.bind(this))
     this.element.addEventListener('keyup', this.handleKeyupEvent.bind(this))
     this.element.addEventListener('keydown', this.handleKeydownEvent.bind(this))
     this.element.addEventListener('click', this.handleClickEvent.bind(this))
@@ -39,6 +40,7 @@ export default class NapkinNote {
   }
 
   destroy() {
+    this.element.removeEventListener('beforeinput', this.handleBeforeInput)
     this.element.removeEventListener('keyup', this.handleKeyupEvent)
     this.element.removeEventListener('keydown', this.handleKeydownEvent)
     this.element.removeEventListener('click', this.handleClickEvent)
@@ -71,25 +73,25 @@ export default class NapkinNote {
     widget.classList.add('widget', 'widget-calculator')
     widget.contentEditable = 'false'
 
-    const input = document.createElement('textarea')
-    input.className = 'widget-calculator__input'
-    input.wrap = 'soft'
-    input.autocomplete = 'off'
-    input.autocapitalize = 'off'
-    input.value = text.replace(this.CALCULATOR_REGEX, '$2')
-    input.placeholder = 'Enter a math expression'
-    input.dataset.value = input.value
+    const textarea = document.createElement('textarea')
+    textarea.className = 'widget-calculator__input'
+    textarea.wrap = 'soft'
+    textarea.autocomplete = 'off'
+    textarea.autocapitalize = 'off'
+    textarea.value = text.replace(this.CALCULATOR_REGEX, '$2')
+    textarea.placeholder = 'Enter a math expression'
+    textarea.dataset.value = textarea.value
 
     const output = document.createElement('output')
     output.className = 'widget-calculator__output'
     output.contentEditable = 'false'
     output.textContent = ''
 
-    widget.appendChild(input)
+    widget.appendChild(textarea)
     widget.appendChild(output)
     textNode.replaceWith(widget)
 
-    input.focus()
+    textarea.focus()
   }
 
   loadCalculatorWidgets() {
@@ -99,14 +101,14 @@ export default class NapkinNote {
     }
 
     for (const calculator of calculatorElements) {
-      const input = calculator.querySelector('.widget-calculator__input') as HTMLInputElement
+      const textarea = calculator.querySelector('.widget-calculator__input') as HTMLTextAreaElement
 
-      if (!input) {
+      if (!textarea) {
         continue
       }
 
-      input.value = input.dataset.value || ''
-      input.placeholder = 'Enter a math expression'
+      textarea.value = textarea.dataset.value || ''
+      textarea.placeholder = 'Enter a math expression'
     }
   }
 
@@ -242,21 +244,25 @@ export default class NapkinNote {
     }
   }
 
-  createCheckboxWidget(textNode: Text, text: string) {
-    const inputText = text.replace(this.CHECKBOX_REGEX, '$2')
+  createCheckboxElement(isChecked = false) {
     const input = document.createElement('input')
 
     input.classList.add('widget', 'widget-checkbox')
     input.type = 'checkbox'
-    input.checked = this.IS_CHECKED_REGEX.test(text)
+    input.checked = isChecked
     input.value = input.checked ? 'true' : 'false'
 
-    const div = document.createElement('div')
-    div.appendChild(input)
-    div.appendChild(document.createTextNode(inputText))
+    return input
+  }
 
-    textNode.replaceWith(div)
-    this.setCursorInElement(div)
+  createCheckboxWidget(textNode: Text, text: string) {
+    const inputText = text.replace("- []", '').replace("- [x]", '').replace("- [ ]", '')
+
+    const input = this.createCheckboxElement(this.IS_CHECKED_REGEX.test(text))
+    const inputTextNode = document.createTextNode(inputText)
+    textNode.replaceWith(input)
+    input.after(inputTextNode)
+    this.setCursorAfterElement(inputTextNode)
   }
 
   loadCheckboxWidgets() {
@@ -285,6 +291,57 @@ export default class NapkinNote {
     }
   }
 
+  private handleBeforeInput(event: InputEvent) {
+    if (event.inputType !== 'insertParagraph') {
+      return
+    }
+
+    let focusedNode = window.getSelection()?.focusNode
+    let cursorTarget: HTMLElement | null = null
+
+    if (focusedNode && focusedNode.nodeType === Node.TEXT_NODE) {
+      cursorTarget = focusedNode.parentElement
+    } else {
+      cursorTarget = focusedNode as HTMLElement | null
+    }
+
+    if (typeof cursorTarget === 'undefined' || cursorTarget === null) {
+      return
+    }
+
+    cursorTarget = cursorTarget as HTMLElement
+
+    const childNodes = cursorTarget.childNodes
+    const hasCheckboxChild = childNodes[0] && (childNodes[0] as HTMLInputElement).type === 'checkbox'
+
+    if (!hasCheckboxChild) {
+      return
+    }
+
+    event.preventDefault()
+
+    const hasText = cursorTarget.textContent ? cursorTarget.textContent.trim().length > 0 : false
+    if (!hasText) {
+      const emptyDiv = document.createElement('div')
+      emptyDiv.appendChild(document.createElement('br'))
+      cursorTarget.replaceWith(emptyDiv)
+      this.setCursorInElement(emptyDiv)
+      return
+    }
+
+    const div = document.createElement('div')
+    const checkboxInput = this.createCheckboxElement()
+    div.appendChild(checkboxInput)
+    div.appendChild(document.createTextNode(' '))
+
+    cursorTarget.after(div)
+
+    this.setCursorInElement(div)
+
+    console.log(event, cursorTarget, childNodes, hasCheckboxChild)
+
+  }
+
   private handleKeyupEvent(event: KeyboardEvent) {
     const isMetaKeyPressed = event.metaKey || event.ctrlKey
 
@@ -296,25 +353,24 @@ export default class NapkinNote {
       return
     }
 
-    const isInputElement =
-      (event.target as HTMLElement).tagName === 'INPUT' ||
-      (event.target as HTMLElement).tagName === 'TEXTAREA'
+    const isBackspace = event.key === 'Backspace'
+    const isEnter = event.key === 'Enter'
+    const isShift = event.shiftKey
+    const isShiftEnter = isEnter && isShift
 
-    if (isInputElement) {
-      const inputTarget = event.target as HTMLInputElement | HTMLTextAreaElement
-      const isBackspace = event.key === 'Backspace'
-      const isShiftEnter = event.key === 'Enter' && event.shiftKey
+    if ((event.target as HTMLElement).tagName === 'TEXTAREA') {
+      const inputTarget = event.target as HTMLTextAreaElement
       const value = inputTarget.value
       const isEmpty = value.length === 0
 
       if (isBackspace && isEmpty) {
         const previouslyEmpty = this.alreadyEmptyInputs.has(inputTarget)
 
-        if (previouslyEmpty) {
+        if (!previouslyEmpty) {
+          this.alreadyEmptyInputs.add(inputTarget)
+        } else {
           inputTarget.parentElement?.remove()
           this.alreadyEmptyInputs.delete(inputTarget)
-        } else {
-          this.alreadyEmptyInputs.add(inputTarget)
         }
       } else {
         this.alreadyEmptyInputs.delete(inputTarget)
@@ -408,34 +464,35 @@ export default class NapkinNote {
   private formatTextNodes() {
     const textNodes = this.getAllTextNodes(this.element as Node)
     for (const textNode of textNodes) {
-      const text = textNode.textContent || ''
+      const rawText = textNode.textContent || ''
+      const cleanedText = rawText.trim()
 
-      const isCheckbox = this.CHECKBOX_REGEX.test(text)
-      const isBulletList = this.LIST_UNORDERED_REGEX.test(text)
-      const isNumberedList = this.LIST_ORDERED_REGEX.test(text)
-      const isCalculator = this.CALCULATOR_REGEX.test(text)
+      const isCheckbox = this.CHECKBOX_REGEX.test(cleanedText)
+      const isBulletList = this.LIST_UNORDERED_REGEX.test(cleanedText)
+      const isNumberedList = this.LIST_ORDERED_REGEX.test(cleanedText)
+      const isCalculator = this.CALCULATOR_REGEX.test(rawText)
 
       if (!isCheckbox && !isBulletList && !isNumberedList && !isCalculator) {
         continue
       }
 
       if (isCheckbox) {
-        this.createCheckboxWidget(textNode, text)
+        this.createCheckboxWidget(textNode, rawText)
         continue
       }
 
       if (isBulletList) {
-        this.createUnorderedListWidget(textNode, text)
+        this.createUnorderedListWidget(textNode, rawText)
         continue
       }
 
       if (isNumberedList) {
-        this.createOrderedListWidget(textNode, text)
+        this.createOrderedListWidget(textNode, rawText)
         continue
       }
 
       if (isCalculator) {
-        this.createCalculatorWidget(textNode, text)
+        this.createCalculatorWidget(textNode, rawText)
         continue
       }
     }
