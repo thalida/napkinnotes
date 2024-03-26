@@ -260,6 +260,17 @@ export default class NapkinNote {
 
     const input = this.createCheckboxElement(this.IS_CHECKED_REGEX.test(text))
     const inputTextNode = document.createTextNode(inputText)
+
+    const isParentRawElement = textNode.parentElement?.classList.contains('napkinnote')
+    if (isParentRawElement) {
+      const div = document.createElement('div')
+      div.appendChild(input)
+      div.appendChild(inputTextNode)
+      textNode.replaceWith(div)
+      this.setCursorInElement(div)
+      return
+    }
+
     textNode.replaceWith(input)
     input.after(inputTextNode)
     this.setCursorAfterElement(inputTextNode)
@@ -411,7 +422,21 @@ export default class NapkinNote {
 
     if (isTab) {
       event.preventDefault()
-      const tabNode = document.createTextNode('\t')
+
+      const isCursorAtLiStart = window.getSelection()?.anchorOffset === 0
+      const previousSibling = cursorTarget?.previousSibling as HTMLElement
+
+      if (isCursorAtLiStart && cursorTarget?.tagName === 'LI' && previousSibling?.tagName === 'LI') {
+        const listParentType = cursorTarget?.parentElement?.tagName
+        const nestedParent = document.createElement(listParentType === 'OL' ? 'ol' : 'ul')
+        nestedParent.appendChild(cursorTarget)
+        previousSibling.appendChild(nestedParent)
+        this.setCursorBeforeElement(cursorTarget)
+        this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+        return
+      }
+
+      const tabNode = document.createTextNode('    ')
       this.insertHTML(tabNode)
       this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
       return
@@ -523,6 +548,20 @@ export default class NapkinNote {
     const range = document.createRange()
     range.selectNodeContents(element)
     range.collapse(false)
+
+    const selection = window.getSelection()
+    selection?.removeAllRanges()
+    selection?.addRange(range)
+  }
+
+  private setCursorBeforeElement(element: Node | null | undefined) {
+    if (typeof element === 'undefined' || element === null) {
+      return
+    }
+
+    const range = document.createRange()
+    range.selectNodeContents(element)
+    range.collapse(true)
 
     const selection = window.getSelection()
     selection?.removeAllRanges()
