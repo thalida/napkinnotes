@@ -1,11 +1,9 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { AxiosError } from 'axios'
 import type { IUser, INote } from '@/types'
 import notesApi from '@/api/notes'
 import usersApi from '@/api/users'
 import { LOCALSTOARGE_NAMESPACE } from '.'
-import type { Axios } from 'axios'
 
 export const useCoreStore = defineStore('core', () => {
   const NOTE_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}anon-note`
@@ -56,7 +54,9 @@ export const useCoreStore = defineStore('core', () => {
       }
       return
     } catch (error: any) {
-      const errorMessage = Array.isArray(error.response?.data) ? error.response?.data[0] : error.response?.data
+      const errorMessage = Array.isArray(error.response?.data)
+        ? error.response?.data[0]
+        : error.response?.data
       fetchNotesError.value = errorMessage || 'Failed to fetch note'
       note.value = null
     }

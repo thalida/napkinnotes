@@ -426,7 +426,11 @@ export default class NapkinNote {
       const isCursorAtLiStart = window.getSelection()?.anchorOffset === 0
       const previousSibling = cursorTarget?.previousSibling as HTMLElement
 
-      if (isCursorAtLiStart && cursorTarget?.tagName === 'LI' && previousSibling?.tagName === 'LI') {
+      if (
+        isCursorAtLiStart &&
+        cursorTarget?.tagName === 'LI' &&
+        previousSibling?.tagName === 'LI'
+      ) {
         const listParentType = cursorTarget?.parentElement?.tagName
         const nestedParent = document.createElement(listParentType === 'OL' ? 'ol' : 'ul')
         nestedParent.appendChild(cursorTarget)

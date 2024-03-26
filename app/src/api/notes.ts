@@ -27,7 +27,6 @@ export function createNote({ content }: Partial<INote>) {
   )
 }
 
-
 export function updateNote(id: string, { content }: Partial<INote>) {
   const authStore = useAuthStore()
   return api.put(
