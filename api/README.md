@@ -14,7 +14,6 @@ Currently uses local user login, but is setup to support 3rd party sso.
 
 - [Django](https://docs.djangoproject.com/)
 - [Django Rest Framework](https://www.django-rest-framework.org/)
-- [Loguru](https://github.com/Delgan/loguru) (better logging)
 - [Unfold](https://github.com/unfoldadmin/django-unfold) (fancy admin)
     - Icons: <https://fonts.google.com/icons>
 - [Spectacular](https://github.com/tfranzel/drf-spectacular) (fancy api docs)
