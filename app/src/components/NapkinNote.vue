@@ -41,6 +41,10 @@ onBeforeUnmount(() => {
   --napkinnotes--link-widget--action: #10b981;
 }
 
+.napkinnote {
+  white-space: pre-wrap;
+}
+
 .napkinnote .widget.widget-calculator {
   display: flex;
   flex-direction: row;

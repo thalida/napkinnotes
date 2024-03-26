@@ -27,7 +27,6 @@ export default class NapkinNote {
       console.error(error)
     }
 
-    this.element.addEventListener('beforeinput', this.handleBeforeInput.bind(this))
     this.element.addEventListener('keyup', this.handleKeyupEvent.bind(this))
     this.element.addEventListener('keydown', this.handleKeydownEvent.bind(this))
     this.element.addEventListener('click', this.handleClickEvent.bind(this))
@@ -40,7 +39,6 @@ export default class NapkinNote {
   }
 
   destroy() {
-    this.element.removeEventListener('beforeinput', this.handleBeforeInput)
     this.element.removeEventListener('keyup', this.handleKeyupEvent)
     this.element.removeEventListener('keydown', this.handleKeydownEvent)
     this.element.removeEventListener('click', this.handleClickEvent)
@@ -293,57 +291,6 @@ export default class NapkinNote {
     }
   }
 
-  private handleBeforeInput(event: InputEvent) {
-    if (event.inputType !== 'insertParagraph') {
-      return
-    }
-
-    const focusedNode = window.getSelection()?.focusNode
-    let cursorTarget: HTMLElement | null = null
-
-    if (focusedNode && focusedNode.nodeType === Node.TEXT_NODE) {
-      cursorTarget = focusedNode.parentElement
-    } else {
-      cursorTarget = focusedNode as HTMLElement | null
-    }
-
-    if (typeof cursorTarget === 'undefined' || cursorTarget === null) {
-      return
-    }
-
-    cursorTarget = cursorTarget as HTMLElement
-
-    const childNodes = cursorTarget.childNodes
-    const hasCheckboxChild =
-      childNodes[0] && (childNodes[0] as HTMLInputElement).type === 'checkbox'
-
-    if (!hasCheckboxChild) {
-      return
-    }
-
-    event.preventDefault()
-
-    const hasText = cursorTarget.textContent ? cursorTarget.textContent.trim().length > 0 : false
-    if (!hasText) {
-      const emptyDiv = document.createElement('div')
-      emptyDiv.appendChild(document.createElement('br'))
-      cursorTarget.replaceWith(emptyDiv)
-      this.setCursorInElement(emptyDiv)
-      this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
-      return
-    }
-
-    const div = document.createElement('div')
-    const checkboxInput = this.createCheckboxElement()
-    div.appendChild(checkboxInput)
-    div.appendChild(document.createTextNode(' '))
-
-    cursorTarget.after(div)
-
-    this.setCursorInElement(div)
-    this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
-  }
-
   private handleKeyupEvent(event: KeyboardEvent) {
     const isMetaKeyPressed = event.metaKey || event.ctrlKey
 
@@ -371,7 +318,10 @@ export default class NapkinNote {
         if (!previouslyEmpty) {
           this.alreadyEmptyInputs.add(inputTarget)
         } else {
-          inputTarget.parentElement?.remove()
+          const emptyDiv = document.createElement('div')
+          emptyDiv.appendChild(document.createElement('br'))
+          inputTarget.parentElement?.replaceWith(emptyDiv)
+          this.setCursorInElement(emptyDiv)
           this.alreadyEmptyInputs.delete(inputTarget)
         }
       } else {
@@ -402,15 +352,72 @@ export default class NapkinNote {
   }
 
   private handleKeydownEvent(event: KeyboardEvent) {
-    const isMetaKeyPressed = event.metaKey || event.ctrlKey
-
-    if (!isMetaKeyPressed) {
+    const isNapkinNote = (event.target as HTMLElement).classList.contains('napkinnote')
+    if (!isNapkinNote) {
       return
     }
 
-    this.element.classList.add('napkinnote--ctrl-key-active')
+    const isMetaKeyPressed = event.metaKey || event.ctrlKey
+    const isTab = event.key === 'Tab'
+    const isEnter = event.key === 'Enter'
 
-    if (event.key === 'k') {
+    if (isMetaKeyPressed) {
+      this.element.classList.add('napkinnote--ctrl-key-active')
+    }
+
+    const focusedNode = window.getSelection()?.focusNode
+    let cursorTarget: HTMLElement | null = null
+
+    if (focusedNode && focusedNode.nodeType === Node.TEXT_NODE) {
+      cursorTarget = focusedNode.parentElement
+    } else {
+      cursorTarget = focusedNode as HTMLElement | null
+    }
+
+    const childNodes = cursorTarget?.childNodes || []
+    const hasCheckboxChild =
+      childNodes[0] && (childNodes[0] as HTMLInputElement).type === 'checkbox'
+
+    if (isEnter && cursorTarget && hasCheckboxChild) {
+      event.preventDefault()
+
+      const hasText = cursorTarget.textContent ? cursorTarget.textContent.trim().length > 0 : false
+      if (!hasText) {
+        const emptyDiv = document.createElement('div')
+        emptyDiv.appendChild(document.createElement('br'))
+
+        if (cursorTarget.classList.contains('napkinnote')) {
+          cursorTarget.appendChild(emptyDiv)
+        } else {
+          cursorTarget.replaceWith(emptyDiv)
+        }
+
+        this.setCursorInElement(emptyDiv)
+        this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+        return
+      }
+
+      const div = document.createElement('div')
+      const checkboxInput = this.createCheckboxElement()
+      div.appendChild(checkboxInput)
+      div.appendChild(document.createTextNode(' '))
+
+      cursorTarget.after(div)
+
+      this.setCursorInElement(div)
+      this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+      return
+    }
+
+    if (isTab) {
+      event.preventDefault()
+      const tabNode = document.createTextNode('\t')
+      this.insertHTML(tabNode)
+      this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+      return
+    }
+
+    if (isMetaKeyPressed && event.key === 'k') {
       event.preventDefault()
 
       const selection = window.getSelection()
@@ -429,6 +436,7 @@ export default class NapkinNote {
 
       this.createLinkWidget(textNode, textContent)
       this.trigger(NAPKIN_NOTE_EVENTS.ON_UPDATE)
+      return
     }
   }
 
@@ -521,7 +529,7 @@ export default class NapkinNote {
     selection?.addRange(range)
   }
 
-  private insertHTML(element: HTMLElement) {
+  private insertHTML(element: Node) {
     const range = window.getSelection()?.getRangeAt(0)
     range?.collapse(true)
     range?.insertNode(element)

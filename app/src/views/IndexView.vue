@@ -12,7 +12,7 @@ const coreStore = useCoreStore()
       <NapkinNote
         v-if="coreStore.note"
         :key="coreStore.note.id"
-        class="p-8 prose prose-slate grow h-full w-full max-w-full border-slate-100 selection:bg-teal-200 caret-amber-700 dark:selection:bg-blue-900 dark:caret-blue-700 dark:text-white overflow-y-auto focus:outline-none"
+        class="p-8 prose prose-slate grow h-full w-full max-w-full border-slate-100 selection:bg-teal-200 caret-blue-700 dark:selection:bg-blue-900 dark:caret-slate-200 dark:text-white overflow-y-auto focus:outline-none"
       />
     </div>
 
