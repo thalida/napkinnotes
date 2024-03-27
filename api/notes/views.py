@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from .models import Note
 from .serializers import NoteSerializer
 
+
 @extend_schema_view(
     create=extend_schema(summary="Create note"),
     list=extend_schema(summary="List notes"),
@@ -14,7 +15,13 @@ from .serializers import NoteSerializer
     update=extend_schema(summary="Update note"),
     partial_update=extend_schema(exclude=True),
 )
-class NotesViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class NotesViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permission_classes = [permissions.IsAuthenticated]
