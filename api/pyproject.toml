@@ -29,6 +29,9 @@ cryptography = "^42.0.5"
 channels = {extras = ["daphne"], version = "^4.0.0"}
 channels-redis = "^4.2.0"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
