@@ -1,14 +1,11 @@
-import { ref, watchEffect } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useWebSocket, type UseWebSocketReturn } from '@vueuse/core'
 import type { IUser, INote } from '@/types'
 import notesApi from '@/api/notes'
 import usersApi from '@/api/users'
 import { LOCALSTOARGE_NAMESPACE } from '.'
-import { useAuthStore } from './auth'
 
 export const useCoreStore = defineStore('core', () => {
-  const authStore = useAuthStore()
   const NOTE_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}anon-note`
 
   const user = ref<IUser | null>(null)
@@ -103,6 +100,6 @@ export const useCoreStore = defineStore('core', () => {
     setNoteContent,
     initUser,
     initAnon,
-    updateNote,
+    updateNote
   }
 })

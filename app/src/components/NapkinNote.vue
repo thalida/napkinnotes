@@ -3,15 +3,19 @@ import { onMounted, onBeforeUnmount, ref, watchEffect } from 'vue'
 import { throttle } from 'lodash'
 import { useCoreStore } from '@/stores/core'
 import NapkinNote, { NAPKIN_NOTE_EVENTS } from '@/components/NapkinNote'
-import { useAuthStore } from '@/stores/auth';
-import { useWebSocket } from '@vueuse/core';
+import { useAuthStore } from '@/stores/auth'
+import { useWebSocket } from '@vueuse/core'
 
 let napkinnote: NapkinNote
 const authStore = useAuthStore()
 const coreStore = useCoreStore()
-const websocketUrl = ref(authStore.isAuthenticated ? `${import.meta.env.VITE_WEBSOCKET_URL}ws/notes/?token=${authStore.getTokenData()?.access_token}&token_type=${authStore.getTokenData()?.token_type}` : undefined)
-const { status, data, send } = useWebSocket(websocketUrl, {
-  autoReconnect: true,
+const websocketUrl = ref(
+  authStore.isAuthenticated
+    ? `${import.meta.env.VITE_WEBSOCKET_URL}ws/notes/?token=${authStore.getTokenData()?.access_token}&token_type=${authStore.getTokenData()?.token_type}`
+    : undefined
+)
+const { data, send } = useWebSocket(websocketUrl, {
+  autoReconnect: true
 })
 
 const contentEditableRef = ref<HTMLDivElement | null>(null)
@@ -22,13 +26,15 @@ onMounted(() => {
   napkinnote = new NapkinNote(contentEditableRef.value as HTMLElement)
   napkinnote.on(NAPKIN_NOTE_EVENTS.ON_UPDATE, () => {
     coreStore.setNoteContent(napkinnote.htmlContent)
-    send(JSON.stringify({
-      type: 'note_update',
-      data: {
-        id: coreStore.note?.id,
-        content: napkinnote.htmlContent
-      }
-    }))
+    send(
+      JSON.stringify({
+        type: 'note_update',
+        data: {
+          id: coreStore.note?.id,
+          content: napkinnote.htmlContent
+        }
+      })
+    )
     throttledUpdate()
   })
 })
