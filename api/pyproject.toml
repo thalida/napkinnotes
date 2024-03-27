@@ -26,6 +26,8 @@ django-simple-history = "^3.5.0"
 whitenoise = {extras = ["brotli"], version = "^6.6.0"}
 gunicorn = "^21.2.0"
 cryptography = "^42.0.5"
+channels = {extras = ["daphne"], version = "^4.0.0"}
+channels-redis = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]

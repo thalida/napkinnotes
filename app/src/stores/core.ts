@@ -1,11 +1,14 @@
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
+import { useWebSocket, type UseWebSocketReturn } from '@vueuse/core'
 import type { IUser, INote } from '@/types'
 import notesApi from '@/api/notes'
 import usersApi from '@/api/users'
 import { LOCALSTOARGE_NAMESPACE } from '.'
+import { useAuthStore } from './auth'
 
 export const useCoreStore = defineStore('core', () => {
+  const authStore = useAuthStore()
   const NOTE_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}anon-note`
 
   const user = ref<IUser | null>(null)
@@ -15,18 +18,6 @@ export const useCoreStore = defineStore('core', () => {
   function clearData() {
     user.value = null
     note.value = null
-  }
-
-  function setNoteContent(content: string) {
-    if (!note.value) {
-      return
-    }
-
-    note.value.content = content
-
-    if (note.value.isAnon) {
-      localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
-    }
   }
 
   async function initUser() {
@@ -80,6 +71,18 @@ export const useCoreStore = defineStore('core', () => {
     localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
   }
 
+  function setNoteContent(content: string) {
+    if (!note.value) {
+      return
+    }
+
+    note.value.content = content
+
+    if (note.value.isAnon) {
+      localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
+    }
+  }
+
   async function updateNote() {
     if (!note.value) {
       return
@@ -100,6 +103,6 @@ export const useCoreStore = defineStore('core', () => {
     setNoteContent,
     initUser,
     initAnon,
-    updateNote
+    updateNote,
   }
 })

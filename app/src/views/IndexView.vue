@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { ref, watchEffect } from 'vue';
 import { useCoreStore } from '@/stores/core'
 import NapkinNote from '@/components/NapkinNote.vue'
 import AppMenu from '@/components/AppMenu.vue'
+import { useWebSocket } from '@vueuse/core';
+import { useAuthStore } from '@/stores/auth';
 
 const coreStore = useCoreStore()
+
 </script>
 
 <template>

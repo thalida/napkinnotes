@@ -6,7 +6,7 @@ export function fetchMe() {
   return api.get('/users/me/', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `${authStore.tokenData?.token_type} ${authStore.tokenData?.access_token}`
+      Authorization: `${authStore.getTokenData()?.token_type} ${authStore.getTokenData()?.access_token}`
     }
   })
 }

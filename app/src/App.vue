@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { onMounted, watchEffect } from 'vue'
 import { RouterView } from 'vue-router'
 import { useAuthStore } from './stores/auth'
