@@ -73,6 +73,7 @@ Catalog of the tools, resources, and services used in the creation of this proje
 |-----------------|------|-------------|
 | Vue (Vue3) | <https://vuejs.org/> | Frontend framework |
 | Vite PWA | <https://vite-pwa-org.netlify.app/> | Adds PWA Support to Vue |
+| Vue useWebsockets | https://vueuse.org/core/useWebSocket/ | Vue Websockets Support | 
 | Tailwind | <https://tailwindcss.com/> | Design system and CSS Components |
 | Tailwind Components | <https://tailwindui.com/> | Pre-built components from Tailwind; Uses [Headless UI](https://headlessui.com/) and [Heroicons](https://heroicons.com/) |
 | Vue Google Login | <https://github.com/devbaji/vue3-google-login> | Powers "Login with Google" functionality |
@@ -85,6 +86,7 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | Tool or Service | Link | Description |
 |-----------------|------|-------------|
 | Django | https://www.djangoproject.com/ | Backend framework |
+| Django Channels | https://channels.readthedocs.io/en/latest/index.html | Django websocket support |
 | Django Rest Framework | https://www.django-rest-framework.org/ | RESTFul Django APIs |
 | DRF Social Oauth | https://github.com/wagnerdelima/drf-social-oauth2 | Provides support for social login; Uses [Python Social Auth](https://python-social-auth.readthedocs.io/en/latest/) and [Django OAuth2 Toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/); |
 | Python Cryptography | https://github.com/pyca/cryptography | Encryption library used for storing note content |
