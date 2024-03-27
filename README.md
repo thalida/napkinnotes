@@ -120,3 +120,11 @@ Since this project was a quick hack, I didn't want to spend too much time gettin
 From everything I saw online (Stackoverflow), `contenteditable` is a headache and difficult to work with. While that was the case when figuring out how to handle custom compoents; I found it equally as challenging to find a simple text editor framework that was well supported, not behind a paywall, and allowed for easy customization.
 
 At the end of this weekend, I'd say that I wouldn't recommend `contenteditable` if working on a production-grade high-traffic platform, but for a quick editor it's **highly recommended!!**
+
+
+### Django Channels and Token Auth
+
+Django Channels doesn't seem to support token authentication by default, so I add to create my own auth token middleware for use of Django Channels to authenticate websocket requests.
+https://github.com/thalida/napkinnotes/blob/ee942bd460c80500b40851985d145863a2ce32dc/api/api/middleware.py
+
+The middleware takes in the `token` and `token_type` query paramaters from the websocket request, and directly calls `oauth2_provider.contrib.rest_framework.OAuth2Authentication` to perform the authtentication.
