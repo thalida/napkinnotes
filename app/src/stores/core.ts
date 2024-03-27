@@ -17,18 +17,6 @@ export const useCoreStore = defineStore('core', () => {
     note.value = null
   }
 
-  function setNoteContent(content: string) {
-    if (!note.value) {
-      return
-    }
-
-    note.value.content = content
-
-    if (note.value.isAnon) {
-      localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
-    }
-  }
-
   async function initUser() {
     const userRes = await usersApi.fetchMe()
     user.value = userRes.data
@@ -78,6 +66,18 @@ export const useCoreStore = defineStore('core', () => {
       isAnon: true
     }
     localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
+  }
+
+  function setNoteContent(content: string) {
+    if (!note.value) {
+      return
+    }
+
+    note.value.content = content
+
+    if (note.value.isAnon) {
+      localStorage.setItem(NOTE_STORAGE_KEY, JSON.stringify(note.value))
+    }
   }
 
   async function updateNote() {

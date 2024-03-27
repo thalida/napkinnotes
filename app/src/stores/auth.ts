@@ -6,13 +6,9 @@ import { LOCALSTOARGE_NAMESPACE } from '.'
 
 export const useAuthStore = defineStore('auth', () => {
   const TOKEN_STORAGE_KEY = `${LOCALSTOARGE_NAMESPACE}tokenData`
-
-  const tokenData = ref<IAuthTokenResponse | null>(null)
   const isAuthenticated = ref(false)
 
   function setTokenData(data: IAuthTokenResponse) {
-    tokenData.value = data
-
     localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(data))
 
     isAuthenticated.value = true
@@ -29,13 +25,12 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function clearTokenData() {
-    tokenData.value = null
     localStorage.removeItem(TOKEN_STORAGE_KEY)
     isAuthenticated.value = false
   }
 
   async function logout() {
-    const tokenDataCopy = tokenData.value ? { ...tokenData.value } : null
+    const tokenDataCopy = getTokenData()
 
     clearTokenData()
 
@@ -82,7 +77,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return {
-    tokenData,
     isAuthenticated,
     setTokenData,
     getTokenData,

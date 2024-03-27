@@ -43,6 +43,25 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: napkinnotes:redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: napkinnotes:redis
+          property: port
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: napkinnotes:redis
+          property: connectionString
+
+  - type: redis
+    name: napkinnotes:redis
+    ipAllowList: []
 
 databases:
   - name: napkinnotes:db

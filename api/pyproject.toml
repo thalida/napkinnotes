@@ -26,6 +26,8 @@ django-simple-history = "^3.5.0"
 whitenoise = {extras = ["brotli"], version = "^6.6.0"}
 gunicorn = "^21.2.0"
 cryptography = "^42.0.5"
+channels = {extras = ["daphne"], version = "^4.0.0"}
+channels-redis = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -42,8 +44,7 @@ select = ["E4", "E7", "E9", "F", "Q"]
 [tool.ruff.lint.isort]
 force-wrap-aliases = true
 combine-as-imports = true
-# Currently the default, but want to be explicit
-section-order = ["future", "standard-library", "django", "third-party", "first-party", "local-folder"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
 [tool.ruff.format]
 quote-style = "double"
