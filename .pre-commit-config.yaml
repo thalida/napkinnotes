@@ -48,10 +48,10 @@ repos:
   - repo: local
     hooks:
       - id: typescript
-        require_serial: true
         files: ^app/
         language: system
         name: typescript
         entry: sh -c "cd app && npm run type-check"
         types_or: [ts, tsx, vue]
         pass_filenames: false
+        require_serial: true
