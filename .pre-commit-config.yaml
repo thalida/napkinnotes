@@ -23,6 +23,7 @@ repos:
     hooks:
       - id: prettier
         args: ["--write", "./app/src/"]
+        files: \.(vue|js|jsx|cjs|mjs|ts|tsx|cts|mts)$
 
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.49.0
