@@ -2,65 +2,85 @@
 
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ title }}</title>
+    <meta
+      name="description"
+      content="API for the digital 'napkin' nobody needs but everybody wanted"
+    />
 
-  <title>{{ title }}</title>
-  <meta name="description" content="API for the digital 'napkin' nobody needs but everybody wanted">
+    <link
+      rel="icon"
+      href="{% static 'docs/images/favicon.ico' %}"
+      sizes="any"
+    />
+    <link
+      rel="icon"
+      href="{% static 'docs/images/logo.svg' %}"
+      type="image/svg+xml"
+    />
 
-  <link rel="icon" href="{% static 'docs/images/favicon.ico' %}" sizes="any">
-  <link rel="icon" href="{% static 'docs/images/logo.svg' %}" type="image/svg+xml">
-
-  <!-- Embed elements Elements via Web Component -->
-  <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
-  <style>
-    .wrapper {
-      display: block;
-      height: 100%;
-      padding: 1rem;
-    }
-
-    @media screen and (min-width: 1200px) {
+    <!-- Embed elements Elements via Web Component -->
+    <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@stoplight/elements/styles.min.css"
+    />
+    <style>
       .wrapper {
         display: block;
-        height: 100vh;
-        padding: 0;
+        height: 100%;
+        padding: 1rem;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <div class="wrapper">
-    <elements-api id="docs" apiDescriptionUrl="{{ schema_url }}" router="hash" layout="stacked" />
-  </div>
-  <script>
-    const doc = document.querySelector('#docs');
-
-    function throttle(fn, delay) {
-      let lastCall = 0;
-      return function (...args) {
-        const now = (new Date).getTime();
-        if (now - lastCall < delay) {
-          return;
+      @media screen and (min-width: 1200px) {
+        .wrapper {
+          display: block;
+          height: 100vh;
+          padding: 0;
         }
-        lastCall = now;
-        return fn(...args);
       }
-    }
+    </style>
+  </head>
 
-    function updateLayout() {
-      doc.layout = window.innerWidth >= 1200 ? 'sidebar' : 'stacked';
-    }
+  <body>
+    <div class="wrapper">
+      <elements-api
+        id="docs"
+        apiDescriptionUrl="{{ schema_url }}"
+        router="hash"
+        layout="stacked"
+      />
+    </div>
+    <script>
+      const doc = document.querySelector("#docs");
 
-    let trottledUpdateLayout = throttle(updateLayout, 250);
+      function throttle(fn, delay) {
+        let lastCall = 0;
+        return function (...args) {
+          const now = new Date().getTime();
+          if (now - lastCall < delay) {
+            return;
+          }
+          lastCall = now;
+          return fn(...args);
+        };
+      }
 
-    window.addEventListener('resize', trottledUpdateLayout);
-    trottledUpdateLayout();
-  </script>
-</body>
+      function updateLayout() {
+        doc.layout = window.innerWidth >= 1200 ? "sidebar" : "stacked";
+      }
 
+      let trottledUpdateLayout = throttle(updateLayout, 250);
+
+      window.addEventListener("resize", trottledUpdateLayout);
+      trottledUpdateLayout();
+    </script>
+  </body>
 </html>

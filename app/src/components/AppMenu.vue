@@ -36,18 +36,18 @@ function handleLogoButtonClick() {
 </script>
 
 <template>
-  <div :class="$attrs.class" class="grid grid-cols-3 justify-between items-center">
+  <div :class="$attrs.class" class="grid grid-cols-3 items-center justify-between">
     <div class="flex flex-row items-center justify-start gap-4">
       <button
         v-if="authStore.isAuthenticated"
-        class="flex flex-row items-center justify-center w-5 h-5 hover:opacity-70"
+        class="flex h-5 w-5 flex-row items-center justify-center hover:opacity-70"
         @click="handleLogoutButtonClick"
       >
-        <BIconEscape class="inline-block text-rose-800 w-5 h-5" />
+        <BIconEscape class="inline-block h-5 w-5 text-rose-800" />
       </button>
       <button
         v-else
-        class="bg-gradient-to-br from-pink-700 via-fuchsia-500 to-violet-700 text-white font-semibold py-2 px-4 rounded hover:shadow-lg hover:scale-105 hover:rotate-3 transition ease-in-out duration-200"
+        class="rounded bg-gradient-to-br from-pink-700 via-fuchsia-500 to-violet-700 px-4 py-2 font-semibold text-white transition duration-200 ease-in-out hover:rotate-3 hover:scale-105 hover:shadow-lg"
         @click="handleLoginButtonClick"
       >
         Log In
@@ -55,10 +55,10 @@ function handleLogoButtonClick() {
     </div>
     <div class="flex flex-row items-center justify-center">
       <button
-        class="flex flex-row items-center justify-center hover:scale-110 hover:-rotate-12 transition ease-in-out duration-200"
+        class="flex flex-row items-center justify-center transition duration-200 ease-in-out hover:-rotate-12 hover:scale-110"
         @click="handleLogoButtonClick"
       >
-        <NapkinNotesLogo class="w-10 h-10" />
+        <NapkinNotesLogo class="h-10 w-10" />
       </button>
     </div>
     <div class="flex flex-row items-center justify-end gap-4">

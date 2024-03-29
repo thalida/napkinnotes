@@ -9,7 +9,7 @@ services:
     rootDir: app/
     buildFilter:
       paths:
-      - app/**
+        - app/**
     buildCommand: ./scripts/render/build.sh
     staticPublishPath: ./dist
     headers:
@@ -29,7 +29,7 @@ services:
     rootDir: api/
     buildFilter:
       paths:
-      - api/**
+        - api/**
     startCommand: ./scripts/render/start.sh
     buildCommand: ./scripts/render/build.sh
     envVars:

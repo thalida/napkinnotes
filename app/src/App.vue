@@ -36,10 +36,10 @@ watchEffect(() => {
   <RouterView v-if="!isLoading" />
   <div
     v-else
-    class="flex flex-col gap-4 items-center justify-center w-full h-full bg-gradient-to-br from-slate-300 via-blue-200 to-sky-20 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950"
+    class="flex h-full w-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-slate-300 via-blue-200 to-sky-200 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950"
   >
     <NapkinNotesLogo
-      class="animate-grow-spin relative inline-block w-16 h-16 rounded-lg drop-shadow-xl"
+      class="animate-grow-spin relative inline-block h-16 w-16 rounded-lg drop-shadow-xl"
     />
   </div>
 </template>

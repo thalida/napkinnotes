@@ -31,28 +31,28 @@ const menuOptions = [
     <div>
       <MenuButton class="flex items-center rounded-full text-blue-500 dark:text-slate-800">
         <span class="sr-only">Open options</span>
-        <BIconSunFill v-if="uiStore.colorScheme === 'light'" class="w-5 h-5" />
-        <BIconMoonFill v-else class="w-5 h-5" />
+        <BIconSunFill v-if="uiStore.colorScheme === 'light'" class="h-5 w-5" />
+        <BIconMoonFill v-else class="h-5 w-5" />
       </MenuButton>
     </div>
 
     <transition
-      enter-active-class="transition ease-out duration-100"
-      enter-from-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100"
-      leave-active-class="transition ease-in duration-75"
-      eave-from-class="transform opacity-100 scale-100"
+      enter-active-class="transition duration-100 ease-out"
+      enter-from-class="scale-95 transform opacity-0"
+      enter-to-class="scale-100 transform opacity-100"
+      leave-active-class="transition duration-75 ease-in"
+      eave-from-class="scale-100 transform opacity-100"
       l
-      eave-to-class="transform opacity-0 scale-95"
+      eave-to-class="scale-95 transform opacity-0"
     >
       <MenuItems
-        class="absolute right-1 bottom-10 z-10 mt-2 min-w-32 origin-bottom-right rounded-md bg-blue-50 dark:bg-slate-800 shadow-lg overflow-hidden ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="absolute bottom-10 right-1 z-10 mt-2 min-w-32 origin-bottom-right overflow-hidden rounded-md bg-blue-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-slate-800"
       >
         <div>
           <MenuItem v-for="option in menuOptions" :key="option.key" v-slot="{ active: hover }">
             <button
               @click="uiStore.setTheme(option.key as Theme)"
-              class="flex flex-row items-center justify-start gap-2 w-full px-4 py-2 text-left text-sm"
+              class="flex w-full flex-row items-center justify-start gap-2 px-4 py-2 text-left text-sm"
               :class="{
                 'bg-teal-100 text-blue-500 dark:bg-slate-900/50 dark:text-blue-500':
                   uiStore.selectedTheme === option.key,
@@ -60,7 +60,7 @@ const menuOptions = [
                 'text-gray-700 dark:text-white': uiStore.selectedTheme !== option.key && !hover
               }"
             >
-              <component :is="option.icon" class="w-4 h-4 inline-block mr-2" />
+              <component :is="option.icon" class="mr-2 inline-block h-4 w-4" />
               <span>{{ option.label }}</span>
             </button>
           </MenuItem>
