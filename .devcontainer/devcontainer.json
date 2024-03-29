@@ -53,7 +53,11 @@
 				"ms-python.vscode-pylance",
 				"yzhang.markdown-all-in-one",
 				"Vue.volar",
-				"ms-python.python"
+				"ms-python.python",
+				"esbenp.prettier-vscode",
+				"rvest.vs-code-prettier-eslint",
+				"YoavBls.pretty-ts-errors",
+				"bradlc.vscode-tailwindcss"
 			]
 		}
 	}
