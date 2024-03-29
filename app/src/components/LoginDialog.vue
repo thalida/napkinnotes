@@ -57,7 +57,7 @@ async function handleGoogleLogin() {
         leave-to="opacity-0"
       >
         <div
-          class="fixed inset-0 bg-blue-200 bg-opacity-75 dark:bg-slate-900 dark:bg-opacity-75 transition-opacity backdrop-blur-sm"
+          class="fixed inset-0 bg-blue-200 bg-opacity-75 backdrop-blur-sm transition-opacity dark:bg-slate-900 dark:bg-opacity-75"
         />
       </TransitionChild>
 
@@ -67,34 +67,34 @@ async function handleGoogleLogin() {
         >
           <TransitionChild
             as="template"
-            enter="ease-out duration-300"
-            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enter-to="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leave-from="opacity-100 translate-y-0 sm:scale-100"
-            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter="duration-300 ease-out"
+            enter-from="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
+            enter-to="translate-y-0 opacity-100 sm:scale-100"
+            leave="duration-200 ease-in"
+            leave-from="translate-y-0 opacity-100 sm:scale-100"
+            leave-to="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative w-full transform overflow-hidden rounded-lg bg-white dark:bg-slate-950 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:max-w-sm sm:p-6"
+              class="relative w-full transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:max-w-sm sm:p-6 dark:bg-slate-950"
             >
               <div
-                class="flex flex-row items-end justify-start pb-4 gap-4 w-full sm:mx-auto sm:max-w-md"
+                class="flex w-full flex-row items-end justify-start gap-4 pb-4 sm:mx-auto sm:max-w-md"
               >
-                <NapkinNotesLogo class="w-10 h-10" />
+                <NapkinNotesLogo class="h-10 w-10" />
                 <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   Napkin Notes
                 </h2>
               </div>
 
-              <div class="mt-2 mb-8">
-                <p class="text-sm text-gray-900 dark:text-white text-center">
+              <div class="mb-8 mt-2">
+                <p class="text-center text-sm text-gray-900 dark:text-white">
                   Sign in to sync your notes across all your devices.
                 </p>
               </div>
 
               <div
                 v-if="error"
-                class="flex flex-row gap-2 mt-4 rounded-md bg-red-50 dark:bg-red-200 p-4 sm:mx-auto sm:w-full sm:max-w-sm"
+                class="mt-4 flex flex-row gap-2 rounded-md bg-red-50 p-4 sm:mx-auto sm:w-full sm:max-w-sm dark:bg-red-200"
               >
                 <div class="flex-shrink-0">
                   <XCircleIcon class="h-5 w-5 text-red-400 dark:text-red-600" aria-hidden="true" />
@@ -131,12 +131,12 @@ async function handleGoogleLogin() {
                 </button>
               </div>
 
-              <div class="mt-8 relative">
+              <div class="relative mt-8">
                 <div class="absolute inset-0 flex items-center" aria-hidden="true">
                   <div class="w-full border-t border-gray-200 dark:border-slate-500" />
                 </div>
                 <div class="relative flex justify-center text-sm font-bold uppercase leading-6">
-                  <span class="bg-white dark:bg-slate-950 px-6 text-gray-900 dark:text-slate-400"
+                  <span class="bg-white px-6 text-gray-900 dark:bg-slate-950 dark:text-slate-400"
                     >Or</span
                   >
                 </div>
@@ -158,7 +158,7 @@ async function handleGoogleLogin() {
                       type="email"
                       autocomplete="email"
                       required
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:bg-white/5 dark:text-white dark:ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-white/5 dark:text-white dark:ring-white/10"
                     />
                   </div>
                 </div>
@@ -177,14 +177,14 @@ async function handleGoogleLogin() {
                       type="password"
                       autocomplete="current-password"
                       required
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:bg-white/5 dark:text-white dark:ring-white/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-white/5 dark:text-white dark:ring-white/10"
                     />
                   </div>
                 </div>
                 <div>
                   <button
                     type="submit"
-                    class="mt-8 transition ease-in-out duration-200 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:shadow-lg bg-lime-500 hover:bg-fuchsia-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    class="mt-8 flex w-full justify-center rounded-md bg-lime-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm transition duration-200 ease-in-out hover:bg-fuchsia-500 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Log In
                   </button>

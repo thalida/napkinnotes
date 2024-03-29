@@ -20,7 +20,7 @@ const props = defineProps({
         leave-to="opacity-0"
       >
         <div
-          class="fixed inset-0 bg-blue-200 bg-opacity-75 dark:bg-slate-900 dark:bg-opacity-75 transition-opacity backdrop-blur-sm"
+          class="fixed inset-0 bg-blue-200 bg-opacity-75 backdrop-blur-sm transition-opacity dark:bg-slate-900 dark:bg-opacity-75"
         />
       </TransitionChild>
 
@@ -38,10 +38,10 @@ const props = defineProps({
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative w-full transform overflow-hidden rounded-lg bg-white dark:bg-slate-950 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:max-w-sm sm:p-6"
+              class="relative w-full transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:max-w-sm sm:p-6 dark:bg-slate-950"
             >
               <div
-                class="flex flex-row items-center justify-start pb-4 gap-4 w-full sm:mx-auto sm:max-w-md"
+                class="flex w-full flex-row items-center justify-start gap-4 pb-4 sm:mx-auto sm:max-w-md"
               >
                 <NapkinNotesLogo class="w-10 h-10" />
                 <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

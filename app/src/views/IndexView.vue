@@ -7,19 +7,19 @@ const coreStore = useCoreStore()
 </script>
 
 <template>
-  <div class="flex flex-col h-full max-h-full bg-blue-100 dark:bg-slate-900">
+  <div class="flex h-full max-h-full flex-col bg-blue-100 dark:bg-slate-900">
     <div class="grow overflow-auto">
       <NapkinNote
         v-if="coreStore.note"
         :key="coreStore.note.id"
-        class="p-8 prose prose-slate grow h-full w-full max-w-full border-slate-100 selection:bg-teal-200 caret-blue-700 dark:selection:bg-blue-900 dark:caret-slate-200 dark:text-white overflow-y-auto focus:outline-none"
+        class="prose prose-slate h-full w-full max-w-full grow overflow-y-auto border-slate-100 p-8 caret-blue-700 selection:bg-teal-200 focus:outline-none dark:text-white dark:caret-slate-200 dark:selection:bg-blue-900"
       />
       <div v-if="coreStore.fetchNotesError" class="p-8 text-red-700 dark:text-red-300">
         {{ coreStore.fetchNotesError }}
       </div>
     </div>
 
-    <AppMenu class="p-4 shrink-0 bg-blue-200 dark:bg-slate-950" />
+    <AppMenu class="shrink-0 bg-blue-200 p-4 dark:bg-slate-950" />
   </div>
 </template>
 
