@@ -1,6 +1,8 @@
 import type NapkinNote from './NapkinNote'
 
 export interface Widget {
+  load?(): void
+  update?(): void
   onKeyup?(event: KeyboardEvent): void
   onKeydown?(event: KeyboardEvent): void
   onClick?(event: MouseEvent): void
@@ -16,7 +18,5 @@ export abstract class Widget {
     this.napkinnote = napkinnote
   }
 
-  abstract load(): void
-  abstract update(): void
   abstract insert(textNode: Text, text: string): void
 }

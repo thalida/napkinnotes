@@ -4,10 +4,6 @@ import { Widget } from '../Widget'
 export default class UnorderedListWidget extends Widget {
   SYNTAX_REGEX = /^([*-]\s)([^[].*)/
 
-  load() {}
-
-  update() {}
-
   insert(textNode: Text, text: string) {
     const ul = document.createElement('ul')
     const li = document.createElement('li')

@@ -4,10 +4,6 @@ import { Widget } from '../Widget'
 export default class OrderedListWidget extends Widget {
   SYNTAX_REGEX = /^([1]+\.\s)(.*)/
 
-  load() {}
-
-  update() {}
-
   insert(textNode: Text, text: string) {
     const ol = document.createElement('ol')
     const li = document.createElement('li')
