@@ -2,7 +2,7 @@
 import { onMounted, onBeforeUnmount, ref, watchEffect } from 'vue'
 import { throttle } from 'lodash'
 import { useCoreStore } from '@/stores/core'
-import NapkinNote, { NAPKIN_NOTE_EVENTS } from '@/components/NapkinNote'
+import NapkinNote, { NAPKINNOTE_EVENTS } from '@/lib/NapkinNote'
 import { useAuthStore } from '@/stores/auth'
 import { useWebSocket } from '@vueuse/core'
 
@@ -24,7 +24,7 @@ const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 onMounted(() => {
   napkinnote = new NapkinNote(contentEditableRef.value as HTMLElement)
-  napkinnote.on(NAPKIN_NOTE_EVENTS.ON_UPDATE, () => {
+  napkinnote.on(NAPKINNOTE_EVENTS.ON_UPDATE, () => {
     coreStore.setNoteContent(napkinnote.htmlContent)
     send(
       JSON.stringify({
@@ -52,7 +52,7 @@ watchEffect(() => {
   const message = JSON.parse(data.value)
   if (message.type === 'note_update') {
     coreStore.setNoteContent(message.data.content)
-    htmlContent.value = message.data.content
+    napkinnote.htmlContent = message.data.content
   }
 })
 </script>
