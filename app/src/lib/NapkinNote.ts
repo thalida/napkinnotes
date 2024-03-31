@@ -66,11 +66,11 @@ export default class NapkinNote {
     }
   }
 
-  get htmlContent() {
+  getHtmlContent() {
     return this.element.innerHTML || ''
   }
 
-  set htmlContent(content: string) {
+  setHtmlContent(content: string) {
     this.element.innerHTML = content
     this.loadAllWidgets()
   }
@@ -95,7 +95,7 @@ export default class NapkinNote {
       }
     }
 
-    this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.htmlContent)
+    this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.getHtmlContent())
   }
 
   handleKeydownEvent(event: KeyboardEvent) {
@@ -131,7 +131,7 @@ export default class NapkinNote {
       }
     }
 
-    this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.htmlContent)
+    this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.getHtmlContent())
   }
 
   handleClickEvent(event: MouseEvent) {
@@ -141,6 +141,6 @@ export default class NapkinNote {
       }
     }
 
-    this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.htmlContent)
+    this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.getHtmlContent())
   }
 }

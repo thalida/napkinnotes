@@ -23,15 +23,15 @@ const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 onMounted(() => {
   napkinnote = new NapkinNote($napkinnote.value as HTMLElement)
-  napkinnote.htmlContent = coreStore.note?.content || ''
+  napkinnote.setHtmlContent(coreStore.note?.content || '')
   napkinnote.on(NAPKINNOTE_EVENTS.ON_UPDATE, () => {
-    coreStore.setNoteContent(napkinnote.htmlContent)
+    coreStore.setNoteContent(napkinnote.getHtmlContent())
     send(
       JSON.stringify({
         type: 'note_update',
         data: {
           id: coreStore.note?.id,
-          content: napkinnote.htmlContent
+          content: napkinnote.getHtmlContent()
         }
       })
     )
@@ -52,7 +52,7 @@ watchEffect(() => {
   const message = JSON.parse(data.value)
   if (message.type === 'note_update') {
     coreStore.setNoteContent(message.data.content)
-    napkinnote.htmlContent = message.data.content
+    napkinnote.setHtmlContent(message.data.content)
   }
 })
 </script>
@@ -60,5 +60,3 @@ watchEffect(() => {
 <template>
   <div ref="$napkinnote" />
 </template>
-
-<style></style>
