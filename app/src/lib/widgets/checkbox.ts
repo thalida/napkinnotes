@@ -2,7 +2,7 @@ import { getNodesAtCursor, setCursorAfterElement, setCursorInElement } from '../
 import { Widget } from '../Widget'
 
 export default class CheckboxWidget extends Widget {
-  SYNTAX_REGEX = /^[\s*]?(-\s\[[\sx]?\])(.*)/
+  SYNTAX_REGEX = /^(?:\s*)(-\s\[[\sx]?\])(.*)/
   private IS_CHECKED_REGEX = /^-\s\[[x]\]/
 
   load() {
@@ -43,24 +43,23 @@ export default class CheckboxWidget extends Widget {
   }
 
   insert(textNode: Text, text: string) {
-    const inputText = text.replace('- []', '').replace('- [x]', '').replace('- [ ]', '')
+    const inputText = text.replace('- []', '').replace('- [ ]', '').replace('- [x]', '').trim()
 
     const input = this.createElement(this.IS_CHECKED_REGEX.test(text))
     const inputTextNode = document.createTextNode(inputText)
 
-    const isParentRawElement = textNode.parentElement?.classList.contains('napkinnote')
-    if (isParentRawElement) {
-      const div = document.createElement('div')
-      div.appendChild(input)
-      div.appendChild(inputTextNode)
-      textNode.replaceWith(div)
-      setCursorInElement(div)
+    const div = document.createElement('div')
+    div.append(input)
+    div.innerHTML += '&ZeroWidthSpace;'
+    div.append(inputTextNode)
+    textNode.replaceWith(div)
+    setCursorInElement(div)
+
+    const checkbox = div.querySelector('input[type=checkbox]') as HTMLInputElement
+    if (!checkbox) {
       return
     }
-
-    textNode.replaceWith(input)
-    input.after(inputTextNode)
-    setCursorAfterElement(inputTextNode)
+    checkbox.checked = checkbox.value === 'true'
   }
 
   onKeyup(): void {
@@ -98,7 +97,9 @@ export default class CheckboxWidget extends Widget {
 
     event.preventDefault()
 
-    const hasText = cursorTarget.textContent ? cursorTarget.textContent.trim().length > 0 : false
+    const hasText = cursorTarget.textContent
+      ? cursorTarget.textContent.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().length > 0
+      : false
     if (!hasText) {
       const emptyDiv = document.createElement('div')
       emptyDiv.appendChild(document.createElement('br'))
@@ -115,8 +116,8 @@ export default class CheckboxWidget extends Widget {
 
     const div = document.createElement('div')
     const checkboxInput = this.createElement()
-    div.appendChild(checkboxInput)
-    div.appendChild(document.createTextNode(' '))
+    div.append(checkboxInput)
+    div.innerHTML += '&ZeroWidthSpace;'
 
     cursorTarget.after(div)
     setCursorInElement(div)

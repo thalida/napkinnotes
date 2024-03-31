@@ -7,7 +7,7 @@ export default class UnorderedListWidget extends Widget {
   insert(textNode: Text, text: string) {
     const ul = document.createElement('ul')
     const li = document.createElement('li')
-    li.textContent = text.slice(2) || ' '
+    li.innerHTML = text.slice(2).trim() || '&ZeroWidthSpace;'
     ul.appendChild(li)
 
     textNode.replaceWith(ul)

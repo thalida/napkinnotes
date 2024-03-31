@@ -7,7 +7,7 @@ export default class OrderedListWidget extends Widget {
   insert(textNode: Text, text: string) {
     const ol = document.createElement('ol')
     const li = document.createElement('li')
-    li.textContent = text.slice(3) || ' '
+    li.innerHTML = text.slice(3).trim() || '&ZeroWidthSpace;'
     ol.appendChild(li)
 
     textNode.replaceWith(ol)
