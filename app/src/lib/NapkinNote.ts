@@ -1,6 +1,6 @@
 import { insertHTMLAtCursor } from './utils/cursor'
 import CalculatorWidget from './widgets/calculator'
-import CheckboxWidget from './widgets/checkbox'
+import ChecklistWidget from './widgets/checklist'
 import HeadingsWidget from './widgets/headings'
 import LinkWidget from './widgets/link'
 import OrderedListWidget from './widgets/orderedList'
@@ -20,7 +20,7 @@ export default class NapkinNote {
     this.element = element
     this.widgets = [
       new CalculatorWidget(this),
-      new CheckboxWidget(this),
+      new ChecklistWidget(this),
       new HeadingsWidget(this),
       new LinkWidget(this),
       new OrderedListWidget(this),
