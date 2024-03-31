@@ -42,14 +42,16 @@ export function insertHTMLAtCursor(element: Node) {
 }
 
 export function getNodesAtCursor() {
-  const focusedNode = window.getSelection()?.focusNode
+  const cursorPosition = window.getSelection()?.getRangeAt(0).startOffset
+  const anchorNode = window.getSelection()?.anchorNode
+  const focusNode = window.getSelection()?.focusNode
   let cursorTarget: HTMLElement | null = null
 
-  if (focusedNode && focusedNode.nodeType === Node.TEXT_NODE) {
-    cursorTarget = focusedNode.parentElement
+  if (focusNode && focusNode.nodeType === Node.TEXT_NODE) {
+    cursorTarget = focusNode.parentElement
   } else {
-    cursorTarget = focusedNode as HTMLElement | null
+    cursorTarget = focusNode as HTMLElement | null
   }
 
-  return { focusedNode, cursorTarget }
+  return { cursorPosition, anchorNode, focusNode, cursorTarget }
 }

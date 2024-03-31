@@ -74,6 +74,20 @@ watchEffect(() => {
   --napkinnotes--link-widget--action: #10b981;
 }
 
+.prose
+  :where(.prose > ul > li > *:last-child):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  ) {
+  margin-bottom: 0;
+}
+
+.prose
+  :where(.prose > ul > li > *:first-child):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  ) {
+  margin-top: 0;
+}
+
 .napkinnote {
   white-space: pre-wrap;
 }
@@ -123,7 +137,12 @@ watchEffect(() => {
   font-weight: 700;
 }
 
-.napkinnote .widget.widget-checkbox {
+.napkinnote .widget.widget-checklist {
+}
+.napkinnote .widget-checklist__listitem {
+  list-style-type: circle;
+}
+.napkinnote .widget-checklist__input {
   margin-right: 0.5rem;
 }
 

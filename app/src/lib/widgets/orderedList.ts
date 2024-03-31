@@ -4,14 +4,10 @@ import { Widget } from '../Widget'
 export default class OrderedListWidget extends Widget {
   SYNTAX_REGEX = /^([1]+\.\s)(.*)/
 
-  load() {}
-
-  update() {}
-
   insert(textNode: Text, text: string) {
     const ol = document.createElement('ol')
     const li = document.createElement('li')
-    li.textContent = text.slice(3) || ' '
+    li.innerHTML = text.slice(3).trim() || '&ZeroWidthSpace;'
     ol.appendChild(li)
 
     textNode.replaceWith(ol)
@@ -19,16 +15,14 @@ export default class OrderedListWidget extends Widget {
   }
 
   onKeyup() {
-    const { focusedNode } = getNodesAtCursor()
-    const isInsertWidget = focusedNode
-      ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
-      : false
+    const { focusNode } = getNodesAtCursor()
+    const isInsertWidget = focusNode ? this.SYNTAX_REGEX.test(focusNode.textContent || '') : false
     if (!isInsertWidget) {
       return
     }
 
-    if (focusedNode) {
-      this.insert(focusedNode as Text, focusedNode.textContent || '')
+    if (focusNode) {
+      this.insert(focusNode as Text, focusNode.textContent || '')
     }
   }
 
