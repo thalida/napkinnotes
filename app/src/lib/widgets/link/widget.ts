@@ -1,7 +1,9 @@
-import { setCursorInElement } from '../utils/cursor'
-import { Widget } from '../Widget'
+import './widget.css'
 
-export default class LinkWidget extends Widget {
+import { setCursorInElement } from '../../utils/cursor'
+import { BaseWidget } from '../BaseWidget'
+
+export default class LinkWidget extends BaseWidget {
   load() {
     const linkElements = this.napkinnote.element.querySelectorAll(
       '.widget-link'

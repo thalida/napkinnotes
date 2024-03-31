@@ -18,12 +18,12 @@ const { data, send } = useWebSocket(websocketUrl, {
   autoReconnect: true
 })
 
-const contentEditableRef = ref<HTMLDivElement | null>(null)
-const htmlContent = ref(coreStore.note?.content)
+const $napkinnote = ref<HTMLDivElement | null>(null)
 const throttledUpdate = throttle(coreStore.updateNote, 1000)
 
 onMounted(() => {
-  napkinnote = new NapkinNote(contentEditableRef.value as HTMLElement)
+  napkinnote = new NapkinNote($napkinnote.value as HTMLElement)
+  napkinnote.htmlContent = coreStore.note?.content || ''
   napkinnote.on(NAPKINNOTE_EVENTS.ON_UPDATE, () => {
     coreStore.setNoteContent(napkinnote.htmlContent)
     send(
@@ -58,100 +58,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="napkinnote" ref="contentEditableRef" contentEditable="true" v-html="htmlContent" />
+  <div ref="$napkinnote" />
 </template>
 
-<style>
-:root {
-  --napkinnotes--calculator-widget--bg: #bfdbfe80;
-  --napkinnoes--calculator-widget--output-text: #10b981;
-  --napkinnotes--link-widget--action: #10b981;
-}
-
-.dark {
-  --napkinnotes--calculator-widget--bg: rgba(0, 0, 0, 0.2);
-  --napkinnoes--calculator-widget--output-text: #22c55e;
-  --napkinnotes--link-widget--action: #10b981;
-}
-
-.prose
-  :where(.prose > ul > li > *:last-child):not(
-    :where([class~='not-prose'], [class~='not-prose'] *)
-  ) {
-  margin-bottom: 0;
-}
-
-.prose
-  :where(.prose > ul > li > *:first-child):not(
-    :where([class~='not-prose'], [class~='not-prose'] *)
-  ) {
-  margin-top: 0;
-}
-
-.napkinnote {
-  white-space: pre-wrap;
-}
-
-.napkinnote .widget.widget-calculator {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-  min-height: 48px;
-}
-
-.napkinnote .widget-calculator--empty > .widget-calculator__output,
-.napkinnote .widget-calculator--error > .widget-calculator__output {
-  display: none;
-}
-
-.napkinnote .widget-calculator__input {
-  background-color: var(--napkinnotes--calculator-widget--bg);
-  border: 0;
-  border-radius: 8px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  min-height: 48px;
-  max-height: 256px;
-  height: 100%;
-  flex-grow: 1;
-  font-family: 'Fira Code', monospace;
-  word-wrap: break-word;
-  word-break: break-all;
-}
-
-.napkinnote .widget-calculator__output {
-  display: flex;
-  flex-shrink: 0;
-  justify-content: center;
-  align-items: center;
-  height: 48px;
-  min-width: 48px;
-  background-color: var(--napkinnotes--calculator-widget--bg);
-  border-radius: 8px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  color: var(--napkinnoes--calculator-widget--output-text);
-  font-family: 'Fira Code', monospace;
-  font-weight: 700;
-}
-
-.napkinnote .widget.widget-checklist {
-}
-.napkinnote .widget-checklist__listitem {
-  list-style-type: circle;
-}
-.napkinnote .widget-checklist__input {
-  margin-right: 0.5rem;
-}
-
-.napkinnote a,
-.napkinnote .widget.widget-link {
-  color: var(--napkinnotes--link-widget--action);
-  text-decoration: underline;
-}
-.napkinnote.napkinnote--ctrl-key-active .widget.widget-link {
-  cursor: pointer;
-}
-</style>
+<style></style>

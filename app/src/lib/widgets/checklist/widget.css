@@ -1,0 +1,8 @@
+.napkinnote .widget.widget-checklist {
+}
+.napkinnote .widget-checklist__listitem {
+  list-style-type: circle;
+}
+.napkinnote .widget-checklist__input {
+  margin-right: 0.5rem;
+}

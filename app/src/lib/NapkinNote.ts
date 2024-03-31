@@ -1,8 +1,10 @@
+import './styles.css'
+
 import { insertHTMLAtCursor } from './utils/cursor'
-import CalculatorWidget from './widgets/calculator'
-import ChecklistWidget from './widgets/checklist'
+import CalculatorWidget from './widgets/calculator/widget'
+import ChecklistWidget from './widgets/checklist/widget'
 import HeadingsWidget from './widgets/headings'
-import LinkWidget from './widgets/link'
+import LinkWidget from './widgets/link/widget'
 import OrderedListWidget from './widgets/orderedList'
 import UnorderedListWidget from './widgets/unorderedList'
 
@@ -18,6 +20,9 @@ export default class NapkinNote {
 
   constructor(element: HTMLElement) {
     this.element = element
+    this.element.classList.add('napkinnote')
+    this.element.contentEditable = 'true'
+
     this.widgets = [
       new CalculatorWidget(this),
       new ChecklistWidget(this),

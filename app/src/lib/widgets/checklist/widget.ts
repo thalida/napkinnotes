@@ -1,7 +1,9 @@
-import { getNodesAtCursor, setCursorInElement } from '../utils/cursor'
-import { Widget } from '../Widget'
+import './widget.css'
 
-export default class ChecklistWidget extends Widget {
+import { getNodesAtCursor, setCursorInElement } from '../../utils/cursor'
+import { BaseWidget } from '../BaseWidget'
+
+export default class ChecklistWidget extends BaseWidget {
   SYNTAX_REGEX = /^(?:\s*)(-\s\[[\sx]?\])(.*)/
   private IS_CHECKED_REGEX = /^-\s\[[x]\]/
 

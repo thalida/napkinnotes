@@ -1,7 +1,9 @@
-import { getNodesAtCursor, setCursorBeforeElement, setCursorInElement } from '../utils/cursor'
-import { Widget } from '../Widget'
+import './widget.css'
 
-export default class OrderedListWidget extends Widget {
+import { getNodesAtCursor, setCursorBeforeElement, setCursorInElement } from '../../utils/cursor'
+import { BaseWidget } from '../BaseWidget'
+
+export default class OrderedListWidget extends BaseWidget {
   SYNTAX_REGEX = /^([1]+\.\s)(.*)/
 
   insert(textNode: Text, text: string) {

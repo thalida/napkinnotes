@@ -1,0 +1,16 @@
+:root {
+  --napkinnote--link-widget--action: #10b981;
+}
+
+.dark {
+  --napkinnote--link-widget--action: #10b981;
+}
+
+.napkinnote a,
+.napkinnote .widget.widget-link {
+  color: var(--napkinnote--link-widget--action);
+  text-decoration: underline;
+}
+.napkinnote.napkinnote--ctrl-key-active .widget.widget-link {
+  cursor: pointer;
+}

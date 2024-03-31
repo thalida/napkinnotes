@@ -1,0 +1,54 @@
+:root {
+  --napkinnote--calculator-widget--bg: #bfdbfe80;
+  --napkinnote--calculator-widget--output-text: #10b981;
+}
+
+.dark {
+  --napkinnote--calculator-widget--bg: rgba(0, 0, 0, 0.2);
+  --napkinnote--calculator-widget--output-text: #22c55e;
+}
+
+.napkinnote .widget.widget-calculator {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  min-height: 48px;
+}
+
+.napkinnote .widget-calculator--empty > .widget-calculator__output,
+.napkinnote .widget-calculator--error > .widget-calculator__output {
+  display: none;
+}
+
+.napkinnote .widget-calculator__input {
+  background-color: var(--napkinnote--calculator-widget--bg);
+  border: 0;
+  border-radius: 8px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-height: 48px;
+  max-height: 256px;
+  height: 100%;
+  flex-grow: 1;
+  font-family: 'Fira Code', monospace;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.napkinnote .widget-calculator__output {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  min-width: 48px;
+  background-color: var(--napkinnote--calculator-widget--bg);
+  border-radius: 8px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: var(--napkinnote--calculator-widget--output-text);
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+}
