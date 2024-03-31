@@ -1,4 +1,4 @@
-import { insertHTML } from './utils/cursor'
+import { insertHTMLAtCursor } from './utils/cursor'
 import CalculatorWidget from './widgets/calculator'
 import CheckboxWidget from './widgets/checkbox'
 import LinkWidget from './widgets/link'
@@ -123,7 +123,7 @@ export default class NapkinNote {
 
       if (!isHandled) {
         const tabNode = document.createTextNode('    ')
-        insertHTML(tabNode)
+        insertHTMLAtCursor(tabNode)
       }
     }
 

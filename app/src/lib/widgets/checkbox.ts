@@ -1,4 +1,4 @@
-import { getCursorNodes, setCursorAfterElement, setCursorInElement } from '../utils/cursor'
+import { getNodesAtCursor, setCursorAfterElement, setCursorInElement } from '../utils/cursor'
 import { Widget } from '../Widget'
 
 export default class CheckboxWidget extends Widget {
@@ -64,7 +64,7 @@ export default class CheckboxWidget extends Widget {
   }
 
   onKeyup(): void {
-    const { focusedNode } = getCursorNodes()
+    const { focusedNode } = getNodesAtCursor()
     const isInsertWidget = focusedNode
       ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
       : false
@@ -83,7 +83,7 @@ export default class CheckboxWidget extends Widget {
       return
     }
 
-    const { cursorTarget } = getCursorNodes()
+    const { cursorTarget } = getNodesAtCursor()
     if (typeof cursorTarget === 'undefined' || cursorTarget === null) {
       return
     }

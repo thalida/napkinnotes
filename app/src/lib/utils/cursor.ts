@@ -34,14 +34,14 @@ export function setCursorInElement(element: HTMLElement | null | undefined) {
   setCursorAfterElement(element.childNodes[element.childNodes.length - 1] as HTMLElement)
 }
 
-export function insertHTML(element: Node) {
+export function insertHTMLAtCursor(element: Node) {
   const range = window.getSelection()?.getRangeAt(0)
   range?.collapse(true)
   range?.insertNode(element)
   setCursorAfterElement(element)
 }
 
-export function getCursorNodes() {
+export function getNodesAtCursor() {
   const focusedNode = window.getSelection()?.focusNode
   let cursorTarget: HTMLElement | null = null
 

@@ -1,5 +1,5 @@
 import { Widget } from '../Widget'
-import { getCursorNodes, setCursorInElement } from '../utils/cursor'
+import { getNodesAtCursor, setCursorInElement } from '../utils/cursor'
 
 export default class CalculatorWidget extends Widget {
   SYNTAX_REGEX = /^(\$\s)(.*)/
@@ -144,7 +144,7 @@ export default class CalculatorWidget extends Widget {
       return
     }
 
-    const { focusedNode } = getCursorNodes()
+    const { focusedNode } = getNodesAtCursor()
     const isInsertCalculator = focusedNode
       ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
       : false

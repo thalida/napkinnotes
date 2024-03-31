@@ -1,4 +1,4 @@
-import { getCursorNodes, setCursorBeforeElement, setCursorInElement } from '../utils/cursor'
+import { getNodesAtCursor, setCursorBeforeElement, setCursorInElement } from '../utils/cursor'
 import { Widget } from '../Widget'
 
 export default class UnorderedListWidget extends Widget {
@@ -19,7 +19,7 @@ export default class UnorderedListWidget extends Widget {
   }
 
   onKeyup(): boolean {
-    const { focusedNode } = getCursorNodes()
+    const { focusedNode } = getNodesAtCursor()
     const isInsertWidget = focusedNode
       ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
       : false
@@ -36,7 +36,7 @@ export default class UnorderedListWidget extends Widget {
   }
 
   onTab(event: KeyboardEvent): boolean {
-    const { cursorTarget } = getCursorNodes()
+    const { cursorTarget } = getNodesAtCursor()
     const isCursorAtLiStart = window.getSelection()?.anchorOffset === 0
     const previousSibling = cursorTarget?.previousSibling as HTMLElement
     const listParentType = cursorTarget?.parentElement?.tagName
