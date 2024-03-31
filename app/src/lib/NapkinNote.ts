@@ -1,6 +1,6 @@
 import './styles.css'
 
-import { insertHTMLAtCursor } from './utils/cursor'
+import { insertHTMLAtCursor, setCursorInElement } from './utils/cursor'
 import CalculatorWidget from './widgets/calculator/widget'
 import ChecklistWidget from './widgets/checklist/widget'
 import HeadingsWidget from './widgets/headings'
@@ -95,6 +95,16 @@ export default class NapkinNote {
       if (widget.onKeyup) {
         widget.onKeyup(event)
       }
+    }
+
+    const isBackspace = event.key === 'Backspace'
+    const isEmptyNotes = this.element.innerHTML.length === 0 || this.element.innerHTML === '<br>'
+    if (isBackspace && isEmptyNotes) {
+      const div = document.createElement('div')
+      div.append(document.createElement('br'))
+      this.element.innerHTML = ''
+      this.element.append(div)
+      setCursorInElement(div)
     }
 
     this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.getHtmlContent())
