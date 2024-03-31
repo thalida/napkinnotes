@@ -6,7 +6,7 @@ export default class CheckboxWidget extends Widget {
   private IS_CHECKED_REGEX = /^-\s\[[x]\]/
 
   load() {
-    const checkboxElements = this.$napkinnote.querySelectorAll(
+    const checkboxElements = this.napkinnote.element.querySelectorAll(
       'input[type=checkbox]'
     ) as NodeListOf<HTMLInputElement>
     if (!checkboxElements) {
@@ -19,7 +19,7 @@ export default class CheckboxWidget extends Widget {
   }
 
   update() {
-    const checkboxElements = this.$napkinnote.querySelectorAll(
+    const checkboxElements = this.napkinnote.element.querySelectorAll(
       'input[type=checkbox]'
     ) as NodeListOf<HTMLInputElement>
     if (!checkboxElements) {

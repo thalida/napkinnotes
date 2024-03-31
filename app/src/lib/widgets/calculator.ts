@@ -34,7 +34,7 @@ export default class CalculatorWidget extends Widget {
   }
 
   load() {
-    const calculatorElements = this.$napkinnote.querySelectorAll('.widget-calculator')
+    const calculatorElements = this.napkinnote.element.querySelectorAll('.widget-calculator')
     if (!calculatorElements) {
       return
     }
@@ -52,7 +52,7 @@ export default class CalculatorWidget extends Widget {
   }
 
   update() {
-    const calculatorElements = this.$napkinnote.querySelectorAll('.widget-calculator')
+    const calculatorElements = this.napkinnote.element.querySelectorAll('.widget-calculator')
     if (!calculatorElements) {
       return
     }

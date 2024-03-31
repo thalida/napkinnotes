@@ -3,7 +3,7 @@ import { Widget } from '../Widget'
 
 export default class LinkWidget extends Widget {
   load() {
-    const linkElements = this.$napkinnote.querySelectorAll(
+    const linkElements = this.napkinnote.element.querySelectorAll(
       '.widget-link'
     ) as NodeListOf<HTMLAnchorElement>
 

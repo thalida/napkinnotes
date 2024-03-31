@@ -1,3 +1,5 @@
+import type NapkinNote from './NapkinNote'
+
 export interface Widget {
   onKeyup?(event: KeyboardEvent): void
   onKeydown?(event: KeyboardEvent): void
@@ -6,12 +8,12 @@ export interface Widget {
 }
 
 export abstract class Widget {
-  $napkinnote: HTMLElement
+  napkinnote: NapkinNote
 
   SYNTAX_REGEX: RegExp | null = null
 
-  constructor($napkinnote: HTMLElement) {
-    this.$napkinnote = $napkinnote
+  constructor(napkinnote: NapkinNote) {
+    this.napkinnote = napkinnote
   }
 
   abstract load(): void

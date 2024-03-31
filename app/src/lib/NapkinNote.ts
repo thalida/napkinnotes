@@ -18,11 +18,11 @@ export default class NapkinNote {
   constructor(element: HTMLElement) {
     this.element = element
     this.widgets = [
-      new CalculatorWidget(this.element),
-      new CheckboxWidget(this.element),
-      new LinkWidget(this.element),
-      new OrderedListWidget(this.element),
-      new UnorderedListWidget(this.element)
+      new CalculatorWidget(this),
+      new CheckboxWidget(this),
+      new LinkWidget(this),
+      new OrderedListWidget(this),
+      new UnorderedListWidget(this)
     ]
     this.loadAllWidgets()
     this.element.addEventListener('keyup', this.handleKeyupEvent.bind(this))
