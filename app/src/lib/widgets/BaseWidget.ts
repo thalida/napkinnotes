@@ -1,6 +1,6 @@
-import type NapkinNote from './NapkinNote'
+import type NapkinNote from '../NapkinNote'
 
-export interface Widget {
+export interface BaseWidget {
   load?(): void
   update?(): void
   onKeyup?(event: KeyboardEvent): void
@@ -9,7 +9,7 @@ export interface Widget {
   onTab?(event: KeyboardEvent): boolean
 }
 
-export abstract class Widget {
+export abstract class BaseWidget {
   napkinnote: NapkinNote
 
   SYNTAX_REGEX: RegExp | null = null

@@ -1,0 +1,17 @@
+.napkinnote {
+  white-space: pre-wrap;
+}
+
+.napkinnote.prose
+  :where(.prose > ul > li > *:last-child):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  ) {
+  margin-bottom: 0;
+}
+
+.napkinnote.prose
+  :where(.prose > ul > li > *:first-child):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  ) {
+  margin-top: 0;
+}

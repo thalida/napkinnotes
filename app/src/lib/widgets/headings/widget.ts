@@ -1,7 +1,9 @@
-import { getNodesAtCursor, setCursorInElement } from '../utils/cursor'
-import { Widget } from '../Widget'
+import './widget.css'
 
-export default class HeadingsWidget extends Widget {
+import { getNodesAtCursor, setCursorInElement } from '../../utils/cursor'
+import { BaseWidget } from '../BaseWidget'
+
+export default class HeadingsWidget extends BaseWidget {
   SYNTAX_REGEX = /^(?:\s*)(#{1,4})\s/gm
 
   insert(textNode: Text, text: string) {

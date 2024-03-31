@@ -1,7 +1,8 @@
-import { Widget } from '../Widget'
-import { getNodesAtCursor, setCursorInElement } from '../utils/cursor'
+import './widget.css'
+import { BaseWidget } from '../BaseWidget'
+import { getNodesAtCursor, setCursorInElement } from '../../utils/cursor'
 
-export default class CalculatorWidget extends Widget {
+export default class CalculatorWidget extends BaseWidget {
   SYNTAX_REGEX = /^(\$\s)(.*)/
   private CALCULATOR_NEEDS_VAR_DEF_REGEX = /^\s*?([\w]*)\s*?=/
   private CALCULAOTR_VARIABLE_REGEX = /^(let|const|var)?\s*?([\w]*)\s*?=/
