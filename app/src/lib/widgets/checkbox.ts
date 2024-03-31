@@ -31,10 +31,10 @@ export default class CheckboxWidget extends Widget {
     }
   }
 
-  createElement(isChecked = false) {
+  _createInputElement(isChecked = false) {
     const input = document.createElement('input')
 
-    input.classList.add('widget', 'widget-checkbox')
+    input.classList.add('widget-checklist__input')
     input.type = 'checkbox'
     input.checked = isChecked
     input.value = input.checked ? 'true' : 'false'
@@ -43,84 +43,69 @@ export default class CheckboxWidget extends Widget {
   }
 
   insert(textNode: Text, text: string) {
+    const ul = document.createElement('ul')
+    const li = document.createElement('li')
+    const input = this._createInputElement(this.IS_CHECKED_REGEX.test(text))
     const inputText = text.replace('- []', '').replace('- [ ]', '').replace('- [x]', '').trim()
-
-    const input = this.createElement(this.IS_CHECKED_REGEX.test(text))
     const inputTextNode = document.createTextNode(inputText)
+    ul.classList.add('widget', 'widget-checklist')
+    li.classList.add('widget-checklist__listitem')
+    li.append(input)
+    li.innerHTML += '&ZeroWidthSpace;'
+    li.append(inputTextNode)
+    ul.append(li)
+    textNode.replaceWith(ul)
+    setCursorInElement(li)
 
-    const div = document.createElement('div')
-    div.append(input)
-    div.innerHTML += '&ZeroWidthSpace;'
-    div.append(inputTextNode)
-    textNode.replaceWith(div)
-    setCursorInElement(div)
-
-    const checkbox = div.querySelector('input[type=checkbox]') as HTMLInputElement
+    const checkbox = li.querySelector('input[type=checkbox]') as HTMLInputElement
     if (!checkbox) {
       return
     }
     checkbox.checked = checkbox.value === 'true'
   }
 
-  onKeyup(): void {
-    const { focusedNode } = getNodesAtCursor()
-    const isInsertWidget = focusedNode
-      ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
-      : false
-    if (!isInsertWidget) {
-      return
-    }
-
-    if (focusedNode) {
-      this.insert(focusedNode as Text, focusedNode.textContent || '')
-    }
-  }
-
-  onKeydown(event: KeyboardEvent): void {
+  onKeyup(event: KeyboardEvent): void {
     const isEnter = event.key === 'Enter'
-    if (!isEnter) {
-      return
+    const { focusNode, cursorTarget } = getNodesAtCursor()
+    const isInsertWidget = focusNode ? this.SYNTAX_REGEX.test(focusNode.textContent || '') : false
+
+    if (isInsertWidget && focusNode) {
+      this.insert(focusNode as Text, focusNode.textContent || '')
     }
 
-    const { cursorTarget } = getNodesAtCursor()
-    if (typeof cursorTarget === 'undefined' || cursorTarget === null) {
-      return
-    }
-
-    const childNodes = cursorTarget.childNodes || []
-    const hasCheckboxChild =
-      childNodes[0] && (childNodes[0] as HTMLInputElement).type === 'checkbox'
-
-    if (!hasCheckboxChild) {
-      return
-    }
-
-    event.preventDefault()
-
-    const hasText = cursorTarget.textContent
-      ? cursorTarget.textContent.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().length > 0
-      : false
-    if (!hasText) {
-      const emptyDiv = document.createElement('div')
-      emptyDiv.appendChild(document.createElement('br'))
-
-      if (cursorTarget.classList.contains('napkinnote')) {
-        cursorTarget.appendChild(emptyDiv)
-      } else {
-        cursorTarget.replaceWith(emptyDiv)
+    if (isEnter && cursorTarget) {
+      const parentListItem = cursorTarget.closest('li')
+      if (!parentListItem) {
+        return
       }
 
-      setCursorInElement(emptyDiv)
-      return
+      const previousSibling = parentListItem.previousSibling as HTMLElement
+      if (!previousSibling) {
+        return
+      }
+
+      const prevHasCheckbox = previousSibling.querySelector('input[type=checkbox]')
+      if (!prevHasCheckbox) {
+        return
+      }
+
+      const prevTextLength =
+        previousSibling.textContent?.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().length || 0
+
+      if (prevTextLength === 0) {
+        const div = document.createElement('div')
+        div.append(document.createElement('br'))
+        cursorTarget.parentElement?.after(div)
+        cursorTarget.remove()
+        setCursorInElement(div)
+        return
+      }
+
+      const checkboxInput = this._createInputElement()
+      cursorTarget.innerHTML = '&ZeroWidthSpace;' + cursorTarget.innerHTML
+      cursorTarget?.prepend(checkboxInput)
+      setCursorInElement(cursorTarget)
     }
-
-    const div = document.createElement('div')
-    const checkboxInput = this.createElement()
-    div.append(checkboxInput)
-    div.innerHTML += '&ZeroWidthSpace;'
-
-    cursorTarget.after(div)
-    setCursorInElement(div)
   }
 
   onClick(event: MouseEvent) {

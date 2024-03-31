@@ -13,10 +13,8 @@ export default class HeadingsWidget extends Widget {
   }
 
   onKeyup(): boolean {
-    const { focusedNode, cursorTarget } = getNodesAtCursor()
-    const isInsertWidget = focusedNode
-      ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
-      : false
+    const { focusNode, cursorTarget } = getNodesAtCursor()
+    const isInsertWidget = focusNode ? this.SYNTAX_REGEX.test(focusNode.textContent || '') : false
     if (!isInsertWidget) {
       return false
     }
@@ -30,8 +28,8 @@ export default class HeadingsWidget extends Widget {
       return false
     }
 
-    if (focusedNode) {
-      this.insert(focusedNode as Text, focusedNode.textContent || '')
+    if (focusNode) {
+      this.insert(focusNode as Text, focusNode.textContent || '')
       return true
     }
 

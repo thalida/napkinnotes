@@ -144,17 +144,17 @@ export default class CalculatorWidget extends Widget {
       return
     }
 
-    const { focusedNode } = getNodesAtCursor()
-    const isInsertCalculator = focusedNode
-      ? this.SYNTAX_REGEX.test(focusedNode.textContent || '')
+    const { focusNode } = getNodesAtCursor()
+    const isInsertCalculator = focusNode
+      ? this.SYNTAX_REGEX.test(focusNode.textContent || '')
       : false
     const isTextArea = (event.target as HTMLElement).tagName === 'TEXTAREA'
     if (!isTextArea && !isInsertCalculator) {
       return
     }
 
-    if (focusedNode && isInsertCalculator) {
-      this.insert(focusedNode as Text, focusedNode.textContent || '')
+    if (focusNode && isInsertCalculator) {
+      this.insert(focusNode as Text, focusNode.textContent || '')
       return
     }
 
