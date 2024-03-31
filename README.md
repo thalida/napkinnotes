@@ -35,6 +35,7 @@ You can try it out anonymously, but to sync your notes across devices you'll nee
 
 | Feature                | Trigger Action              |
 | ---------------------- | --------------------------- |
+| Headings (H1-H4)       | Markdown headings syntax (#) |
 | Bold                   | Highlight text and `CTRL+B` |
 | Italics                | Highlight text and `CTRL+I` |
 | Underline              | Highlight text and `CTRL+Y` |
