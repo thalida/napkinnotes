@@ -1,6 +1,7 @@
 import './styles.css'
 
 import { insertHTMLAtCursor } from './utils/cursor'
+import AccordionWidget from './widgets/accordion/widget'
 import CalculatorWidget from './widgets/calculator/widget'
 import ChecklistWidget from './widgets/checklist/widget'
 import HeadingsWidget from './widgets/headings'
@@ -24,6 +25,7 @@ export default class NapkinNote {
     this.element.contentEditable = 'true'
 
     this.widgets = [
+      new AccordionWidget(this),
       new CalculatorWidget(this),
       new ChecklistWidget(this),
       new HeadingsWidget(this),
