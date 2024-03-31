@@ -97,11 +97,6 @@ export default class NapkinNote {
       this.element.classList.add('napkinnote--ctrl-key-active')
     }
 
-    const isNapkinNote = (event.target as HTMLElement).classList.contains('napkinnote')
-    if (!isNapkinNote) {
-      return
-    }
-
     for (const widget of this.widgets) {
       if (widget.onKeydown) {
         widget.onKeydown(event)
@@ -112,12 +107,14 @@ export default class NapkinNote {
     if (isTab) {
       event.preventDefault()
       let isHandled = false
+
       for (const widget of this.widgets) {
-        if (widget.onTab) {
-          isHandled = widget.onTab(event)
-          if (isHandled) {
-            break
-          }
+        if (!widget.onTab) {
+          continue
+        }
+        isHandled = widget.onTab(event)
+        if (isHandled) {
+          break
         }
       }
 
