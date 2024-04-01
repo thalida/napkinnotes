@@ -12,11 +12,16 @@ export default class CodeblockWidget extends BaseWidget {
     const endNode = nodes[nodes.length - 1] as HTMLElement
     const innerNodes = nodes.slice(1, nodes.length - 1)
 
-    const lang = startNode.textContent?.replace(this.START_SYNTAX_REGEX, '$2') || ''
+    const lang = startNode.textContent?.replace(this.START_SYNTAX_REGEX, '$2') || 'plaintext'
 
     const div = document.createElement('div')
     const pre = document.createElement('pre')
+    pre.classList.add('widget', 'widget-codeblock')
+
     const code = document.createElement('code')
+    code.contentEditable = 'plaintext-only'
+    code.spellcheck = false
+    code.classList.add('language-' + lang)
 
     for (const node of innerNodes) {
       let text = node.textContent || ''
@@ -25,10 +30,9 @@ export default class CodeblockWidget extends BaseWidget {
       node.remove()
     }
 
-    pre.classList.add('widget', 'widget-codeblock')
-    code.contentEditable = 'plaintext-only'
-    code.spellcheck = false
-    code.classList.add('language-' + lang)
+    if (code.textContent?.length === 0) {
+      code.appendChild(document.createTextNode('\n'))
+    }
 
     pre.appendChild(code)
     div.appendChild(pre)
