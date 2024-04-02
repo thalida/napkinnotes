@@ -40,10 +40,11 @@ You can try it out anonymously, but to sync your notes across devices you'll nee
 | Italics                | Highlight text and `CTRL+I` |
 | Underline              | Highlight text and `CTRL+Y` |
 | Link                   | Highlight text and `CTRL+K` |
-| Unordered List         | Type `*` (`*` + `SPACE`)    |
-| Ordered List           | Type `1.` (`1.` + `SPACE`)  |
+| Unordered List         | Type `* ` (`*` + `SPACE`)    |
+| Ordered List           | Type `1. ` (`1.` + `SPACE`)  |
 | Interactive Checkboxes | Type `- []` or `- [x]`      |
-| Interactive Math ✨    | Type `$` (`$` + `SPACE`)    |
+| Interactive Math ✨    | Type `$ ` (`$` + `SPACE`)    |
+| Code Blocks with Syntax Highlighting | Fence code in <code>```</code> |
 
 ## Caveats & Known Issues
 
@@ -73,6 +74,7 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | Vue Google Login | <https://github.com/devbaji/vue3-google-login> | Powers "Login with Google" functionality |
 | Hero Icons | <https://heroicons.com/> | |
 | Bootstrap Icons Vue | <https://github.com/tommyip/bootstrap-icons-vue> | Vue components for [Bootstrap Icons](https://icons.getbootstrap.com/) |
+| Highlight JS | <https://highlightjs.org/> | Code Syntax Highlighting |
 
 
 ### Api
@@ -95,6 +97,7 @@ Catalog of the tools, resources, and services used in the creation of this proje
 | --------------------- | ------------------------------------------------------------- | ----------------------------------------------- |
 | Render                | <https://render.com/>                                         | Deployment and hosting for both the app and api |
 | VSCode Dev Containers | <https://code.visualstudio.com/docs/devcontainers/containers> | Development environment                         |
+| Pre-Commit Hooks | <https://github.com/pre-commit/pre-commit-hooks> | Auto-runs lint and format checks on commit |
 
 ## Diary of Challenges
 
