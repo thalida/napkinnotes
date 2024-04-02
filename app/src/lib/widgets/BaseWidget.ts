@@ -17,6 +17,4 @@ export abstract class BaseWidget {
   constructor(napkinnote: NapkinNote) {
     this.napkinnote = napkinnote
   }
-
-  abstract insert(textNode: Text, text: string): void
 }

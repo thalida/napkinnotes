@@ -1,0 +1,27 @@
+.napkinnote .widget.widget-codeblock .hljs {
+  background-color: transparent;
+}
+
+.napkinnote .widget.widget-codeblock {
+  position: relative;
+}
+
+.napkinnote .widget.widget-codeblock .widget-codeblock__pre {
+  background-color: black;
+}
+
+.napkinnote .widget.widget-codeblock .widget-codeblock__lang-dropdown-wrapper {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.napkinnote .widget.widget-codeblock .widget-codeblock__lang-dropdown {
+  background-color: transparent;
+  color: var(--jp-ui-font-color1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}

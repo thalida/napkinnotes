@@ -34,6 +34,17 @@ export function setCursorInElement(element: HTMLElement | null | undefined) {
   setCursorAfterElement(element.childNodes[element.childNodes.length - 1] as HTMLElement)
 }
 
+export function setCursorAtPosition(element: HTMLElement, position: number) {
+  const range = document.createRange()
+  const sel = window.getSelection()
+  range.setStart(element.childNodes[0], position)
+  range.collapse(true)
+
+  sel?.removeAllRanges()
+  sel?.addRange(range)
+  element.focus()
+}
+
 export function insertHTMLAtCursor(element: Node) {
   const range = window.getSelection()?.getRangeAt(0)
   range?.collapse(true)

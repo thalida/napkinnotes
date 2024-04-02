@@ -19,6 +19,7 @@
     "@vueuse/core": "^10.9.0",
     "axios": "^1.6.8",
     "bootstrap-icons-vue": "^1.11.3",
+    "highlight.js": "^11.9.0",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",

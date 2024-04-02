@@ -1,11 +1,12 @@
 import './styles.css'
 
-import { insertHTMLAtCursor } from './utils/cursor'
-import CalculatorWidget from './widgets/calculator/widget'
-import ChecklistWidget from './widgets/checklist/widget'
+import { insertHTMLAtCursor, setCursorInElement } from './utils/cursor'
+import CalculatorWidget from './widgets/calculator'
+import ChecklistWidget from './widgets/checklist'
+import CodeBlockWidget from './widgets/codeblock'
 import HeadingsWidget from './widgets/headings'
-import HrWidget from './widgets/hr/widget'
-import LinkWidget from './widgets/link/widget'
+import HrWidget from './widgets/hr'
+import LinkWidget from './widgets/link'
 import OrderedListWidget from './widgets/orderedList'
 import UnorderedListWidget from './widgets/unorderedList'
 
@@ -23,17 +24,19 @@ export default class NapkinNote {
     this.element = element
     this.element.classList.add('napkinnote')
     this.element.contentEditable = 'true'
+    this.element.tabIndex = 0
 
     this.widgets = [
       new CalculatorWidget(this),
       new ChecklistWidget(this),
+      new CodeBlockWidget(this),
       new HeadingsWidget(this),
       new HrWidget(this),
       new LinkWidget(this),
       new OrderedListWidget(this),
       new UnorderedListWidget(this)
     ]
-    this.loadAllWidgets()
+    this.setup()
     this.element.addEventListener('keyup', this.handleKeyupEvent.bind(this))
     this.element.addEventListener('keydown', this.handleKeydownEvent.bind(this))
     this.element.addEventListener('click', this.handleClickEvent.bind(this))
@@ -74,6 +77,19 @@ export default class NapkinNote {
 
   setHtmlContent(content: string) {
     this.element.innerHTML = content
+    this.setup()
+  }
+
+  setup() {
+    const isEmpty = this.element.innerHTML.length === 0 || this.element.innerHTML === '<br>'
+    if (isEmpty) {
+      const div = document.createElement('div')
+      div.append(document.createElement('br'))
+      this.element.innerHTML = ''
+      this.element.append(div)
+      setCursorInElement(div)
+    }
+
     this.loadAllWidgets()
   }
 
@@ -95,6 +111,16 @@ export default class NapkinNote {
       if (widget.onKeyup) {
         widget.onKeyup(event)
       }
+    }
+
+    const isBackspace = event.key === 'Backspace'
+    const isEmptyNotes = this.element.innerHTML.length === 0 || this.element.innerHTML === '<br>'
+    if (isBackspace && isEmptyNotes) {
+      const div = document.createElement('div')
+      div.append(document.createElement('br'))
+      this.element.innerHTML = ''
+      this.element.append(div)
+      setCursorInElement(div)
     }
 
     this.trigger(NAPKINNOTE_EVENTS.ON_UPDATE, this.getHtmlContent())
