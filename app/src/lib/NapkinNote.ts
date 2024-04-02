@@ -24,6 +24,7 @@ export default class NapkinNote {
     this.element = element
     this.element.classList.add('napkinnote')
     this.element.contentEditable = 'true'
+    this.element.tabIndex = 0
 
     this.widgets = [
       new CalculatorWidget(this),
